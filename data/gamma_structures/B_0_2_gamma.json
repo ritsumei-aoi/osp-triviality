@@ -1,0 +1,438 @@
+{
+  "schema_version": "5.0",
+  "algebra_reference": {
+    "family": "B",
+    "m": 0,
+    "n": 2,
+    "cartan_type": "B(0,2)",
+    "structure_file": "../algebra_structures/B_0_2_structure.json",
+    "structure_schema_version": "5.0"
+  },
+  "inhomogeneous_deformation": {
+    "exchange_relation": "[b_j, a_i] = G[b_j][a_i]·κ = -gh[i][j]·κ",
+    "gram_matrix_convention": {
+      "description": "Full Gram matrix G of the skew-supersymmetric bilinear form, in PBW basis order (fermion-first). Entry G[x][y] = (x|y).",
+      "basis_order": "[ a_0, a_1_p, a_1_m, ..., a_m_p, a_m_m, b_1_p, b_1_m, ..., b_n_p, b_n_m ]",
+      "gh_submatrix": "gh[a_i][b_j] = (a_i | b_j). Relation to paper B matrix: gh = -B_paper (sign reversal due to basis reordering)."
+    },
+    "inhomogeneous_matrix": {
+      "description": "gh submatrix (fermion rows × boson columns). gh[i][j] = (f_i | e_j). Exchange relation: [e_j, f_i] = -gh[i][j]·κ.",
+      "fermion_basis_order": [
+        "a_0"
+      ],
+      "boson_basis_order": [
+        "b_1_p",
+        "b_1_m",
+        "b_2_p",
+        "b_2_m"
+      ],
+      "shape": [
+        1,
+        4
+      ],
+      "matrix": [
+        [
+          "gh_a0_b1p",
+          "gh_a0_b1m",
+          "gh_a0_b2p",
+          "gh_a0_b2m"
+        ]
+      ],
+      "sympy_repr": [
+        [
+          "gh_a0_b1p",
+          "gh_a0_b1m",
+          "gh_a0_b2p",
+          "gh_a0_b2m"
+        ]
+      ]
+    }
+  },
+  "gamma_matrix": {
+    "description": "γ(X,Y) coefficients: [X,Y]_L = [X,Y]_0 + κ·γ(X,Y). Only non-zero entries stored.",
+    "brackets": {
+      "E_del1_m,E_del1_m": {
+        "E_del1_m": {
+          "gh_a0_b1m": "2"
+        }
+      },
+      "E_del1_m,E_del2_m": {
+        "E_del2_m": {
+          "gh_a0_b1m": "1"
+        },
+        "E_del1_m": {
+          "gh_a0_b2m": "1"
+        }
+      },
+      "E_del1_p,E_del1_m": {
+        "E_del1_p": {
+          "gh_a0_b1m": "1"
+        },
+        "E_del1_m": {
+          "gh_a0_b1p": "1"
+        }
+      },
+      "E_del1_p,E_del1_p": {
+        "E_del1_p": {
+          "gh_a0_b1p": "2"
+        }
+      },
+      "E_del1_p,E_del2_m": {
+        "E_del2_m": {
+          "gh_a0_b1p": "1"
+        },
+        "E_del1_p": {
+          "gh_a0_b2m": "1"
+        }
+      },
+      "E_del1_p,E_del2_p": {
+        "E_del2_p": {
+          "gh_a0_b1p": "1"
+        },
+        "E_del1_p": {
+          "gh_a0_b2p": "1"
+        }
+      },
+      "E_del2_m,E_del2_m": {
+        "E_del2_m": {
+          "gh_a0_b2m": "2"
+        }
+      },
+      "E_del2_p,E_del1_m": {
+        "E_del2_p": {
+          "gh_a0_b1m": "1"
+        },
+        "E_del1_m": {
+          "gh_a0_b2p": "1"
+        }
+      },
+      "E_del2_p,E_del2_m": {
+        "E_del2_p": {
+          "gh_a0_b2m": "1"
+        },
+        "E_del2_m": {
+          "gh_a0_b2p": "1"
+        }
+      },
+      "E_del2_p,E_del2_p": {
+        "E_del2_p": {
+          "gh_a0_b2p": "2"
+        }
+      },
+      "E_2del1_m,E_del1_m": {
+        "E_2del1_m": {
+          "gh_a0_b1m": "-2"
+        }
+      },
+      "E_2del1_m,E_del1_p": {
+        "H_1": {
+          "gh_a0_b1m": "-2"
+        }
+      },
+      "E_2del1_m,E_del2_m": {
+        "E_del1_del2_mm": {
+          "gh_a0_b1m": "-2"
+        }
+      },
+      "E_2del1_m,E_del2_p": {
+        "E_del1_del2_mp": {
+          "gh_a0_b1m": "-2"
+        }
+      },
+      "E_2del1_p,E_del1_m": {
+        "H_1": {
+          "gh_a0_b1p": "-2"
+        }
+      },
+      "E_2del1_p,E_del1_p": {
+        "E_2del1_p": {
+          "gh_a0_b1p": "-2"
+        }
+      },
+      "E_2del1_p,E_del2_m": {
+        "E_del1_del2_pm": {
+          "gh_a0_b1p": "-2"
+        }
+      },
+      "E_2del1_p,E_del2_p": {
+        "E_del1_del2_pp": {
+          "gh_a0_b1p": "-2"
+        }
+      },
+      "E_2del2_m,E_del1_m": {
+        "E_del1_del2_mm": {
+          "gh_a0_b2m": "-2"
+        }
+      },
+      "E_2del2_m,E_del1_p": {
+        "E_del1_del2_pm": {
+          "gh_a0_b2m": "-2"
+        }
+      },
+      "E_2del2_m,E_del2_m": {
+        "E_2del2_m": {
+          "gh_a0_b2m": "-2"
+        }
+      },
+      "E_2del2_m,E_del2_p": {
+        "H_2": {
+          "gh_a0_b2m": "-2"
+        }
+      },
+      "E_2del2_p,E_del1_m": {
+        "E_del1_del2_mp": {
+          "gh_a0_b2p": "-2"
+        }
+      },
+      "E_2del2_p,E_del1_p": {
+        "E_del1_del2_pp": {
+          "gh_a0_b2p": "-2"
+        }
+      },
+      "E_2del2_p,E_del2_m": {
+        "H_2": {
+          "gh_a0_b2p": "-2"
+        }
+      },
+      "E_2del2_p,E_del2_p": {
+        "E_2del2_p": {
+          "gh_a0_b2p": "-2"
+        }
+      },
+      "E_del1_del2_mm,E_del1_m": {
+        "E_2del1_m": {
+          "gh_a0_b2m": "-1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b1m": "-1"
+        }
+      },
+      "E_del1_del2_mm,E_del1_p": {
+        "E_del1_del2_pm": {
+          "gh_a0_b1m": "-1"
+        },
+        "H_1": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_mm,E_del2_m": {
+        "E_2del2_m": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_mm,E_del2_p": {
+        "H_2": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mp": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_mp,E_del1_m": {
+        "E_2del1_m": {
+          "gh_a0_b2p": "-1"
+        },
+        "E_del1_del2_mp": {
+          "gh_a0_b1m": "-1"
+        }
+      },
+      "E_del1_del2_mp,E_del1_p": {
+        "E_del1_del2_pp": {
+          "gh_a0_b1m": "-1"
+        },
+        "H_1": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "E_del1_del2_mp,E_del2_m": {
+        "H_2": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "E_del1_del2_mp,E_del2_p": {
+        "E_2del2_p": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mp": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "E_del1_del2_pm,E_del1_m": {
+        "E_del1_del2_mm": {
+          "gh_a0_b1p": "-1"
+        },
+        "H_1": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_pm,E_del1_p": {
+        "E_2del1_p": {
+          "gh_a0_b2m": "-1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b1p": "-1"
+        }
+      },
+      "E_del1_del2_pm,E_del2_m": {
+        "E_2del2_m": {
+          "gh_a0_b1p": "-1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_pm,E_del2_p": {
+        "H_2": {
+          "gh_a0_b1p": "-1"
+        },
+        "E_del1_del2_pp": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "E_del1_del2_pp,E_del1_m": {
+        "E_del1_del2_mp": {
+          "gh_a0_b1p": "-1"
+        },
+        "H_1": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "E_del1_del2_pp,E_del1_p": {
+        "E_2del1_p": {
+          "gh_a0_b2p": "-1"
+        },
+        "E_del1_del2_pp": {
+          "gh_a0_b1p": "-1"
+        }
+      },
+      "E_del1_del2_pp,E_del2_m": {
+        "H_2": {
+          "gh_a0_b1p": "-1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "E_del1_del2_pp,E_del2_p": {
+        "E_2del2_p": {
+          "gh_a0_b1p": "-1"
+        },
+        "E_del1_del2_pp": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "H_1,E_del1_m": {
+        "E_2del1_m": {
+          "gh_a0_b1p": "-1"
+        },
+        "E_del1_del2_mp": {
+          "gh_a0_b2m": "1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b2p": "1"
+        },
+        "H_1": {
+          "gh_a0_b1m": "-1"
+        }
+      },
+      "H_1,E_del1_p": {
+        "E_2del1_p": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_pp": {
+          "gh_a0_b2m": "1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b2p": "1"
+        },
+        "H_1": {
+          "gh_a0_b1p": "-1"
+        }
+      },
+      "H_1,E_del2_m": {
+        "E_2del2_m": {
+          "gh_a0_b2p": "1"
+        },
+        "H_2": {
+          "gh_a0_b2m": "1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b1p": "-1"
+        }
+      },
+      "H_1,E_del2_p": {
+        "E_2del2_p": {
+          "gh_a0_b2m": "1"
+        },
+        "H_2": {
+          "gh_a0_b2p": "1"
+        },
+        "E_del1_del2_pp": {
+          "gh_a0_b1m": "-1"
+        },
+        "E_del1_del2_mp": {
+          "gh_a0_b1p": "-1"
+        }
+      },
+      "H_2,E_del1_m": {
+        "E_del1_del2_mp": {
+          "gh_a0_b2m": "-1"
+        },
+        "E_del1_del2_mm": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "H_2,E_del1_p": {
+        "E_del1_del2_pp": {
+          "gh_a0_b2m": "-1"
+        },
+        "E_del1_del2_pm": {
+          "gh_a0_b2p": "-1"
+        }
+      },
+      "H_2,E_del2_m": {
+        "E_2del2_m": {
+          "gh_a0_b2p": "-1"
+        },
+        "H_2": {
+          "gh_a0_b2m": "-1"
+        }
+      },
+      "H_2,E_del2_p": {
+        "E_2del2_p": {
+          "gh_a0_b2m": "-1"
+        },
+        "H_2": {
+          "gh_a0_b2p": "-1"
+        }
+      }
+    }
+  },
+  "computation_metadata": {
+    "method": "standard_form_expansion_v5",
+    "input_basis": "Generator realizations from B_0_2_structure.json (v5.0)",
+    "generated_by": "experiments/generate_B_gamma_json.py",
+    "bracket_types": {
+      "odd_odd": "anticommutator",
+      "even_even": "commutator",
+      "even_odd": "commutator"
+    },
+    "computed_combinations": {
+      "odd_odd": "all pairs (i, j) with i <= j",
+      "even_even": "all pairs (i, j) with i < j",
+      "even_odd": "all pairs (i, j)"
+    },
+    "kappa_order": 1,
+    "kappa_squared": 0,
+    "description": "γ(a,b) gives the κ-linear coefficient in [a,b]_L = [a,b]_0 + κ·γ(a,b). κ is PBW-leftmost (rank 0); no sign negation needed for odd×odd. Only non-zero κ terms stored."
+  }
+}
