@@ -1,25 +1,16 @@
-# Oscillator Lie Superalgebras module
-from .constructors import (
-    build_central_extension_from_gram,
-    gram_from_central_extension,
-    verify_gram_skew_supersymmetric,
-)
-from .inhomogeneous import build_inhomogeneous_oscillator_algebra
-from .verifier import (
-    verify_central_elements,
-    verify_super_antisymmetry,
-    verify_super_jacobi,
-)
-from .bracket_table import BracketTable, bracket_table_from_algebra
-from .renderers import render_plain, render_markdown, render_latex
-# 追記（既存の export に合わせて）
+"""
+osp-triviality: Computational verification of triviality for osp(1|2n) deformations.
 
-from .B_structure_builder import (
-    build_algebra_section,
-    build_oscillator_generators_section,
-    build_oscillator_relations_section,
-    build_basis_section,
-    build_parity_section,
-    build_generator_realization_section,
-    build_metadata_section,
-)
+Core library for oscillator Lie superalgebras B(0,n) = osp(1|2n).
+"""
+
+from .triviality_checker import check_triviality
+from .cohomology_solver import solve_odd_f_generic, reconstruct_gamma_from_f
+from .adjoint_from_json import build_adjoint_from_json
+from .gamma_from_B import compute_gamma_from_B
+from .algebra_parser import OSpAlgebraParser
+from .gamma_parser import GammaStructureParser
+from .oscillator_algebra import BmnAlgebra
+from .B_generators import build_B0n_basis, build_B0n_structure_constants
+
+__version__ = "0.1.0"

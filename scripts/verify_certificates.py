@@ -602,7 +602,7 @@ def main():
         description="Algebraic verification of left null space certificates"
     )
     parser.add_argument("--n", type=int, default=None, help="Specific n value")
-    parser.add_argument("--n-max", type=int, default=4, help="Max n for range check")
+    parser.add_argument("--n-max", type=int, default=3, help="Max n for range check (default: 3)")
     parser.add_argument("--family", choices=["I", "II", "IIIm", "IIIp", "all"], default="all")
     parser.add_argument("--j", type=int, default=1, help="Index j for Family I/II")
     parser.add_argument("--verbose", action="store_true", help="Detailed expansion")

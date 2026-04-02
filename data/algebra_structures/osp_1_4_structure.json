@@ -1,0 +1,630 @@
+{
+  "schema_version": "3.0",
+  "algebra": {
+    "family": "osp",
+    "m": 1,
+    "2n": 4,
+    "cartan_type": "B(0,2)",
+    "dimension": {
+      "total": 14,
+      "even": 10,
+      "odd": 4
+    }
+  },
+  "oscillator_generators": {
+    "bosonic": [
+      "b_0",
+      "b_1",
+      "b_2",
+      "b_3"
+    ],
+    "fermionic": [
+      "a"
+    ],
+    "bosonic_dim": 4,
+    "fermionic_dim": 1
+  },
+  "oscillator_relations": {
+    "symplectic_matrix": {
+      "description": "Bosonic commutation relations: [b_i, b_j] = J_{ij} K. Standard symplectic form J_{2n} = [[0, I_n], [-I_n, 0]]. In quotient algebra, K = 1.",
+      "matrix": [
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0
+        ]
+      ]
+    },
+    "fermionic_metric": {
+      "description": "Fermionic anticommutation relations: {a_i, a_j} = g_{ij} K. For osp(1|2n), g = [[1]].",
+      "matrix": [
+        [
+          1
+        ]
+      ]
+    },
+    "mixed_commutators": {
+      "description": "[b_i, a_j] = 0 in the homogeneous case (κ=0). For inhomogeneous deformation, see gamma_structures file.",
+      "homogeneous": "zero"
+    }
+  },
+  "basis": {
+    "even": [
+      "M_0_0",
+      "M_0_1",
+      "M_0_2",
+      "M_0_3",
+      "M_1_1",
+      "M_1_2",
+      "M_1_3",
+      "M_2_2",
+      "M_2_3",
+      "M_3_3"
+    ],
+    "odd": [
+      "Q_0",
+      "Q_1",
+      "Q_2",
+      "Q_3"
+    ]
+  },
+  "parity": {
+    "M_0_0": 0,
+    "M_0_1": 0,
+    "M_0_2": 0,
+    "M_0_3": 0,
+    "M_1_1": 0,
+    "M_1_2": 0,
+    "M_1_3": 0,
+    "M_2_2": 0,
+    "M_2_3": 0,
+    "M_3_3": 0,
+    "Q_0": 1,
+    "Q_1": 1,
+    "Q_2": 1,
+    "Q_3": 1
+  },
+  "generator_realization": {
+    "description": "Standard form expressions with fermionic-first PBW ordering. Symmetric forms provided for reference.",
+    "ordering": "fermionic-first: a, b_0, b_1, ...",
+    "realizations": {
+      "M_0_0": {
+        "standard_form": [
+          {
+            "words": [
+              "b_0",
+              "b_0"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_0 b_0 + b_0 b_0)",
+        "note": "Frappat B(0,2): b_0^- b_0^+"
+      },
+      "M_0_1": {
+        "standard_form": [
+          {
+            "words": [
+              "b_0",
+              "b_1"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_0 b_1 + b_1 b_0)",
+        "note": "Frappat B(0,2): b_1^- b_1^+"
+      },
+      "M_0_2": {
+        "standard_form": [
+          {
+            "words": [
+              "b_0",
+              "b_2"
+            ],
+            "coeff": "1"
+          },
+          {
+            "words": [],
+            "coeff": "-1/2"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_0 b_2 + b_2 b_0)",
+        "note": "Frappat B(0,2): b_2^- b_2^+"
+      },
+      "M_0_3": {
+        "standard_form": [
+          {
+            "words": [
+              "b_0",
+              "b_3"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_0 b_3 + b_3 b_0)",
+        "note": "Frappat B(0,2): b_3^- b_3^+"
+      },
+      "M_1_1": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1",
+              "b_1"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_1 b_1 + b_1 b_1)",
+        "note": "Frappat B(0,2): b_1^- b_1^+"
+      },
+      "M_1_2": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1",
+              "b_2"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_1 b_2 + b_2 b_1)",
+        "note": "Frappat B(0,2): b_2^- b_2^+"
+      },
+      "M_1_3": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1",
+              "b_3"
+            ],
+            "coeff": "1"
+          },
+          {
+            "words": [],
+            "coeff": "-1/2"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_1 b_3 + b_3 b_1)",
+        "note": "Frappat B(0,2): b_3^- b_3^+"
+      },
+      "M_2_2": {
+        "standard_form": [
+          {
+            "words": [
+              "b_2",
+              "b_2"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_2 b_2 + b_2 b_2)",
+        "note": "Frappat B(0,2): b_2^- b_2^+"
+      },
+      "M_2_3": {
+        "standard_form": [
+          {
+            "words": [
+              "b_2",
+              "b_3"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_2 b_3 + b_3 b_2)",
+        "note": "Frappat B(0,2): b_3^- b_3^+"
+      },
+      "M_3_3": {
+        "standard_form": [
+          {
+            "words": [
+              "b_3",
+              "b_3"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "symmetric_form": "(1/2)(b_3 b_3 + b_3 b_3)",
+        "note": "Frappat B(0,2): b_3^- b_3^+"
+      },
+      "Q_0": {
+        "standard_form": [
+          {
+            "words": [
+              "a",
+              "b_0"
+            ],
+            "coeff": "sqrt(2)/2"
+          }
+        ],
+        "symmetric_form": "(1/(2*sqrt(2)))(a b_0 + b_0 a)",
+        "note": "Frappat-modified with fermionic attachment. Original: (1/sqrt(2)) b_0^-. κ-linear terms in gamma_structures file."
+      },
+      "Q_1": {
+        "standard_form": [
+          {
+            "words": [
+              "a",
+              "b_1"
+            ],
+            "coeff": "sqrt(2)/2"
+          }
+        ],
+        "symmetric_form": "(1/(2*sqrt(2)))(a b_1 + b_1 a)",
+        "note": "Frappat-modified with fermionic attachment. Original: (1/sqrt(2)) b_1^-. κ-linear terms in gamma_structures file."
+      },
+      "Q_2": {
+        "standard_form": [
+          {
+            "words": [
+              "a",
+              "b_2"
+            ],
+            "coeff": "sqrt(2)/2"
+          }
+        ],
+        "symmetric_form": "(1/(2*sqrt(2)))(a b_2 + b_2 a)",
+        "note": "Frappat-modified with fermionic attachment. Original: (1/sqrt(2)) b_2^-. κ-linear terms in gamma_structures file."
+      },
+      "Q_3": {
+        "standard_form": [
+          {
+            "words": [
+              "a",
+              "b_3"
+            ],
+            "coeff": "sqrt(2)/2"
+          }
+        ],
+        "symmetric_form": "(1/(2*sqrt(2)))(a b_3 + b_3 a)",
+        "note": "Frappat-modified with fermionic attachment. Original: (1/sqrt(2)) b_3^-. κ-linear terms in gamma_structures file."
+      }
+    }
+  },
+  "structure_constants": {
+    "description": "Non-zero brackets [X, Y] = sum_Z c_Z Z for κ=0 (homogeneous case). For odd-odd it is anticommutator, otherwise commutator.",
+    "brackets": {
+      "M_0_0,M_0_2": {
+        "M_0_0": "2"
+      },
+      "M_0_0,M_1_2": {
+        "M_0_1": "2"
+      },
+      "M_0_0,M_2_2": {
+        "M_0_2": "4"
+      },
+      "M_0_0,M_2_3": {
+        "M_0_3": "2"
+      },
+      "M_0_1,M_0_2": {
+        "M_0_1": "1"
+      },
+      "M_0_1,M_0_3": {
+        "M_0_0": "1"
+      },
+      "M_0_1,M_1_2": {
+        "M_1_1": "1"
+      },
+      "M_0_1,M_1_3": {
+        "M_0_1": "1"
+      },
+      "M_0_1,M_2_2": {
+        "M_1_2": "2"
+      },
+      "M_0_1,M_2_3": {
+        "M_1_3": "1",
+        "M_0_2": "1"
+      },
+      "M_0_1,M_3_3": {
+        "M_0_3": "2"
+      },
+      "M_0_2,M_0_0": {
+        "M_0_0": "-2"
+      },
+      "M_0_2,M_0_1": {
+        "M_0_1": "-1"
+      },
+      "M_0_2,M_0_3": {
+        "M_0_3": "-1"
+      },
+      "M_0_2,M_1_2": {
+        "M_1_2": "1"
+      },
+      "M_0_2,M_2_2": {
+        "M_2_2": "2"
+      },
+      "M_0_2,M_2_3": {
+        "M_2_3": "1"
+      },
+      "M_0_3,M_0_1": {
+        "M_0_0": "-1"
+      },
+      "M_0_3,M_0_2": {
+        "M_0_3": "1"
+      },
+      "M_0_3,M_1_1": {
+        "M_0_1": "-2"
+      },
+      "M_0_3,M_1_2": {
+        "M_0_2": "-1",
+        "M_1_3": "1"
+      },
+      "M_0_3,M_1_3": {
+        "M_0_3": "-1"
+      },
+      "M_0_3,M_2_2": {
+        "M_2_3": "2"
+      },
+      "M_0_3,M_2_3": {
+        "M_3_3": "1"
+      },
+      "M_1_1,M_0_3": {
+        "M_0_1": "2"
+      },
+      "M_1_1,M_1_3": {
+        "M_1_1": "2"
+      },
+      "M_1_1,M_2_3": {
+        "M_1_2": "2"
+      },
+      "M_1_1,M_3_3": {
+        "M_1_3": "4"
+      },
+      "M_1_2,M_0_0": {
+        "M_0_1": "-2"
+      },
+      "M_1_2,M_0_1": {
+        "M_1_1": "-1"
+      },
+      "M_1_2,M_0_2": {
+        "M_1_2": "-1"
+      },
+      "M_1_2,M_0_3": {
+        "M_1_3": "-1",
+        "M_0_2": "1"
+      },
+      "M_1_2,M_1_3": {
+        "M_1_2": "1"
+      },
+      "M_1_2,M_2_3": {
+        "M_2_2": "1"
+      },
+      "M_1_2,M_3_3": {
+        "M_2_3": "2"
+      },
+      "M_1_3,M_0_1": {
+        "M_0_1": "-1"
+      },
+      "M_1_3,M_0_3": {
+        "M_0_3": "1"
+      },
+      "M_1_3,M_1_1": {
+        "M_1_1": "-2"
+      },
+      "M_1_3,M_1_2": {
+        "M_1_2": "-1"
+      },
+      "M_1_3,M_2_3": {
+        "M_2_3": "1"
+      },
+      "M_1_3,M_3_3": {
+        "M_3_3": "2"
+      },
+      "M_2_2,M_0_0": {
+        "M_0_2": "-4"
+      },
+      "M_2_2,M_0_1": {
+        "M_1_2": "-2"
+      },
+      "M_2_2,M_0_2": {
+        "M_2_2": "-2"
+      },
+      "M_2_2,M_0_3": {
+        "M_2_3": "-2"
+      },
+      "M_2_3,M_0_0": {
+        "M_0_3": "-2"
+      },
+      "M_2_3,M_0_1": {
+        "M_1_3": "-1",
+        "M_0_2": "-1"
+      },
+      "M_2_3,M_0_2": {
+        "M_2_3": "-1"
+      },
+      "M_2_3,M_0_3": {
+        "M_3_3": "-1"
+      },
+      "M_2_3,M_1_1": {
+        "M_1_2": "-2"
+      },
+      "M_2_3,M_1_2": {
+        "M_2_2": "-1"
+      },
+      "M_2_3,M_1_3": {
+        "M_2_3": "-1"
+      },
+      "M_3_3,M_0_1": {
+        "M_0_3": "-2"
+      },
+      "M_3_3,M_1_1": {
+        "M_1_3": "-4"
+      },
+      "M_3_3,M_1_2": {
+        "M_2_3": "-2"
+      },
+      "M_3_3,M_1_3": {
+        "M_3_3": "-2"
+      },
+      "M_0_0,Q_2": {
+        "Q_0": "2"
+      },
+      "Q_2,M_0_0": {
+        "Q_0": "-2"
+      },
+      "M_0_1,Q_2": {
+        "Q_1": "1"
+      },
+      "Q_2,M_0_1": {
+        "Q_1": "-1"
+      },
+      "M_0_1,Q_3": {
+        "Q_0": "1"
+      },
+      "Q_3,M_0_1": {
+        "Q_0": "-1"
+      },
+      "M_0_2,Q_0": {
+        "Q_0": "-1"
+      },
+      "Q_0,M_0_2": {
+        "Q_0": "1"
+      },
+      "M_0_2,Q_2": {
+        "Q_2": "1"
+      },
+      "Q_2,M_0_2": {
+        "Q_2": "-1"
+      },
+      "M_0_3,Q_1": {
+        "Q_0": "-1"
+      },
+      "Q_1,M_0_3": {
+        "Q_0": "1"
+      },
+      "M_0_3,Q_2": {
+        "Q_3": "1"
+      },
+      "Q_2,M_0_3": {
+        "Q_3": "-1"
+      },
+      "M_1_1,Q_3": {
+        "Q_1": "2"
+      },
+      "Q_3,M_1_1": {
+        "Q_1": "-2"
+      },
+      "M_1_2,Q_0": {
+        "Q_1": "-1"
+      },
+      "Q_0,M_1_2": {
+        "Q_1": "1"
+      },
+      "M_1_2,Q_3": {
+        "Q_2": "1"
+      },
+      "Q_3,M_1_2": {
+        "Q_2": "-1"
+      },
+      "M_1_3,Q_1": {
+        "Q_1": "-1"
+      },
+      "Q_1,M_1_3": {
+        "Q_1": "1"
+      },
+      "M_1_3,Q_3": {
+        "Q_3": "1"
+      },
+      "Q_3,M_1_3": {
+        "Q_3": "-1"
+      },
+      "M_2_2,Q_0": {
+        "Q_2": "-2"
+      },
+      "Q_0,M_2_2": {
+        "Q_2": "2"
+      },
+      "M_2_3,Q_0": {
+        "Q_3": "-1"
+      },
+      "Q_0,M_2_3": {
+        "Q_3": "1"
+      },
+      "M_2_3,Q_1": {
+        "Q_2": "-1"
+      },
+      "Q_1,M_2_3": {
+        "Q_2": "1"
+      },
+      "M_3_3,Q_1": {
+        "Q_3": "-2"
+      },
+      "Q_1,M_3_3": {
+        "Q_3": "2"
+      },
+      "Q_0,Q_0": {
+        "M_0_0": "1/2"
+      },
+      "Q_0,Q_1": {
+        "M_0_1": "1/2"
+      },
+      "Q_0,Q_2": {
+        "M_0_2": "1/2"
+      },
+      "Q_0,Q_3": {
+        "M_0_3": "1/2"
+      },
+      "Q_1,Q_0": {
+        "M_0_1": "1/2"
+      },
+      "Q_1,Q_1": {
+        "M_1_1": "1/2"
+      },
+      "Q_1,Q_2": {
+        "M_1_2": "1/2"
+      },
+      "Q_1,Q_3": {
+        "M_1_3": "1/2"
+      },
+      "Q_2,Q_0": {
+        "M_0_2": "1/2"
+      },
+      "Q_2,Q_1": {
+        "M_1_2": "1/2"
+      },
+      "Q_2,Q_2": {
+        "M_2_2": "1/2"
+      },
+      "Q_2,Q_3": {
+        "M_2_3": "1/2"
+      },
+      "Q_3,Q_0": {
+        "M_0_3": "1/2"
+      },
+      "Q_3,Q_1": {
+        "M_1_3": "1/2"
+      },
+      "Q_3,Q_2": {
+        "M_2_3": "1/2"
+      },
+      "Q_3,Q_3": {
+        "M_3_3": "1/2"
+      }
+    }
+  },
+  "metadata": {
+    "reference": "Frappat et al. Sec.29 (modified with single fermionic element a for odd generators)",
+    "generated_by": "experiments/generate_osp_structure_json.py",
+    "related_files": {
+      "gamma_structure": "gamma_structures/osp_1_4_gamma.json"
+    }
+  }
+}
