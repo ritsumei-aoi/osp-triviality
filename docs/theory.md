@@ -83,7 +83,7 @@ For given n and deformation parameter B:
 
 ### Key Results Verified
 
-- **Dimension formula**: dim C¹_μ = 6n − 2 for each gh-weight sector μ
+- **Dimension formula**: dim C¹_μ = 6n − 2 for each gb-weight sector μ
 - **Certificate verification**: Algebraic certificates c satisfying
   c^T A = 0 that prove triviality symbolically
 - **Numerical triviality**: For B(0,n) with n = 1, 2, 3, all first-order

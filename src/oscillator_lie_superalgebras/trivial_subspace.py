@@ -1,20 +1,20 @@
 """
-Analytical computation of the trivial gh subspace for B(m,n).
+Analytical computation of the trivial gb subspace for B(m,n).
 
 Mathematical background:
-- γ(gh) depends linearly on gh: γ(gh) = L · vec(gh)
+- γ(gb) depends linearly on gb: γ(gb) = L · vec(gb)
   where L is a fixed matrix determined by the algebra structure (Schema 2 gamma_matrix).
 - The coboundary operator δ is linear: δf = A · vec(f)
   where A is determined by the adjoint representation (Schema 1 structure_constants).
-- A deformation is trivial ⟺ γ(gh) ∈ Im(A).
+- A deformation is trivial ⟺ γ(gb) ∈ Im(A).
 - Let P_⊥ be the orthogonal projector onto the complement of Im(A).
-  Then: trivial ⟺ P_⊥ · γ(gh) = 0 ⟺ (P_⊥ · L) · vec(gh) = 0.
-- The trivial gh subspace is null(P_⊥ · L), computed via SVD.
+  Then: trivial ⟺ P_⊥ · γ(gb) = 0 ⟺ (P_⊥ · L) · vec(gb) = 0.
+- The trivial gb subspace is null(P_⊥ · L), computed via SVD.
 
 Usage:
-    from oscillator_lie_superalgebras.trivial_subspace import trivial_gh_subspace
-    result = trivial_gh_subspace(0, 1)
-    print(result['null_space_basis'])  # basis of trivial gh directions
+    from oscillator_lie_superalgebras.trivial_subspace import trivial_gb_subspace
+    result = trivial_gb_subspace(0, 1)
+    print(result['null_space_basis'])  # basis of trivial gb directions
 """
 
 from __future__ import annotations
@@ -168,8 +168,8 @@ def build_coboundary_matrix(
     return A, basis, parity
 
 
-def _gh_var_names_from_json(m: int, n: int) -> List[str]:
-    """Read gh variable names from the gamma structure JSON (row-major order)."""
+def _gb_var_names_from_json(m: int, n: int) -> List[str]:
+    """Read gb variable names from the gamma structure JSON (row-major order)."""
     gamma_path = _get_gamma_json_path(m, n)
     with open(gamma_path, encoding="utf-8") as f:
         data = json.load(f)
@@ -183,15 +183,15 @@ def build_gamma_linear_map(
     tol: float = 1e-12,
 ) -> Tuple[np.ndarray, List[str], List[str], List[str], Dict[str, int]]:
     """
-    Build the linear map L such that vec(γ) = L · vec(gh).
+    Build the linear map L such that vec(γ) = L · vec(gb).
 
     γ is represented as a vector indexed by (independent pair, output basis element),
     using the same pair convention as solve_odd_f_generic.
 
     Returns:
-        L: ndarray of shape (num_gamma_components, num_gh_vars)
+        L: ndarray of shape (num_gamma_components, num_gb_vars)
         gamma_index: list of (pair_str, output_gen) describing each row of L
-        gh_vars: ordered list of gh variable names
+        gb_vars: ordered list of gb variable names
         basis: ordered basis list
         parity: dict {name: 0/1}
     """
@@ -206,13 +206,13 @@ def build_gamma_linear_map(
     basis: List[str] = alg_data["basis"]["even"] + alg_data["basis"]["odd"]
     parity: Dict[str, int] = alg_data["parity"]
 
-    # gh variable names in canonical order
-    gh_vars = _gh_var_names_from_json(m, n)
-    gh_var_to_idx = {v: i for i, v in enumerate(gh_vars)}
-    num_gh = len(gh_vars)
+    # gb variable names in canonical order
+    gb_vars = _gb_var_names_from_json(m, n)
+    gb_var_to_idx = {v: i for i, v in enumerate(gb_vars)}
+    num_gb = len(gb_vars)
 
-    # Parse gamma_matrix from Schema 2: γ(a,b)_t = Σ_v coeff[v] * gh_v
-    # gamma_data["gamma_matrix"]["brackets"] = { "a,b": { "t": { "gh_var": "coeff_str" } } }
+    # Parse gamma_matrix from Schema 2: γ(a,b)_t = Σ_v coeff[v] * gb_v
+    # gamma_data["gamma_matrix"]["brackets"] = { "a,b": { "t": { "gb_var": "coeff_str" } } }
     raw_gamma = gamma_data["gamma_matrix"]["brackets"]
 
     # Build index of independent (a,b) pairs consistent with solver convention
@@ -238,11 +238,11 @@ def build_gamma_linear_map(
         pair_str = f"{a},{b}"
         gamma_entry = raw_gamma.get(pair_str, {})
         for t in basis:
-            gh_coeffs = gamma_entry.get(t, {})
-            row = np.zeros(num_gh, dtype=complex)
-            for gh_var, coeff_str in gh_coeffs.items():
-                if gh_var in gh_var_to_idx:
-                    row[gh_var_to_idx[gh_var]] = complex(sp.sympify(coeff_str).evalf())
+            gb_coeffs = gamma_entry.get(t, {})
+            row = np.zeros(num_gb, dtype=complex)
+            for gb_var, coeff_str in gb_coeffs.items():
+                if gb_var in gb_var_to_idx:
+                    row[gb_var_to_idx[gb_var]] = complex(sp.sympify(coeff_str).evalf())
             # Include row even if all zero (keeps index consistent with A rows)
             rows.append(row)
             gamma_index.append((pair_str, t))
@@ -250,21 +250,21 @@ def build_gamma_linear_map(
     if rows:
         L = np.array(rows, dtype=complex)
     else:
-        L = np.zeros((0, num_gh), dtype=complex)
+        L = np.zeros((0, num_gb), dtype=complex)
 
-    return L, gamma_index, gh_vars, basis, parity
+    return L, gamma_index, gb_vars, basis, parity
 
 
-def trivial_gh_subspace(
+def trivial_gb_subspace(
     m: int,
     n: int,
     tol: float = 1e-9,
 ) -> dict:
     """
-    Compute the trivial gh subspace for B(m,n) analytically.
+    Compute the trivial gb subspace for B(m,n) analytically.
 
-    A deformation with parameter gh is trivial iff γ(gh) ∈ Im(δ), i.e.,
-    (P_⊥ · L) · vec(gh) = 0, where P_⊥ projects onto Im(A)^⊥.
+    A deformation with parameter gb is trivial iff γ(gb) ∈ Im(δ), i.e.,
+    (P_⊥ · L) · vec(gb) = 0, where P_⊥ projects onto Im(A)^⊥.
 
     The trivial subspace is null(P_⊥ · L), computed via SVD.
 
@@ -275,12 +275,12 @@ def trivial_gh_subspace(
 
     Returns:
         dict with keys:
-          - 'gh_vars': list of gh variable names (column order of L)
-          - 'gh_shape': [rows, cols] of gh matrix
+          - 'gb_vars': list of gb variable names (column order of L)
+          - 'gb_shape': [rows, cols] of gb matrix
           - 'null_space_basis': list of null vectors (each is a list of floats,
-                                length = len(gh_vars)); trivial gh = linear combo
+                                length = len(gb_vars)); trivial gb = linear combo
           - 'null_dim': int, dimension of trivial subspace
-          - 'gh_total_dim': int, total number of gh parameters
+          - 'gb_total_dim': int, total number of gb parameters
           - 'coboundary_rank': int, rank of coboundary matrix A
           - 'gamma_map_rank': int, rank of gamma linear map L
           - 'PL_rank': int, rank of P_⊥ · L
@@ -290,9 +290,9 @@ def trivial_gh_subspace(
     A, basis, parity = build_coboundary_matrix(m, n, tol=tol * 1e-3)
 
     # Build gamma linear map L
-    L, gamma_index, gh_vars, _, _ = build_gamma_linear_map(m, n, tol=tol * 1e-3)
+    L, gamma_index, gb_vars, _, _ = build_gamma_linear_map(m, n, tol=tol * 1e-3)
 
-    num_gh = len(gh_vars)
+    num_gb = len(gb_vars)
     num_rows = L.shape[0]
 
     # Orthogonal projector P_⊥ onto Im(A)^⊥
@@ -308,25 +308,25 @@ def trivial_gh_subspace(
         P_perp = np.eye(num_rows, dtype=complex)
 
     # Compute P_⊥ · L
-    PL = P_perp @ L  # shape: (num_rows, num_gh)
+    PL = P_perp @ L  # shape: (num_rows, num_gb)
 
     # SVD of PL to find null space
     if PL.shape[0] > 0 and PL.shape[1] > 0:
         _, s_PL, Vt_PL = np.linalg.svd(PL, full_matrices=True)
         rank_PL = int(np.sum(s_PL > tol))
         # Null space = rows of Vt_PL[rank_PL:]
-        null_vecs = Vt_PL[rank_PL:]  # shape: (null_dim, num_gh)
+        null_vecs = Vt_PL[rank_PL:]  # shape: (null_dim, num_gb)
     else:
         s_PL = np.array([])
         rank_PL = 0
-        null_vecs = np.eye(num_gh, dtype=complex)
+        null_vecs = np.eye(num_gb, dtype=complex)
 
     # Rank of L itself
     _, s_L, _ = np.linalg.svd(L, full_matrices=False)
     rank_L = int(np.sum(s_L > tol))
 
-    null_dim = num_gh - rank_PL
-    gh_shape = [2 * m + 1, 2 * n]
+    null_dim = num_gb - rank_PL
+    gb_shape = [2 * m + 1, 2 * n]
 
     # Convert null vectors to real if imaginary parts are negligible
     null_basis_out = []
@@ -337,11 +337,11 @@ def trivial_gh_subspace(
             null_basis_out.append(v.tolist())
 
     return {
-        "gh_vars": gh_vars,
-        "gh_shape": gh_shape,
+        "gb_vars": gb_vars,
+        "gb_shape": gb_shape,
         "null_space_basis": null_basis_out,
         "null_dim": null_dim,
-        "gh_total_dim": num_gh,
+        "gb_total_dim": num_gb,
         "coboundary_rank": rank_A,
         "gamma_map_rank": rank_L,
         "PL_rank": rank_PL,

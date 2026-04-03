@@ -56,22 +56,22 @@ def load_gamma_constants(m: int, n: int) -> Tuple[List[str], Dict]:
     with open(gamma_path, encoding="utf-8") as f:
         data = json.load(f)
 
-    gh_vars = []
+    gb_vars = []
     inh = data["inhomogeneous_deformation"]["inhomogeneous_matrix"]
     for row in inh["matrix"]:
-        gh_vars.extend(row)
+        gb_vars.extend(row)
 
-    # Parse gamma brackets: gamma[(X,Y)][Z] = {gh_var: coeff}
+    # Parse gamma brackets: gamma[(X,Y)][Z] = {gb_var: coeff}
     gamma: Dict[Tuple[str, str], Dict[str, Dict[str, Fraction]]] = {}
     for pair_str, out_dict in data["gamma_matrix"]["brackets"].items():
         a, b = pair_str.split(",")
         gamma[(a, b)] = {}
-        for out_gen, gh_dict in out_dict.items():
+        for out_gen, gb_dict in out_dict.items():
             gamma[(a, b)][out_gen] = {}
-            for gh_var, coeff_str in gh_dict.items():
-                gamma[(a, b)][out_gen][gh_var] = Fraction(coeff_str)
+            for gb_var, coeff_str in gb_dict.items():
+                gamma[(a, b)][out_gen][gb_var] = Fraction(coeff_str)
 
-    return gh_vars, gamma
+    return gb_vars, gamma
 
 
 def bracket(a: str, b: str, brackets: Dict) -> Dict[str, Fraction]:
@@ -167,7 +167,7 @@ def gamma_component(
     gamma: Dict, parity: Dict
 ) -> Dict[str, Fraction]:
     """
-    Get γ(X,Y)|_Z as dict {gh_var: coeff}.
+    Get γ(X,Y)|_Z as dict {gb_var: coeff}.
     Handles symmetry: γ(X,Y) = -(-1)^{p(X)p(Y)} γ(Y,X)
     """
     if (X, Y) in gamma and Z in gamma[(X, Y)]:
@@ -177,8 +177,8 @@ def gamma_component(
         pY = parity[Y]
         sign = -(-1) ** (pX * pY)
         result = {}
-        for gh, c in gamma[(Y, X)][Z].items():
-            result[gh] = Fraction(sign) * c
+        for gb, c in gamma[(Y, X)][Z].items():
+            result[gb] = Fraction(sign) * c
         return result
     return {}
 
@@ -189,7 +189,7 @@ def gamma_component(
 
 def get_family_I_certificate(j: int, n: int) -> List[Tuple[str, str, str, Fraction]]:
     """
-    Family I certificate for gh_{a0, b_j^+} (diagonal type, 4 terms).
+    Family I certificate for gb_{a0, b_j^+} (diagonal type, 4 terms).
 
     For j=1: uses H_1, E_{2δ_1}^±, E_{δ_1}^±, output H_2
     For j≥2: uses H_{j-1}, E_{2δ_j}^±, E_{δ_j}^±, output H_{j+1}
@@ -229,7 +229,7 @@ def get_family_I_certificate(j: int, n: int) -> List[Tuple[str, str, str, Fracti
 
 def get_family_II_certificate(j: int, n: int) -> List[Tuple[str, str, str, Fraction]]:
     """
-    Family II certificate for gh_{a0, b_j^-} (difference type, 3 terms).
+    Family II certificate for gb_{a0, b_j^-} (difference type, 3 terms).
 
     For j=1: uses H_1, E_{δ_1}^-, H_1/H_2, E_{2δ_2}^+
     For j≥2: uses H_{j-1}, E_{δ_j}^-, H_j/H_{j+1}, E_{2δ_{j+1}}^+
@@ -265,7 +265,7 @@ def get_family_II_certificate(j: int, n: int) -> List[Tuple[str, str, str, Fract
 
 def get_family_III_certificate_minus(n: int) -> List[Tuple[str, str, str, Fraction]]:
     """
-    Family III certificate for gh_{a0, b_n^-} (cross-term type, 4 terms).
+    Family III certificate for gb_{a0, b_n^-} (cross-term type, 4 terms).
 
     Uses H_{n-1}, E_{δ_1-δ_n}^{--}, E_{δ_1+δ_n}^{++}, E_{δ_1}^±, E_{δ_n}^-, output H_2
     Requires: n ≥ 2
@@ -298,7 +298,7 @@ def get_family_III_certificate_minus(n: int) -> List[Tuple[str, str, str, Fracti
 
 def get_family_III_certificate_plus(n: int) -> List[Tuple[str, str, str, Fraction]]:
     """
-    Family III certificate for gh_{a0, b_n^+} (cross-term type, 4 terms).
+    Family III certificate for gb_{a0, b_n^+} (cross-term type, 4 terms).
 
     For n=2: coeff=2 on third term (H_1 eigenvalue effect)
     For n≥3: coeff=1
@@ -332,7 +332,7 @@ def get_family_III_certificate_plus(n: int) -> List[Tuple[str, str, str, Fractio
 def verify_certificate(
     cert_components: List[Tuple[str, str, str, Fraction]],
     basis: List[str], parity: Dict, brackets: Dict,
-    gamma: Dict, gh_vars: List[str],
+    gamma: Dict, gb_vars: List[str],
     label: str = "",
     verbose: bool = False,
 ) -> Tuple[bool, Dict[str, Fraction]]:
@@ -342,17 +342,17 @@ def verify_certificate(
     Args:
         cert_components: list of (X, Y, Z, coeff) defining the certificate
         basis, parity, brackets: algebra structure constants
-        gamma, gh_vars: gamma deformation data
+        gamma, gb_vars: gamma deformation data
         label: display label
         verbose: show detailed expansion
 
     Returns:
-        (ctA_is_zero, ctL_values): whether c^T A = 0, and c^T L as {gh_var: value}
+        (ctA_is_zero, ctL_values): whether c^T A = 0, and c^T L as {gb_var: value}
     """
     # Accumulate c^T A: sum of coeff * (δf)(X,Y)|_Z over f-variables
     ctA: Dict[Tuple[str, str], Fraction] = {}
 
-    # Accumulate c^T L: sum of coeff * γ(X,Y)|_Z over gh variables
+    # Accumulate c^T L: sum of coeff * γ(X,Y)|_Z over gb variables
     ctL: Dict[str, Fraction] = {}
 
     if verbose:
@@ -373,8 +373,8 @@ def verify_certificate(
 
         # Expand γ(X,Y)|_Z
         gcomp = gamma_component(X, Y, Z, gamma, parity)
-        for gh, val in gcomp.items():
-            ctL[gh] = ctL.get(gh, Fraction(0)) + coeff * val
+        for gb, val in gcomp.items():
+            ctL[gb] = ctL.get(gb, Fraction(0)) + coeff * val
 
     # Clean up zeros
     ctA = {k: v for k, v in ctA.items() if v != 0}
@@ -388,7 +388,7 @@ def verify_certificate(
 def verify_all_certificates(m: int, n: int, verbose: bool = False):
     """Verify all certificate families for B(m, n)."""
     basis, parity, brackets = load_structure_constants(m, n)
-    gh_vars, gamma = load_gamma_constants(m, n)
+    gb_vars, gamma = load_gamma_constants(m, n)
 
     print(f"\n{'='*74}")
     print(f"  B({m},{n}) = osp(1|{2*n}) — Algebraic certificate verification")
@@ -402,11 +402,11 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
         label = f"Family I: b_{j}^+ (j={j})"
         cert = get_family_I_certificate(j, n)
         ctA_ok, ctL = verify_certificate(
-            cert, basis, parity, brackets, gamma, gh_vars,
+            cert, basis, parity, brackets, gamma, gb_vars,
             label=label, verbose=verbose
         )
-        gh_target = f"gh_a0_b{j}p"
-        ctL_val = ctL.get(gh_target, Fraction(0))
+        gb_target = f"gb_a0_b{j}p"
+        ctL_val = ctL.get(gb_target, Fraction(0))
 
         status = "✓" if ctA_ok and ctL_val != 0 else "✗"
         if not ctA_ok:
@@ -419,7 +419,7 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
         results[label] = {"ctA_zero": ctA_ok, "ctL": ctL, "ctL_target": ctL_val}
         print(f"\n  {status} {label}")
         print(f"    c^T A = 0: {ctA_ok}")
-        print(f"    c^T L = {dict(ctL)}  (target gh: {gh_target} = {ctL_val})")
+        print(f"    c^T L = {dict(ctL)}  (target gb: {gb_target} = {ctL_val})")
 
         if not ctA_ok:
             print(f"    ⚠ NONZERO c^T A entries:")
@@ -437,11 +437,11 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
         label = f"Family II: b_{j}^- (j={j})"
         cert = get_family_II_certificate(j, n)
         ctA_ok, ctL = verify_certificate(
-            cert, basis, parity, brackets, gamma, gh_vars,
+            cert, basis, parity, brackets, gamma, gb_vars,
             label=label, verbose=verbose
         )
-        gh_target = f"gh_a0_b{j}m"
-        ctL_val = ctL.get(gh_target, Fraction(0))
+        gb_target = f"gb_a0_b{j}m"
+        ctL_val = ctL.get(gb_target, Fraction(0))
 
         status = "✓" if ctA_ok and ctL_val != 0 else "✗"
         if not ctA_ok:
@@ -452,7 +452,7 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
         results[label] = {"ctA_zero": ctA_ok, "ctL": ctL, "ctL_target": ctL_val}
         print(f"\n  {status} {label}")
         print(f"    c^T A = 0: {ctA_ok}")
-        print(f"    c^T L = {dict(ctL)}  (target gh: {gh_target} = {ctL_val})")
+        print(f"    c^T L = {dict(ctL)}  (target gb: {gb_target} = {ctL_val})")
 
         if not ctA_ok:
             print(f"    ⚠ NONZERO c^T A entries:")
@@ -474,11 +474,11 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
             label = f"Family III: b_{n}^{sign} (n={n})"
             cert = getter(n)
             ctA_ok, ctL = verify_certificate(
-                cert, basis, parity, brackets, gamma, gh_vars,
+                cert, basis, parity, brackets, gamma, gb_vars,
                 label=label, verbose=verbose
             )
-            gh_target = f"gh_a0_b{n}{suffix}"
-            ctL_val = ctL.get(gh_target, Fraction(0))
+            gb_target = f"gb_a0_b{n}{suffix}"
+            ctL_val = ctL.get(gb_target, Fraction(0))
 
             status = "✓" if ctA_ok and ctL_val != 0 else "✗"
             if not ctA_ok:
@@ -489,7 +489,7 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
             results[label] = {"ctA_zero": ctA_ok, "ctL": ctL, "ctL_target": ctL_val}
             print(f"\n  {status} {label}")
             print(f"    c^T A = 0: {ctA_ok}")
-            print(f"    c^T L = {dict(ctL)}  (target gh: {gh_target} = {ctL_val})")
+            print(f"    c^T L = {dict(ctL)}  (target gb: {gb_target} = {ctL_val})")
 
             if not ctA_ok:
                 print(f"    ⚠ NONZERO c^T A entries:")
@@ -520,7 +520,7 @@ def verify_all_certificates(m: int, n: int, verbose: bool = False):
 def detailed_expansion(m: int, n: int, family: str, j: int = 1):
     """Show detailed δf expansion for a specific certificate."""
     basis, parity, brackets = load_structure_constants(m, n)
-    gh_vars, gamma = load_gamma_constants(m, n)
+    gb_vars, gamma = load_gamma_constants(m, n)
 
     if family == "I":
         cert = get_family_I_certificate(j, n)
@@ -587,9 +587,9 @@ def detailed_expansion(m: int, n: int, family: str, j: int = 1):
     for idx, (X, Y, Z, coeff) in enumerate(cert):
         gcomp = gamma_component(X, Y, Z, gamma, parity)
         if gcomp:
-            for gh, val in gcomp.items():
-                print(f"    Component {idx+1}: {coeff} · γ({X},{Y})|_{Z} → {coeff*val} · {gh}")
-                ctL[gh] = ctL.get(gh, Fraction(0)) + coeff * val
+            for gb, val in gcomp.items():
+                print(f"    Component {idx+1}: {coeff} · γ({X},{Y})|_{Z} → {coeff*val} · {gb}")
+                ctL[gb] = ctL.get(gb, Fraction(0)) + coeff * val
         else:
             print(f"    Component {idx+1}: γ({X},{Y})|_{Z} = 0")
 
