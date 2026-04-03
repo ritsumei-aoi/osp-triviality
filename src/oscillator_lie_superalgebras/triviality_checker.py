@@ -57,20 +57,28 @@ def check_triviality(
         >>> if result['is_trivial']:
         >>>     print(f"f map: {result['f_map']}")
     """
-    from .gamma_from_B import compute_gamma_from_B
+    from .gamma_from_gb import compute_gamma_from_gb
     from .adjoint_from_json import build_adjoint_from_json  # v5 (B_0_n) schema
     from .cohomology_solver import solve_odd_f_generic
     
     # Normalize B to numpy array
     B_array = _normalize_B(n, B)
     
-    # Step 1: Compute gamma from B
-    gamma = compute_gamma_from_B(n, B_array)
+    # Step 1: Convert B to gb matrix (v5 convention: gb is 1 x 2n, B is 2n x 1)
+    # gb matrix for v5: shape (1, 2n) for n >= 1 (matches JSON)
+    if B_array.shape[0] == 2 * n:
+        gb = [B_array.flatten().tolist()]
+    else:
+        raise ValueError(f"B must have length 2n={2*n}, got {B_array.shape[0]}")
     
-    # Step 2: Load algebra structure and build adjoint matrices
+    # Step 2: Compute gamma from gb using v5 JSON
+    gamma_json_path = f"data/gamma_structures/B_0_{n}_gamma.json"
+    gamma = compute_gamma_from_gb(gamma_json_path, gb)
+    
+    # Step 3: Load algebra structure and build adjoint matrices
     basis, parity, adjoint_matrices = build_adjoint_from_json(n)  # Now uses v5 (B_0_n) schema
     
-    # Step 3: Solve for f
+    # Step 4: Solve for f
     f_map, residual_norm = solve_odd_f_generic(
         basis=basis,
         parity=parity,
@@ -79,7 +87,7 @@ def check_triviality(
         tol=tol
     )
     
-    # Step 4: Determine triviality
+    # Step 5: Determine triviality
     is_trivial = (residual_norm < tol)
     
     return {

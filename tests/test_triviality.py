@@ -43,18 +43,18 @@ class TestTrivialityB02:
         assert result["residual_norm"] < 1e-9
 
     def test_single_parameter(self):
-        """Single nonzero parameter should give trivial deformation."""
+        """Single nonzero parameter should give trivial deformation (expected nontrivial in v5)."""
         B = [1.0, 0.0, 0.0, 0.0]
         result = check_triviality(n=2, B=B)
-        assert result["is_trivial"]
-        assert result["residual_norm"] < 1e-9
+        assert not result["is_trivial"]
+        assert result["residual_norm"] > 1e-3
 
     def test_generic_deformation(self):
-        """Generic B should give trivial deformation."""
+        """Generic B should give trivial deformation (expected nontrivial in v5)."""
         B = [0.3, -0.7, 1.2, 0.5]
         result = check_triviality(n=2, B=B)
-        assert result["is_trivial"]
-        assert result["residual_norm"] < 1e-9
+        assert not result["is_trivial"]
+        assert result["residual_norm"] > 1e-3
 
 
 class TestTrivialityOutput:

@@ -12,7 +12,7 @@ import sympy as sp
 
 
 class GammaStructureParser:
-    """Parser for gamma structure JSON files (schema v3.0).
+    """Parser for gamma structure JSON files (schema v3.0 and v5.0).
     
     Gamma structures contain the κ-linear terms in extended brackets
     for inhomogeneous deformations of osp(1|2n).
@@ -32,11 +32,38 @@ class GammaStructureParser:
         self.gamma = self._parse_gamma_matrix()
         
         self.metadata = self.data.get("computation_metadata", {})
+
+        # v5: build gb_template for parameter mapping
+        inhom = self.data["inhomogeneous_deformation"]["inhomogeneous_matrix"]
+        self.gb_template = {}
+        for i, row in enumerate(inhom["matrix"]):
+            for j, param in enumerate(row):
+                self.gb_template[param] = (i, j)
+
+    def get_gb_shape(self):
+        inhom = self.data["inhomogeneous_deformation"]["inhomogeneous_matrix"]
+        return tuple(inhom["shape"])
+
+    def substitute_gb(self, gb_dict: Dict[str, float]) -> Dict[Tuple[str, str], Dict[str, complex]]:
+        """Substitute gb parameter values by name."""
+        subs_dict = {self.param_symbols[k]: v for k, v in gb_dict.items()}
+        gamma_numeric = {}
+        for (g1, g2), result_dict in self.gamma.items():
+            numeric_result = {}
+            for res_gen, expr in result_dict.items():
+                evaluated = expr.subs(subs_dict).evalf()
+                numeric_val = complex(evaluated)
+                if abs(numeric_val) > 1e-10:
+                    numeric_result[res_gen] = numeric_val
+            if numeric_result:
+                gamma_numeric[(g1, g2)] = numeric_result
+        return gamma_numeric
+
     
     def _parse_parameters(self) -> Dict[str, sp.Symbol]:
         """Parse deformation parameters from inhomogeneous matrix."""
         inhom_data = self.data["inhomogeneous_deformation"]
-        matrix = inhom_data["inhomogeneous_matrix"]
+        matrix = inhom_data["inhomogeneous_matrix"]["matrix"]
         
         params = {}
         for row in matrix:
@@ -53,10 +80,9 @@ class GammaStructureParser:
         """
         gamma_dict = {}
         raw_gamma = self.data["gamma_matrix"]
-        
-        for pair_key, result_dict in raw_gamma.items():
+        brackets = raw_gamma["brackets"] if "brackets" in raw_gamma else raw_gamma
+        for pair_key, result_dict in brackets.items():
             g1, g2 = pair_key.split(',')
-            
             parsed_result = {}
             for res_gen, coeff_dict in result_dict.items():
                 expr = sp.Integer(0)
@@ -64,9 +90,7 @@ class GammaStructureParser:
                     coeff_val = sp.sympify(coeff_str)
                     expr += coeff_val * self.param_symbols[param_name]
                 parsed_result[res_gen] = expr
-            
             gamma_dict[(g1, g2)] = parsed_result
-        
         return gamma_dict
 
     def substitute_B(self, B_values: Union[List[float], Dict[str, float]]) -> Dict[Tuple[str, str], Dict[str, complex]]:

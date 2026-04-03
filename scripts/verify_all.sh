@@ -11,12 +11,20 @@ echo "--- 1. Running test suite ---"
 pytest tests/ -v
 echo ""
 
-echo "--- 2. Verifying dimension formula (dim C^1_mu = 6n - 2) ---"
-python scripts/verify_dim_formula.py
+echo "--- 2. Verifying trivial algebraic ---"
+python scripts/verify_trivial_algebraic.py
 echo ""
 
 echo "--- 3. Verifying algebraic certificates ---"
-python scripts/verify_certificates.py
+python scripts/verify_certificates_algebraic.py
+echo ""
+
+echo "--- 4. Verifying n-invariance ---"
+python scripts/verify_n_invariance.py
+echo ""
+
+echo "--- 5. Verifying dimension formula (dim C^1_mu = 6n - 2) ---"
+python scripts/verify_dim_formula.py
 echo ""
 
 echo "--- 4. Checking triviality for B(0,2) ---"

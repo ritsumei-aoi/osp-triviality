@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 
 from oscillator_lie_superalgebras.adjoint_from_json import build_adjoint_from_json  # v5 (B_0_n) schema
-from oscillator_lie_superalgebras.gamma_from_B import compute_gamma_from_B
+from oscillator_lie_superalgebras.gamma_from_gb import compute_gamma_from_gb
 from oscillator_lie_superalgebras.cohomology_solver import (
     solve_odd_f_generic,
     reconstruct_gamma_from_f,
@@ -42,7 +42,7 @@ class TestGammaComputation:
     def test_gamma_n1_nonzero(self):
         """Non-zero B should produce non-zero gamma for n=1."""
         B = [1.0, 0.0]
-        gamma = compute_gamma_from_B(n=1, B=B)
+        gamma = compute_gamma_from_gb('data/gamma_structures/B_0_1_gamma.json', [[1.0, 0.0]])
         assert isinstance(gamma, dict)
         has_nonzero = any(
             any(abs(v) > 1e-10 for v in entry.values())
@@ -53,7 +53,7 @@ class TestGammaComputation:
     def test_gamma_n1_zero(self):
         """Zero B should produce zero gamma."""
         B = [0.0, 0.0]
-        gamma = compute_gamma_from_B(n=1, B=B)
+        gamma = compute_gamma_from_gb('data/gamma_structures/B_0_1_gamma.json', [[0.0, 0.0]])
         for key, entry in gamma.items():
             for gen, coeff in entry.items():
                 assert abs(coeff) < 1e-10, f"Expected zero gamma at {key}->{gen}"

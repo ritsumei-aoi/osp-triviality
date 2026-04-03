@@ -41,14 +41,6 @@ def test_osp_1_2_parser_loads():
     # ordering check skipped for v5
 
 
-# v5 does not have M_0_1; skip this test or adapt for B(0,1) generators if needed
-
-
-
-# v5 does not have Q_0; skip this test or adapt for B(0,1) generators if needed
-
-
-
 def test_osp_1_4_loads():
     """Test that osp(1|4) JSON loads successfully."""
     json_path = Path("data/algebra_structures/B_0_2_structure.json")
@@ -59,10 +51,6 @@ def test_osp_1_4_loads():
     parser = OSpAlgebraParser(str(json_path))
     assert parser.schema_version == "5.0"
     assert len(parser.basis) == 14  # 10 even + 4 odd
-
-
-# v5 does not have M_0_1 or M_1_1; skip this test or adapt for B(0,1) generators if needed
-
 
 
 if __name__ == "__main__":
