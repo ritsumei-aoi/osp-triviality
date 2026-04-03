@@ -150,17 +150,17 @@ Extended format used by `check_triviality.py` and `evaluated_structure_parser.py
 
 ## Schema v5.0: Gamma Structure
 
-Extended format including exchange relations and gh parameters.
+Extended format including exchange relations and gb parameters.
 
 ### Exchange Relations
 
 ```json
 {
   "exchange_relations": {
-    "convention": "[b_j, a_i] = -gh[i][j]·κ",
+    "convention": "[b_j, a_i] = -gb[i][j]·κ",
     "parameters": {
-      "gh_a0_b1p": "gh[0][0]",
-      "gh_a0_b1m": "gh[0][1]",
+      "gb_a0_b1p": "gb[0][0]",
+      "gb_a0_b1m": "gb[0][1]",
       ...
     }
   }
@@ -186,8 +186,8 @@ Extended format including exchange relations and gh parameters.
 | `osp_1_2_gamma.json` | B(0,1) | v3.0 | 2 (B₁, B₂) |
 | `osp_1_4_gamma.json` | B(0,2) | v3.0 | 4 (B₁, ..., B₄) |
 | `osp_1_6_gamma.json` | B(0,3) | v3.0 | 6 (B₁, ..., B₆) |
-| `B_0_2_gamma.json` | B(0,2) | v5.0 | 4 (gh matrix) |
-| `B_0_3_gamma.json` | B(0,3) | v5.0 | 6 (gh matrix) |
+| `B_0_2_gamma.json` | B(0,2) | v5.0 | 4 (gb matrix) |
+| `B_0_3_gamma.json` | B(0,3) | v5.0 | 6 (gb matrix) |
 
 Structures for other values of n can be regenerated using the scripts:
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Verify dim(C^1_μ) = 6n - 2 for all gh weight sectors of B(0,n) = osp(1|2n).
+Verify dim(C^1_μ) = 6n - 2 for all gb weight sectors of B(0,n) = osp(1|2n).
 
-Decomposes each gh-sector's f-variables into the 8 categories from the
+Decomposes each gb-sector's f-variables into the 8 categories from the
 analytical proof and verifies the count matches 6n - 2.
 """
 import json
@@ -89,8 +89,8 @@ def get_fvar_sectors(structure, n):
     return sectors
 
 
-def get_gh_weights(n):
-    """Return distinct gh-parameter weights."""
+def get_gb_weights(n):
+    """Return distinct gb-parameter weights."""
     weights = set()
     for j in range(1, n + 1):
         w = [0] * n
@@ -142,8 +142,8 @@ def main():
             continue
 
         sectors = get_fvar_sectors(structure, n)
-        gh_wts = get_gh_weights(n)
-        for wt in gh_wts:
+        gb_wts = get_gb_weights(n)
+        for wt in gb_wts:
             dim = len(sectors.get(wt, []))
             ok = dim == expected
             status = "✓" if ok else "✗"

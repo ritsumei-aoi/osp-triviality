@@ -9,8 +9,8 @@ Schema version: 5.0
 - Output: data/gamma_structures/B_{m}_{n}_gamma.json
 
 Key changes from v4 (generate_B_gamma_json_v4.py):
-- gh parameter names: numeric index gh_i_j -> label-based gh_a0_b1p etc.
-- Sign convention: [b_j, a_i] = -gh[i][j]·κ  (v5.0, κ leftmost in PBW)
+- gb parameter names: numeric index gb_i_j -> label-based gb_a0_b1p etc.
+- Sign convention: [b_j, a_i] = -gb[i][j]·κ  (v5.0, κ leftmost in PBW)
 - odd×odd negate removed: κ is PBW-leftmost, so κ·γ is already correct sign
 - fermion_labels read in creation-first order (v5.0 canonical_pairs)
 - algebra_reference: family "B", m, n (not "osp", 2m+1, 2n)
@@ -19,7 +19,7 @@ Key changes from v4 (generate_B_gamma_json_v4.py):
 - schema_version: "5.0"
 
 Exchange relations (v5.0):
-    [b_j, a_i] = -gh[i][j]·κ   (κ leftmost in PBW)
+    [b_j, a_i] = -gb[i][j]·κ   (κ leftmost in PBW)
     [b_j, b_k] = J_{j,k}        (from symplectic_matrix in JSON)
     {a_i, a_j} = delta_{ij}/2   (canonical anticommutation)
     κ^2 = 0
@@ -88,14 +88,14 @@ def extract_oscillator_labels(
     return fermion_labels, boson_labels, symplectic_matrix
 
 
-def _gh_label(fermion_lbl: str, boson_lbl: str) -> str:
-    """Build gh parameter name from oscillator labels.
+def _gb_label(fermion_lbl: str, boson_lbl: str) -> str:
+    """Build gb parameter name from oscillator labels.
 
-    e.g. ("a_0", "b_1_p") -> "gh_a0_b1p"
+    e.g. ("a_0", "b_1_p") -> "gb_a0_b1p"
     """
     f = fermion_lbl.replace("_", "")  # a0, a1p, a1m
     b = boson_lbl.replace("_", "")    # b1p, b1m
-    return f"gh_{f}_{b}"
+    return f"gb_{f}_{b}"
 
 
 # ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ class OscillatorRewriterV5:
     instead it is accumulated as a commutative scalar coefficient.
 
     Exchange relations (v5.0):
-        [b_j, a_i] = -gh[i][j]·κ   (sign negated vs v4)
+        [b_j, a_i] = -gb[i][j]·κ   (sign negated vs v4)
         [b_j, b_k] = J_{j,k}
         {a_i, a_j} = delta_{ij}/2
         κ^2 = 0
@@ -145,9 +145,9 @@ class OscillatorRewriterV5:
 
         self.kappa = sp.Symbol('kappa', commutative=True)
 
-        # gh symbols: label-based names (v5.0)
-        self.gh_syms: Dict[Tuple[int, int], sp.Symbol] = {
-            (i, j): sp.Symbol(_gh_label(fermion_labels[i], boson_labels[j]), commutative=True)
+        # gb symbols: label-based names (v5.0)
+        self.gb_syms: Dict[Tuple[int, int], sp.Symbol] = {
+            (i, j): sp.Symbol(_gb_label(fermion_labels[i], boson_labels[j]), commutative=True)
             for i in range(self.n_fermions)
             for j in range(self.n_bosons)
         }
@@ -203,7 +203,7 @@ class OscillatorRewriterV5:
             if self.pbw_rank[left] <= self.pbw_rank[right]:
                 continue
 
-            # Case 1: boson * fermion -> fermion * boson - gh[i][j]·κ  (v5.0 sign)
+            # Case 1: boson * fermion -> fermion * boson - gb[i][j]·κ  (v5.0 sign)
             if self._is_boson(left) and self._is_fermion(right):
                 j_flat = self.boson_order[left]
                 i_flat = self.fermion_order[right]
@@ -211,13 +211,13 @@ class OscillatorRewriterV5:
                 swapped = word[:idx] + [right, left] + word[idx + 2:]
                 term1 = self.rewrite_word(swapped)
                 reduced = word[:idx] + word[idx + 2:]
-                gh_val = self.gh_syms.get((i_flat, j_flat), sp.Integer(0))
+                gb_val = self.gb_syms.get((i_flat, j_flat), sp.Integer(0))
 
                 # κ は odd: before 中の odd 元を通過するたびに符号が変わる
                 n_odd_before = sum(1 for tok in word[:idx] if tok in self.fermion_order)
                 kappa_sign = (-1) ** n_odd_before
 
-                term2 = kappa_sign * (-self.kappa) * gh_val * self.rewrite_word(reduced)
+                term2 = kappa_sign * (-self.kappa) * gb_val * self.rewrite_word(reduced)
                 return self._kappa_reduce(term1 + term2)
 
             # Case 2: boson * boson (wrong order)
@@ -388,12 +388,12 @@ def extract_gamma_coefficients_v5(
 ) -> Dict[str, Dict[str, str]]:
     """Extract gamma coefficients from a standardized bracket expression.
 
-    Picks out κ^1 terms and decomposes by gh parameter monomials.
+    Picks out κ^1 terms and decomposes by gb parameter monomials.
     No sign negation needed: κ is PBW-leftmost, so [X,Y]_L = [X,Y] + κ·γ(X,Y)
     is directly read from the κ^1 coefficient.
 
     Returns:
-        {gen_name: {gh_param_str: coeff_str}}
+        {gen_name: {gb_param_str: coeff_str}}
     """
     #print(bracket_std)
 
@@ -401,12 +401,12 @@ def extract_gamma_coefficients_v5(
     terms = expanded.args if expanded.is_Add else [expanded]
 
     gamma_map: Dict[str, Dict[str, sp.Expr]] = {}
-    all_gh_syms = set(rewriter.gh_syms.values())
+    all_gb_syms = set(rewriter.gb_syms.values())
 
     for term in terms:
         kappa_power = 0
         osc_monomial = sp.Integer(1)
-        gh_part = sp.Integer(1)
+        gb_part = sp.Integer(1)
         numeric = sp.Integer(1)
 
         parts = term.args if term.is_Mul else [term]
@@ -420,8 +420,8 @@ def extract_gamma_coefficients_v5(
                 osc_monomial *= arg
             elif arg.is_Pow and arg.args[0] in rewriter.b_std.values():
                 osc_monomial *= arg
-            elif arg in all_gh_syms:
-                gh_part *= arg
+            elif arg in all_gb_syms:
+                gb_part *= arg
             else:
                 numeric *= arg
 
@@ -431,35 +431,35 @@ def extract_gamma_coefficients_v5(
         if osc_monomial not in std_to_gen:
             continue
         gen_name, inv_coeff = std_to_gen[osc_monomial]
-        full_coeff = sp.expand(numeric * gh_part * inv_coeff)
+        full_coeff = sp.expand(numeric * gb_part * inv_coeff)
 
         coeff_terms = full_coeff.args if full_coeff.is_Add else [full_coeff]
         for ct in coeff_terms:
             num_part = sp.Integer(1)
-            gh_vars = []
+            gb_vars = []
 
             ct_parts = ct.args if ct.is_Mul else [ct]
             for arg in ct_parts:
-                if arg in all_gh_syms:
-                    gh_vars.append(arg)
+                if arg in all_gb_syms:
+                    gb_vars.append(arg)
                 else:
                     num_part *= arg
 
-            gh_key = "*".join(sorted(str(g) for g in gh_vars)) if gh_vars else "1"
+            gb_key = "*".join(sorted(str(g) for g in gb_vars)) if gb_vars else "1"
 
             if gen_name not in gamma_map:
                 gamma_map[gen_name] = {}
-            if gh_key in gamma_map[gen_name]:
-                gamma_map[gen_name][gh_key] = sp.expand(
-                    gamma_map[gen_name][gh_key] + num_part
+            if gb_key in gamma_map[gen_name]:
+                gamma_map[gen_name][gb_key] = sp.expand(
+                    gamma_map[gen_name][gb_key] + num_part
                 )
             else:
-                gamma_map[gen_name][gh_key] = num_part
+                gamma_map[gen_name][gb_key] = num_part
 
     return {
-        gen_name: {k: str(v) for k, v in gh_dict.items() if sp.sympify(v) != 0}
-        for gen_name, gh_dict in gamma_map.items()
-        if any(sp.sympify(v) != 0 for v in gh_dict.values())
+        gen_name: {k: str(v) for k, v in gb_dict.items() if sp.sympify(v) != 0}
+        for gen_name, gb_dict in gamma_map.items()
+        if any(sp.sympify(v) != 0 for v in gb_dict.values())
     }
 
 
@@ -571,9 +571,9 @@ def process_algebra(m: int, n: int, structure_json_path: Path) -> None:
     n_ferm = len(fermion_labels)
     n_bos = len(boson_labels)
 
-    # gh parameter matrix: label-based names (v5.0)
-    gh_matrix = [
-        [_gh_label(fermion_labels[i], boson_labels[j]) for j in range(n_bos)]
+    # gb parameter matrix: label-based names (v5.0)
+    gb_matrix = [
+        [_gb_label(fermion_labels[i], boson_labels[j]) for j in range(n_bos)]
         for i in range(n_ferm)
     ]
 
@@ -588,7 +588,7 @@ def process_algebra(m: int, n: int, structure_json_path: Path) -> None:
             "structure_schema_version": "5.0",
         },
         "inhomogeneous_deformation": {
-            "exchange_relation": "[b_j, a_i] = G[b_j][a_i]·κ = -gh[i][j]·κ",
+            "exchange_relation": "[b_j, a_i] = G[b_j][a_i]·κ = -gb[i][j]·κ",
             "gram_matrix_convention": {
                 "description": (
                     "Full Gram matrix G of the skew-supersymmetric bilinear form, "
@@ -599,23 +599,23 @@ def process_algebra(m: int, n: int, structure_json_path: Path) -> None:
                     "[ a_0, a_1_p, a_1_m, ..., a_m_p, a_m_m, "
                     "b_1_p, b_1_m, ..., b_n_p, b_n_m ]"
                 ),
-                "gh_submatrix": (
-                    "gh[a_i][b_j] = (a_i | b_j). "
-                    "Relation to paper B matrix: gh = -B_paper "
+                "gb_submatrix": (
+                    "gb[a_i][b_j] = (a_i | b_j). "
+                    "Relation to paper B matrix: gb = -B_paper "
                     "(sign reversal due to basis reordering)."
                 ),
             },
             "inhomogeneous_matrix": {
                 "description": (
-                    "gh submatrix (fermion rows × boson columns). "
-                    "gh[i][j] = (f_i | e_j). "
-                    "Exchange relation: [e_j, f_i] = -gh[i][j]·κ."
+                    "gb submatrix (fermion rows × boson columns). "
+                    "gb[i][j] = (f_i | e_j). "
+                    "Exchange relation: [e_j, f_i] = -gb[i][j]·κ."
                 ),
                 "fermion_basis_order": fermion_labels,
                 "boson_basis_order": boson_labels,
                 "shape": [n_ferm, n_bos],
-                "matrix": gh_matrix,
-                "sympy_repr": gh_matrix,
+                "matrix": gb_matrix,
+                "sympy_repr": gb_matrix,
             },
         },
         "gamma_matrix": {
@@ -664,7 +664,7 @@ def process_algebra(m: int, n: int, structure_json_path: Path) -> None:
 # Entry point
 # ---------------------------------------------------------------------------
 
-DEFAULT_CASES = [(0, 1), (0, 2), (1, 1),(0, 3), (1, 2), (2, 1)]
+DEFAULT_CASES = [(0, 1), (0, 2), (1, 1),(0, 3), (1, 2), (2, 1),(2,2)]
 
 
 def main():
