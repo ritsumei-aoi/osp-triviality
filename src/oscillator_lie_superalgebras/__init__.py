@@ -7,7 +7,6 @@ Core library for oscillator Lie superalgebras B(0,n) = osp(1|2n).
 from .triviality_checker import check_triviality
 from .cohomology_solver import solve_odd_f_generic, reconstruct_gamma_from_f
 from .adjoint_from_json import build_adjoint_from_json  # v5 (B_0_n) schema
-from .gamma_from_B import compute_gamma_from_B
 from .algebra_parser import OSpAlgebraParser
 from .gamma_parser import GammaStructureParser
 from .oscillator_algebra import BmnAlgebra
