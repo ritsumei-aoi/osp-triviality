@@ -67,13 +67,26 @@ class OSpAlgebraParser:
         symbols = {}
         
         # Bosonic (b_i)
-        for b in self.data["oscillator_generators"]["bosonic"]:
+        bosons = []
+        if "bosonic" in self.data["oscillator_generators"]:
+            bosons = self.data["oscillator_generators"]["bosonic"]
+        elif "bosons" in self.data["oscillator_generators"]:
+            bosons = self.data["oscillator_generators"]["bosons"]["labels"]
+        for b in bosons:
             symbols[b] = sp.Symbol(b, commutative=False)
-            
+        
         # Fermionic (a)
-        for a in self.data["oscillator_generators"]["fermionic"]:
+        fermions = []
+        if "fermionic" in self.data["oscillator_generators"]:
+            fermions = self.data["oscillator_generators"]["fermionic"]
+        elif "fermions" in self.data["oscillator_generators"]:
+            fermions = self.data["oscillator_generators"]["fermions"]["labels"]
+        # Supplementary fermion (B(0,n) case)
+        if "supplementary_fermion" in self.data["oscillator_generators"]:
+            fermions = fermions + [self.data["oscillator_generators"]["supplementary_fermion"]["label"]]
+        for a in fermions:
             symbols[a] = sp.Symbol(a, commutative=False)
-            
+        
         return symbols
 
     def _parse_realizations(self) -> Dict[str, sp.Expr]:

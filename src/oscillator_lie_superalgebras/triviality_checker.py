@@ -58,7 +58,7 @@ def check_triviality(
         >>>     print(f"f map: {result['f_map']}")
     """
     from .gamma_from_B import compute_gamma_from_B
-    from .adjoint_from_json import build_adjoint_from_json
+    from .adjoint_from_json import build_adjoint_from_json  # v5 (B_0_n) schema
     from .cohomology_solver import solve_odd_f_generic
     
     # Normalize B to numpy array
@@ -68,7 +68,7 @@ def check_triviality(
     gamma = compute_gamma_from_B(n, B_array)
     
     # Step 2: Load algebra structure and build adjoint matrices
-    basis, parity, adjoint_matrices = build_adjoint_from_json(n)
+    basis, parity, adjoint_matrices = build_adjoint_from_json(n)  # Now uses v5 (B_0_n) schema
     
     # Step 3: Solve for f
     f_map, residual_norm = solve_odd_f_generic(

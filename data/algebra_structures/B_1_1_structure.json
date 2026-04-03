@@ -1,0 +1,645 @@
+{
+  "schema_version": "5.0",
+  "algebra": {
+    "family": "B",
+    "m": 1,
+    "n": 1,
+    "cartan_type": "B(1,1)",
+    "alternative_notation": {
+      "osp": "osp(3|2)",
+      "dimension_formula": "osp(2m+1|2n)"
+    },
+    "dimension": {
+      "total": 12,
+      "even": 6,
+      "odd": 6
+    }
+  },
+  "oscillator_generators": {
+    "supplementary_fermion": {
+      "label": "a_0",
+      "description": "Supplementary real fermionic oscillator (Frappat 2000, p.219). Replaces grading operator (-1)^N in B(m,n) for m>=1.",
+      "role": "Grading operator replacement",
+      "reference": "Frappat et al., Dictionary on Lie Algebras and Superalgebras (2000)"
+    },
+    "fermions": {
+      "count": 2,
+      "m": 1,
+      "labels": [
+        "a_1_p",
+        "a_1_m"
+      ],
+      "description": "Standard fermionic oscillators a_j^± with j=1,...,1"
+    },
+    "bosons": {
+      "count": 2,
+      "n": 1,
+      "labels": [
+        "b_1_p",
+        "b_1_m"
+      ],
+      "description": "Bosonic oscillators b_i^± with i=1,...,1"
+    }
+  },
+  "oscillator_relations": {
+    "supplementary_fermion_relations": {
+      "label": "a_0",
+      "description": "Relations for supplementary real fermionic oscillator",
+      "self_anticommutator": {
+        "relation": "{a_0, a_0} = 1",
+        "note": "Real fermionic element with {a_0, a_0} = 1. See metadata for correspondence with Frappat's e."
+      },
+      "commutes_with_bosons": {
+        "relation": "[b_i^±, a_0] = 0",
+        "description": "Commutes with all bosonic oscillators"
+      },
+      "anticommutes_with_fermions": {
+        "relation": "{a_i^±, a_0} = 0",
+        "description": "Anticommutes with all standard fermionic oscillators"
+      }
+    },
+    "standard_fermion_anticommutators": {
+      "description": "Canonical anticommutation relations for standard fermionic oscillators",
+      "relations": {
+        "same_type": "{a_i^±, a_j^±} = 0 for all i, j",
+        "conjugate_pair": "{a_i^-, a_j^+} = δ_{ij}"
+      },
+      "canonical_pairs": [
+        {
+          "index": 1,
+          "annihilation": "a_1_m",
+          "creation": "a_1_p",
+          "anticommutator": 1
+        }
+      ],
+      "metric_matrix": {
+        "description": "Metric g_{ij} in basis [a_1^-, a_1^+, ..., a_m^-, a_m^+].",
+        "basis_order": [
+          "a_1_m",
+          "a_1_p"
+        ],
+        "m": 1,
+        "matrix": []
+      }
+    },
+    "bosonic_commutators": {
+      "description": "Canonical commutation relations for bosonic oscillators",
+      "relations": {
+        "same_type": "[b_i^±, b_j^±] = 0 for all i, j",
+        "conjugate_pair": "[b_i^-, b_j^+] = δ_{ij}"
+      },
+      "canonical_pairs": [
+        {
+          "index": 1,
+          "annihilation": "b_1_m",
+          "creation": "b_1_p",
+          "commutator": 1
+        }
+      ],
+      "symplectic_matrix": {
+        "description": "Symplectic form J_{ij} in basis ['b_1_p', 'b_1_m'] with [b_i, b_j] = J_{ij}.",
+        "basis_order": [
+          "b_1_p",
+          "b_1_m"
+        ],
+        "n": 1,
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            -1,
+            0
+          ]
+        ]
+      }
+    },
+    "mixed_commutators": {
+      "description": "Commutation relations between different oscillator types",
+      "boson_fermion": {
+        "relation": "[b_i^±, a_j^±] = 0",
+        "description": "Bosons commute with standard fermions (homogeneous case, κ=0)"
+      },
+      "boson_supplementary": {
+        "relation": "[b_i^±, a_0] = 0",
+        "description": "Bosons commute with supplementary fermion"
+      },
+      "fermion_supplementary": {
+        "relation": "{a_i^±, a_0} = 0",
+        "description": "Standard fermions anticommute with supplementary fermion"
+      }
+    }
+  },
+  "basis": {
+    "even": [
+      "H_1",
+      "H_2",
+      "E_eps1_p",
+      "E_eps1_m",
+      "E_2del1_p",
+      "E_2del1_m"
+    ],
+    "odd": [
+      "E_eps1_del1_pp",
+      "E_eps1_del1_mm",
+      "E_eps1_del1_pm",
+      "E_eps1_del1_mp",
+      "E_del1_p",
+      "E_del1_m"
+    ],
+    "ordering_convention": "Physical ordering: (1) Cartan: H_1,...,H_n (bosonic), H_{n+1},...,H_{n+m} (fermionic); (2) Positive even roots: bosonic long/short, fermionic long/short, mixed; (3) Negative even roots: same pattern; (4) Mixed even roots: bosonic, fermionic, boson-fermion; (5) Positive odd roots: E_del{k}_p (bosonic), E_eps{i}_p (fermionic); (6) Negative odd roots: E_del{k}_m (bosonic), E_eps{i}_m (fermionic)."
+  },
+  "parity": {
+    "H_1": 0,
+    "H_2": 0,
+    "E_eps1_p": 0,
+    "E_eps1_m": 0,
+    "E_2del1_p": 0,
+    "E_2del1_m": 0,
+    "E_eps1_del1_pp": 1,
+    "E_eps1_del1_mm": 1,
+    "E_eps1_del1_pm": 1,
+    "E_eps1_del1_mp": 1,
+    "E_del1_p": 1,
+    "E_del1_m": 1
+  },
+  "generator_realization": {
+    "description": "Standard form with PBW ordering: a_0, a_j^±, b_k^±. E_{+ε_i} = -sqrt(2)*a_0*a_i^+ (sign from {a_i^+,a_0}=0). E_{-ε_i} = sqrt(2)*a_0*a_i^-. E_{±δ_k} = a_0*b_k^± (B(0,n) convention, coeff 1). See metadata.",
+    "ordering": "a_0, a_1_p, a_1_m, b_1_p, b_1_m",
+    "realizations": {
+      "H_1": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1_p",
+              "b_1_m"
+            ],
+            "coeff": "1"
+          },
+          {
+            "words": [
+              "a_1_p",
+              "a_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "b_1^+ b_1^- + a_1^+ a_1^-",
+        "parity": 0,
+        "note": "Cartan (boundary, bosonic-fermionic). Frappat p.219: H_n = b_n^+b_n^- + a_1^+a_1^-."
+      },
+      "H_2": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_p",
+              "a_1_m"
+            ],
+            "coeff": "2"
+          },
+          {
+            "words": [],
+            "coeff": "-1"
+          }
+        ],
+        "frappat_form": "2 a_1^+ a_1^- - 1",
+        "parity": 0,
+        "note": "Cartan (terminal, fermionic). Unified formula: (a_m^+a_m^- - a_m^-a_m^+) = 2a_m^+a_m^- - 1. Frappat p.219."
+      },
+      "E_2del1_p": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1_p",
+              "b_1_p"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "(b_1^+)^2",
+        "parity": 0,
+        "note": "Long even root +2δ_1. Frappat p.220."
+      },
+      "E_2del1_m": {
+        "standard_form": [
+          {
+            "words": [
+              "b_1_m",
+              "b_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "(b_1^-)^2",
+        "parity": 0,
+        "note": "Long even root -2δ_1. Frappat p.220."
+      },
+      "E_2eps1_p": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_p",
+              "a_1_p"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "(a_1^+)^2",
+        "parity": 0,
+        "note": "Long even root +2ε_1. Frappat p.219. NOTE: vanishes in standard CAR realization ((a_i^±)^2 = 0)."
+      },
+      "E_2eps1_m": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_m",
+              "a_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "(a_1^-)^2",
+        "parity": 0,
+        "note": "Long even root -2ε_1. Frappat p.219. NOTE: vanishes in standard CAR realization ((a_i^±)^2 = 0)."
+      },
+      "E_eps1_del1_pp": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_p",
+              "b_1_p"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "a_1^+ b_1^+",
+        "parity": 1,
+        "note": "Mixed even root +(ε_1+δ_1). Frappat p.219."
+      },
+      "E_eps1_del1_mm": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_m",
+              "b_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "a_1^- b_1^-",
+        "parity": 1,
+        "note": "Mixed even root -(ε_1+δ_1). Frappat p.219."
+      },
+      "E_eps1_del1_pm": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_p",
+              "b_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "a_1^+ b_1^-",
+        "parity": 1,
+        "note": "Mixed even root ε_1-δ_1. Frappat p.219."
+      },
+      "E_eps1_del1_mp": {
+        "standard_form": [
+          {
+            "words": [
+              "a_1_m",
+              "b_1_p"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "b_1^+ a_1^-",
+        "parity": 1,
+        "note": "Mixed even root -δ_1+ε_1. Frappat p.219: b_k^+ a_i^-. PBW: a_i^- b_k^+ -> reordered as a_i^- first (a before b)."
+      },
+      "E_del1_p": {
+        "standard_form": [
+          {
+            "words": [
+              "a_0",
+              "b_1_p"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "b_1^+ e",
+        "transformation": "b_1^+ e -> a_0 b_1^+ ([b,a_0]=0, no sign change)",
+        "parity": 1,
+        "note": "Odd root +δ_1. B(0,n) convention: a_0 b_k^+. B(m,n) Frappat: sqrt(2)*a_0*b_k^+. See metadata."
+      },
+      "E_del1_m": {
+        "standard_form": [
+          {
+            "words": [
+              "a_0",
+              "b_1_m"
+            ],
+            "coeff": "1"
+          }
+        ],
+        "frappat_form": "e b_1^-",
+        "transformation": "e b_1^- -> a_0 b_1^- (already PBW order)",
+        "parity": 1,
+        "note": "Odd root -δ_1. B(0,n) convention: a_0 b_k^-. B(m,n) Frappat: sqrt(2)*a_0*b_k^-. See metadata."
+      },
+      "E_eps1_p": {
+        "standard_form": [
+          {
+            "words": [
+              "a_0",
+              "a_1_p"
+            ],
+            "coeff": "-sqrt(2)"
+          }
+        ],
+        "frappat_form": "a_1^+ e",
+        "transformation": "a_1^+ e = a_1^+ * sqrt(2)*a_0 = -sqrt(2)*a_0*a_i^+ ({a_i^+, a_0}=0 => a_i^+*a_0 = -a_0*a_i^+)",
+        "parity": 1,
+        "note": "Odd root +ε_1. Frappat p.219: E_{ε_i} = a_i^+ e. PBW reorder: a_i^+ e = -sqrt(2)*a_0*a_i^+. Coefficient is -sqrt(2) (sign from anticommutation with a_0)."
+      },
+      "E_eps1_m": {
+        "standard_form": [
+          {
+            "words": [
+              "a_0",
+              "a_1_m"
+            ],
+            "coeff": "sqrt(2)"
+          }
+        ],
+        "frappat_form": "e a_1^-",
+        "transformation": "e a_1^- = sqrt(2)*a_0*a_1^- (already PBW order)",
+        "parity": 1,
+        "note": "Odd root -ε_1. Frappat p.219: E_{-ε_i} = e a_i^-. PBW: already in order. Coefficient sqrt(2)."
+      }
+    }
+  },
+  "structure_constants": {
+    "description": "Non-zero brackets [X, Y] = sum_Z c_Z Z. For odd-odd pairs: anticommutator {X,Y}. Otherwise: commutator [X,Y]. Coefficients follow implementation convention (E_{±δ_k} = a_0 b_k^±, E_{±ε_i} = ∓sqrt(2)*a_0*a_i^±); see metadata. Computed via oscillator algebra engine (oscillator_algebra.py).",
+    "brackets": {
+      "H_1,E_2del1_p": {
+        "E_2del1_p": "2"
+      },
+      "H_1,E_2del1_m": {
+        "E_2del1_m": "-2"
+      },
+      "H_1,E_eps1_p": {
+        "E_eps1_p": "1"
+      },
+      "H_1,E_eps1_m": {
+        "E_eps1_m": "-1"
+      },
+      "H_1,E_del1_p": {
+        "E_del1_p": "1"
+      },
+      "H_1,E_del1_m": {
+        "E_del1_m": "-1"
+      },
+      "H_1,E_eps1_del1_pp": {
+        "E_eps1_del1_pp": "2"
+      },
+      "H_1,E_eps1_del1_mm": {
+        "E_eps1_del1_mm": "-2"
+      },
+      "H_2,E_eps1_p": {
+        "E_eps1_p": "2"
+      },
+      "H_2,E_eps1_m": {
+        "E_eps1_m": "-2"
+      },
+      "H_2,E_eps1_del1_pp": {
+        "E_eps1_del1_pp": "2"
+      },
+      "H_2,E_eps1_del1_mm": {
+        "E_eps1_del1_mm": "-2"
+      },
+      "H_2,E_eps1_del1_pm": {
+        "E_eps1_del1_pm": "2"
+      },
+      "H_2,E_eps1_del1_mp": {
+        "E_eps1_del1_mp": "-2"
+      },
+      "E_2del1_p,H_1": {
+        "E_2del1_p": "-2"
+      },
+      "E_2del1_p,E_2del1_m": {
+        "H_1": "-4",
+        "H_2": "2"
+      },
+      "E_2del1_p,E_del1_m": {
+        "E_del1_p": "-2"
+      },
+      "E_2del1_p,E_eps1_del1_mm": {
+        "E_eps1_del1_mp": "-2"
+      },
+      "E_2del1_p,E_eps1_del1_pm": {
+        "E_eps1_del1_pp": "-2"
+      },
+      "E_2del1_m,H_1": {
+        "E_2del1_m": "2"
+      },
+      "E_2del1_m,E_2del1_p": {
+        "H_1": "4",
+        "H_2": "-2"
+      },
+      "E_2del1_m,E_del1_p": {
+        "E_del1_m": "2"
+      },
+      "E_2del1_m,E_eps1_del1_pp": {
+        "E_eps1_del1_pm": "2"
+      },
+      "E_2del1_m,E_eps1_del1_mp": {
+        "E_eps1_del1_mm": "2"
+      },
+      "E_eps1_p,H_1": {
+        "E_eps1_p": "-1"
+      },
+      "E_eps1_p,H_2": {
+        "E_eps1_p": "-2"
+      },
+      "E_eps1_p,E_eps1_m": {
+        "H_2": "1"
+      },
+      "E_eps1_p,E_del1_p": {
+        "E_eps1_del1_pp": "1*sqrt(2)"
+      },
+      "E_eps1_p,E_del1_m": {
+        "E_eps1_del1_pm": "1*sqrt(2)"
+      },
+      "E_eps1_p,E_eps1_del1_mm": {
+        "E_del1_m": "-1*sqrt(2)"
+      },
+      "E_eps1_p,E_eps1_del1_mp": {
+        "E_del1_p": "-1*sqrt(2)"
+      },
+      "E_eps1_m,H_1": {
+        "E_eps1_m": "1"
+      },
+      "E_eps1_m,H_2": {
+        "E_eps1_m": "2"
+      },
+      "E_eps1_m,E_eps1_p": {
+        "H_2": "-1"
+      },
+      "E_eps1_m,E_del1_p": {
+        "E_eps1_del1_mp": "-1*sqrt(2)"
+      },
+      "E_eps1_m,E_del1_m": {
+        "E_eps1_del1_mm": "-1*sqrt(2)"
+      },
+      "E_eps1_m,E_eps1_del1_pp": {
+        "E_del1_p": "1*sqrt(2)"
+      },
+      "E_eps1_m,E_eps1_del1_pm": {
+        "E_del1_m": "1*sqrt(2)"
+      },
+      "E_del1_p,H_1": {
+        "E_del1_p": "-1"
+      },
+      "E_del1_p,E_2del1_m": {
+        "E_del1_m": "-2"
+      },
+      "E_del1_p,E_eps1_p": {
+        "E_eps1_del1_pp": "-1*sqrt(2)"
+      },
+      "E_del1_p,E_eps1_m": {
+        "E_eps1_del1_mp": "1*sqrt(2)"
+      },
+      "E_del1_p,E_del1_p": {
+        "E_2del1_p": "1"
+      },
+      "E_del1_p,E_del1_m": {
+        "H_1": "1",
+        "H_2": "-1/2"
+      },
+      "E_del1_p,E_eps1_del1_mm": {
+        "E_eps1_m": "-1/2*sqrt(2)"
+      },
+      "E_del1_p,E_eps1_del1_pm": {
+        "E_eps1_p": "1/2*sqrt(2)"
+      },
+      "E_del1_m,H_1": {
+        "E_del1_m": "1"
+      },
+      "E_del1_m,E_2del1_p": {
+        "E_del1_p": "2"
+      },
+      "E_del1_m,E_eps1_p": {
+        "E_eps1_del1_pm": "-1*sqrt(2)"
+      },
+      "E_del1_m,E_eps1_m": {
+        "E_eps1_del1_mm": "1*sqrt(2)"
+      },
+      "E_del1_m,E_del1_p": {
+        "H_1": "1",
+        "H_2": "-1/2"
+      },
+      "E_del1_m,E_del1_m": {
+        "E_2del1_m": "1"
+      },
+      "E_del1_m,E_eps1_del1_pp": {
+        "E_eps1_p": "-1/2*sqrt(2)"
+      },
+      "E_del1_m,E_eps1_del1_mp": {
+        "E_eps1_m": "1/2*sqrt(2)"
+      },
+      "E_eps1_del1_pp,H_1": {
+        "E_eps1_del1_pp": "-2"
+      },
+      "E_eps1_del1_pp,H_2": {
+        "E_eps1_del1_pp": "-2"
+      },
+      "E_eps1_del1_pp,E_2del1_m": {
+        "E_eps1_del1_pm": "-2"
+      },
+      "E_eps1_del1_pp,E_eps1_m": {
+        "E_del1_p": "-1*sqrt(2)"
+      },
+      "E_eps1_del1_pp,E_del1_m": {
+        "E_eps1_p": "-1/2*sqrt(2)"
+      },
+      "E_eps1_del1_pp,E_eps1_del1_mm": {
+        "H_1": "1",
+        "H_2": "-1"
+      },
+      "E_eps1_del1_pp,E_eps1_del1_mp": {
+        "E_2del1_p": "1"
+      },
+      "E_eps1_del1_mm,H_1": {
+        "E_eps1_del1_mm": "2"
+      },
+      "E_eps1_del1_mm,H_2": {
+        "E_eps1_del1_mm": "2"
+      },
+      "E_eps1_del1_mm,E_2del1_p": {
+        "E_eps1_del1_mp": "2"
+      },
+      "E_eps1_del1_mm,E_eps1_p": {
+        "E_del1_m": "1*sqrt(2)"
+      },
+      "E_eps1_del1_mm,E_del1_p": {
+        "E_eps1_m": "-1/2*sqrt(2)"
+      },
+      "E_eps1_del1_mm,E_eps1_del1_pp": {
+        "H_1": "1",
+        "H_2": "-1"
+      },
+      "E_eps1_del1_mm,E_eps1_del1_pm": {
+        "E_2del1_m": "1"
+      },
+      "E_eps1_del1_pm,H_2": {
+        "E_eps1_del1_pm": "-2"
+      },
+      "E_eps1_del1_pm,E_2del1_p": {
+        "E_eps1_del1_pp": "2"
+      },
+      "E_eps1_del1_pm,E_eps1_m": {
+        "E_del1_m": "-1*sqrt(2)"
+      },
+      "E_eps1_del1_pm,E_del1_p": {
+        "E_eps1_p": "1/2*sqrt(2)"
+      },
+      "E_eps1_del1_pm,E_eps1_del1_mm": {
+        "E_2del1_m": "1"
+      },
+      "E_eps1_del1_pm,E_eps1_del1_mp": {
+        "H_1": "1"
+      },
+      "E_eps1_del1_mp,H_2": {
+        "E_eps1_del1_mp": "2"
+      },
+      "E_eps1_del1_mp,E_2del1_m": {
+        "E_eps1_del1_mm": "-2"
+      },
+      "E_eps1_del1_mp,E_eps1_p": {
+        "E_del1_p": "1*sqrt(2)"
+      },
+      "E_eps1_del1_mp,E_del1_m": {
+        "E_eps1_m": "1/2*sqrt(2)"
+      },
+      "E_eps1_del1_mp,E_eps1_del1_pp": {
+        "E_2del1_p": "1"
+      },
+      "E_eps1_del1_mp,E_eps1_del1_pm": {
+        "H_1": "1"
+      }
+    }
+  },
+  "metadata": {
+    "reference": "Frappat et al., Dictionary on Lie Algebras and Superalgebras (2000), p.219-220. B(1,1) oscillator realization.",
+    "supplementary_fermion_convention": "Frappat's supplementary fermion e (with e^2 = 1) is implemented as a_0 via e = sqrt(2) * a_0 (so that {a_0, a_0} = 1). Consequence: odd generators E_{±δ_k} = a_0 b_k^± in this file correspond to (1/sqrt(2)) * E_{±δ_k}^{Frappat}. Even generators and Cartan elements are unaffected.",
+    "generated_by": "experiments/generate_B_structure_json.py",
+    "related_files": {
+      "gamma_structure": "gamma_structures/B_1_1_gamma.json"
+    },
+    "schema_version_history": "v5.0 generation for B(1,1) = osp(3|2). ",
+    "computation_method": "oscillator_algebra_engine (oscillator_algebra.py)"
+  }
+}

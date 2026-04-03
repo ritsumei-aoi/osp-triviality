@@ -26,7 +26,7 @@ def test_algebra_parser_loads():
     from oscillator_lie_superalgebras.algebra_parser import OSpAlgebraParser
     from pathlib import Path
     
-    json_path = Path(__file__).parent.parent / "data" / "algebra_structures" / "osp_1_2_structure.json"
+    json_path = Path(__file__).parent.parent / "data" / "algebra_structures" / "B_0_1_structure.json"
     parser = OSpAlgebraParser(str(json_path))
     
     assert len(parser.basis) > 0

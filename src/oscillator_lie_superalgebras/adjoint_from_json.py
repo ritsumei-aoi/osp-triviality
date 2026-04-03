@@ -14,123 +14,35 @@ from pathlib import Path
 
 def build_adjoint_from_json(n: int) -> Tuple[List[str], Dict[str, int], Dict[str, np.ndarray]]:
     """
-    Build adjoint representation matrices from Algebra Structure JSON (v3.0).
-    
-    The adjoint action is defined as ad(x) y = [x, y].
-    For a basis {e_0, ..., e_{N-1}}, the matrix representation ad_x of ad(x)
-    satisfies:
-        [x, e_j] = sum_i (ad_x)_{i, j} e_i
-    
-    This function reads the structure_constants section from the algebra JSON
-    file to construct the adjoint matrices, ensuring consistency with the
-    stored data.
-    
-    Args:
-        n: The size parameter for osp(1|2n).
-        
+    Build adjoint representation matrices for B(0,n) = osp(1|2n) from Algebra Structure JSON (v5.0).
+    This is a wrapper for build_adjoint_from_json_v41(m=0, n=n).
+    """
+    return build_adjoint_from_json_v41(0, n)
+
+
+
+
+def get_available_algebra_structures() -> list[tuple[int, int]]:
+    """
+    Get list of (m, n) values for which B_{m}_{n}_structure.json algebra structures are available.
     Returns:
-        basis: The ordered list of generator names used as the basis.
-        parity: Dictionary mapping generator names to parity (0=even, 1=odd).
-        adjoint_matrices: A dictionary mapping each generator name to its
-                          adjoint representation matrix (numpy array of shape (N, N)).
-                          
-    Raises:
-        FileNotFoundError: If algebra structure JSON for this n is not found.
-        
-    Example:
-        >>> basis, parity, adjoint = build_adjoint_from_json(1)
-        >>> # Check that [M_0_0, Q_0] = Q_0
-        >>> ad_M00 = adjoint["M_0_0"]
-        >>> Q0_idx = basis.index("Q_0")
-        >>> result = ad_M00[:, Q0_idx]
-        >>> # result should have coefficient 1 at Q_0 position
-    """
-    from .algebra_parser import OSpAlgebraParser
-    
-    # Get path to algebra structure JSON
-    json_path = _get_algebra_structure_path(n)
-    
-    # Load algebra structure
-    parser = OSpAlgebraParser(str(json_path))
-    
-    # Extract basis and parity
-    basis = parser.basis
-    parity = parser.parity
-    dim = len(basis)
-    
-    # Create index mapping
-    basis_to_idx = {name: idx for idx, name in enumerate(basis)}
-    
-    # Build adjoint matrices
-    adjoint_matrices: Dict[str, np.ndarray] = {}
-    
-    for x in basis:
-        # Initialize an N x N matrix for ad(x)
-        ad_x = np.zeros((dim, dim), dtype=complex)
-        
-        for j, y in enumerate(basis):
-            # Get [x, y] from parser
-            bracket_result = parser.get_bracket(x, y)
-            
-            # Fill in the column corresponding to y
-            for res_gen, coeff in bracket_result.items():
-                i = basis_to_idx[res_gen]
-                ad_x[i, j] = complex(coeff)
-        
-        adjoint_matrices[x] = ad_x
-    
-    return basis, parity, adjoint_matrices
-
-
-def _get_algebra_structure_path(n: int) -> Path:
-    """
-    Get the path to the algebra structure JSON file for osp(1|2n).
-    
-    Args:
-        n: Size parameter
-        
-    Returns:
-        Path to algebra structure JSON
-        
-    Raises:
-        FileNotFoundError: If algebra structure file doesn't exist
-    """
-    # Determine project root (assuming this file is in src/oscillator_lie_superalgebras/)
-    module_path = Path(__file__).resolve()
-    project_root = module_path.parent.parent.parent
-    
-    algebra_file = project_root / "data" / "algebra_structures" / f"osp_1_{2*n}_structure.json"
-    
-    if not algebra_file.exists():
-        raise FileNotFoundError(
-            f"Algebra structure file not found: {algebra_file}\n"
-            f"Please generate algebra structure for n={n} first using "
-            f"experiments/generate_osp_structure_json.py"
-        )
-    
-    return algebra_file
-
-
-def get_available_algebra_structures() -> List[int]:
-    """
-    Get list of n values for which algebra structures are available.
-    
-    Returns:
-        List of n values (e.g., [1, 2, 3])
+        List of (m, n) tuples (e.g., [(0, 1), (0, 2), ...])
     """
     module_path = Path(__file__).resolve()
     project_root = module_path.parent.parent.parent
     algebra_dir = project_root / "data" / "algebra_structures"
-    
     available = []
     if algebra_dir.exists():
-        for file in algebra_dir.glob("osp_1_*_structure.json"):
-            # Extract 2n from filename
-            two_n = int(file.stem.split('_')[2])
-            n = two_n // 2
-            available.append(n)
-    
-    return sorted(available)
+        for file in algebra_dir.glob("B_*_*_structure.json"):
+            parts = file.stem.split('_')  # ['B', m, n, 'structure']
+            if len(parts) == 4 and parts[0] == 'B' and parts[3] == 'structure':
+                try:
+                    m = int(parts[1])
+                    n = int(parts[2])
+                    available.append((m, n))
+                except ValueError:
+                    continue
+    return available
 
 def build_adjoint_from_json_v41(m: int, n: int) -> Tuple[List[str], Dict[str, int], Dict[str, np.ndarray]]:
     """
