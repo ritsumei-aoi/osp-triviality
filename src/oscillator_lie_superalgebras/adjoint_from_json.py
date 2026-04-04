@@ -12,16 +12,6 @@ import numpy as np
 from pathlib import Path
 
 
-def build_adjoint_from_json(n: int) -> Tuple[List[str], Dict[str, int], Dict[str, np.ndarray]]:
-    """
-    Build adjoint representation matrices for B(0,n) = osp(1|2n) from Algebra Structure JSON (v5.0).
-    This is a wrapper for build_adjoint_from_json_v41(m=0, n=n).
-    """
-    return build_adjoint_from_json_v41(0, n)
-
-
-
-
 def get_available_algebra_structures() -> list[tuple[int, int]]:
     """
     Get list of (m, n) values for which B_{m}_{n}_structure.json algebra structures are available.
@@ -44,21 +34,21 @@ def get_available_algebra_structures() -> list[tuple[int, int]]:
                     continue
     return available
 
-def build_adjoint_from_json_v41(m: int, n: int) -> Tuple[List[str], Dict[str, int], Dict[str, np.ndarray]]:
+def build_adjoint_from_json(n: int, m: int = 0) -> Tuple[List[str], Dict[str, int], Dict[str, np.ndarray]]:
     """
-    Build adjoint representation matrices from Algebra Structure JSON (v4.1).
+    Build adjoint representation matrices from Algebra Structure JSON (v5.0).
 
     The adjoint action is defined as ad(x) y = [x, y].
     For a basis {e_0, ..., e_{N-1}}, the matrix representation ad_x of ad(x)
     satisfies:
         [x, e_j] = sum_i (ad_x)_{i, j} e_i
 
-    This function reads the structure_constants section from the v4.1 algebra JSON
-    file directly (without OSpAlgebraParser) to construct the adjoint matrices.
+    This function reads the structure_constants section from the v5.0 algebra JSON
+    file directly to construct the adjoint matrices.
 
     Args:
-        m: Number of standard fermionic oscillator pairs (B(m,n) type).
-        n: Number of bosonic oscillator pairs (B(m,n) type).
+        n: The size parameter for osp(1|2n) (or B(m,n) type).
+        m: Number of standard fermionic oscillator pairs (default 0 for B(0,n)).
 
     Returns:
         basis: The ordered list of generator names used as the basis.
@@ -71,7 +61,7 @@ def build_adjoint_from_json_v41(m: int, n: int) -> Tuple[List[str], Dict[str, in
     """
     import json
 
-    json_path = _get_algebra_structure_path_v41(m, n)
+    json_path = _get_algebra_structure_path(m, n)
 
     with open(json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -114,9 +104,9 @@ def build_adjoint_from_json_v41(m: int, n: int) -> Tuple[List[str], Dict[str, in
     return basis, parity, adjoint_matrices
 
 
-def _get_algebra_structure_path_v41(m: int, n: int) -> Path:
+def _get_algebra_structure_path(m: int, n: int) -> Path:
     """
-    Get the path to the v4.1 algebra structure JSON file for B(m,n).
+    Get the path to the v5.0 algebra structure JSON file for B(m,n).
 
     Args:
         m: Number of standard fermionic oscillator pairs.
@@ -142,26 +132,3 @@ def _get_algebra_structure_path_v41(m: int, n: int) -> Path:
 
     return algebra_file
 
-
-def get_available_algebra_structures_v41() -> List[Tuple[int, int]]:
-    """
-    Get list of (m, n) pairs for which v4.1 algebra structures are available.
-
-    Returns:
-        List of (m, n) tuples (e.g., [(0, 1), (0, 2), (1, 1)]).
-    """
-    module_path = Path(__file__).resolve()
-    project_root = module_path.parent.parent.parent
-    algebra_dir = project_root / "data" / "algebra_structures"
-
-    available = []
-    if algebra_dir.exists():
-        for file in algebra_dir.glob("B_*_*_structure.json"):
-            parts = file.stem.split('_')  # ['B', m, n, 'structure']
-            try:
-                m_val, n_val = int(parts[1]), int(parts[2])
-                available.append((m_val, n_val))
-            except (IndexError, ValueError):
-                continue
-
-    return sorted(available)
