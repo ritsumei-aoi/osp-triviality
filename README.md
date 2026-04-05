@@ -5,11 +5,19 @@
 Computational verification code for the triviality of first-order
 deformations of oscillator Lie superalgebras B(0,n) = osp(1|2n).
 
+## References
+
+- H. Aoi, *On the triviality of inhomogeneous deformations of osp(1|2n)*, Preprint, 2026.
+  <!-- arXiv link: https://arxiv.org/abs/2604.XXXXX -->
+- H. Aoi, *A collaborative workflow for human-AI research in pure mathematics*, Preprint, 2026.
+  <!-- arXiv link: https://arxiv.org/abs/2604.YYYYY -->
+- Workflow template: [ai-research-workflow-template](https://github.com/ritsumei-aoi/ai-research-workflow-template)
+
 ## Overview
 
 This repository provides Python code to verify the main results of:
 
-> *Triviality of first-order deformations of oscillator Lie superalgebras B(0,n)*
+> *On the triviality of inhomogeneous deformations of osp(1|2n)*
 
 The code computationally verifies that every first-order deformation of
 the oscillator Lie superalgebra B(0,n) = osp(1|2n) is trivial (equivalent
