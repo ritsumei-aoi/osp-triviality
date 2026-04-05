@@ -1,5 +1,7 @@
 # osp-triviality
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ritsumei-aoi/osp-triviality/HEAD?labpath=notebooks%2Fdemo_certificate_verification.ipynb)
+
 Computational verification code for the triviality of first-order
 deformations of oscillator Lie superalgebras B(0,n) = osp(1|2n).
 
@@ -55,6 +57,9 @@ osp-triviality/
 │   ├── verify_dim_formula.py           # dim C^1_μ = 6n-2 verification
 │   ├── generate_structure.py           # Generate algebra structure JSON
 │   └── generate_gamma.py              # Generate gamma structure JSON
+├── notebooks/                          # Interactive Jupyter notebooks
+│   └── demo_certificate_verification.ipynb  # Main demo notebook
+├── .binder/                            # Binder configuration
 ├── data/                               # Pre-computed algebra data
 │   ├── algebra_structures/             # Algebra structure constants (JSON)
 │   └── gamma_structures/               # Gamma cocycle structures (JSON)
@@ -63,6 +68,18 @@ osp-triviality/
     ├── theory.md                       # Mathematical background
     └── schemas.md                      # JSON data schema specification
 ```
+
+## Interactive Notebook
+
+Try the interactive demo without installing anything:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ritsumei-aoi/osp-triviality/HEAD?labpath=notebooks%2Fdemo_certificate_verification.ipynb)
+
+The notebook demonstrates:
+- Algebra structure of osp(1|2n) for small n
+- Triviality checking (n=1 vs n≥2)
+- Certificate verification for all three families
+- Dimension formula dim C¹_μ = 6n − 2
 
 ## Mathematical Background
 
