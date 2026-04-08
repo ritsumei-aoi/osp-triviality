@@ -7,10 +7,9 @@ deformations of oscillator Lie superalgebras B(0,n) = osp(1|2n).
 
 ## References
 
-- H. Aoi, *On the triviality of inhomogeneous deformations of osp(1|2n)*, Preprint, 2026.
-  \[[PDF](aoi2026_triviality_osp1_2n.pdf)\]
+- H. Aoi, *On the triviality of inhomogeneous deformations of osp(1|2n)*, [arXiv:2604.05252](https://arxiv.org/abs/2604.05252) [math.RT], 2026.
 - H. Aoi, *A collaborative workflow for human-AI research in pure mathematics*, Preprint, 2026.
-  \[[PDF](https://github.com/ritsumei-aoi/ai-research-workflow-template/blob/main/aoi2026_collaborative_workflow.pdf)\]
+  [PDF](https://github.com/ritsumei-aoi/ai-research-workflow-template/blob/main/aoi2026_collaborative_workflow.pdf)
 - Workflow template: [ai-research-workflow-template](https://github.com/ritsumei-aoi/ai-research-workflow-template)
 
 ## Overview
