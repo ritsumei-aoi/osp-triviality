@@ -256,3 +256,6 @@ papers
 *-blx.bib
 out
 *.out
+
+# ---- Lean / Lake ----
+.lake/
