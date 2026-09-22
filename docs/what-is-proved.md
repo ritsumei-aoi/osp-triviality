@@ -17,7 +17,9 @@ boundary drift apart. Where this document touches scope it points there.
 <!-- ENDPOINT-BOUND(audit-counts): 649/634/15, the profiles 603/16/15, and the
      Layer B figures 1081/11450 must match the manuscript's subsec:formal-repro,
      README.md, and RELEASE_PROCEDURE.md step 2. A commit that adds or removes a
-     declaration makes all of them stale together. -->
+     declaration makes all of them stale together — INCLUDING THE TWO IMAGES IN
+     docs/figures/, which are rendered from the same graph and carry support
+     counts, edge weights and a transitive path that all move with it. -->
 
 ---
 
@@ -216,6 +218,14 @@ it.)*
 
 ## 3.3 The shape of the development
 
+![The twenty declarations of Appendix A.3, and the dependencies that hold between them](figures/layerB_a3.png)
+
+*The twenty declarations Appendix A.3 names, grouped by the claim each carries.
+The bracketed number on a declaration is how many distinct declarations its proof
+term reaches, transitively. **Solid red** is a direct dependency; **dashed grey**
+is a one-hop transitive one, drawn through the intermediate that realises it.
+Regenerate it yourself: run `tools/extract.lean` and read `edges.tsv`.*
+
 168 ordered module pairs carry at least one edge, 140 of them between *distinct*
 modules. The heaviest are
 `SourceRecovery*  →  SourceTensor` and `Indexed*  →  Indexed`: two foundations,
@@ -231,6 +241,17 @@ edges: `GammaBetaN_eq_deltaFN → G4` and `coefficient_unique → iotaBetaR_inje
 `intertwining_basis` — transitively, not directly.) **The five claims are, in the
 proof terms, largely independent of one another** — which is the reason each can
 be read, and doubted, separately.
+
+That is what the figure above shows: seven groups, and two solid arrows between
+them.
+
+![Dependencies between modules, above a threshold](figures/layerB_modules.png)
+
+*The module-level view. An arrow carries the number of declaration-to-declaration
+dependencies behind it, and only pairs above sixty are drawn — so `FixtureData`,
+whose edges into `Decode` and `Wire` number two and seven, does not appear here
+even though it belongs to the rank-1 branch. Every weight shown was checked
+against `edges.tsv`.*
 
 ---
 
