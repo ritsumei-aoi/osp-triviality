@@ -134,7 +134,7 @@ Checking the first is reading; checking the second is the command above.
 
 ---
 
-# Part 3 — What Layer B adds
+# Part 3 — What the proofs actually use
 
 The audit answers "is it proved?". The dependency graph answers a different
 question: **"what did the proof actually use?"** — which is not always what the
