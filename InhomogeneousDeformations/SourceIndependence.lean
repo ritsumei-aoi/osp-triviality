@@ -64,6 +64,15 @@ carrying no proof, so it cannot be mistaken for a completed claim). Any future r
 (2) must take it as an explicit hypothesis argument to whatever it proves
 (`independence_of_L0_and_F0` below already shows exactly how: it takes independence of the `L0`
 family as a hypothesis, not an axiom, and discharges the rest unconditionally).
+
+**Update (I106 R3, `SourceQuadraticIndependence.lean`): (2) is no longer open.** The
+four-sector evaluation left unattempted above was carried out there, proving the frozen
+`L0FamilyIndependent` unconditionally (`L0FamilyIndependent_proved`) and, via
+`independence_of_L0_and_F0`, discharging `IndependenceStatement` unconditionally as well
+(`IndependenceStatement_proved`) — both on the standard three axioms, no `sorryAx`, no
+hypothesis left unclosed. The assessment above is kept as the record of how the reduction was
+found and why R2 itself left (2) open; nothing below this note should be read as still
+describing the current state of `IndependenceStatement`.
 -/
 
 namespace InhomogeneousDeformations
