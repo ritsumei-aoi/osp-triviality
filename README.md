@@ -14,7 +14,7 @@ restriction on the rank:
 - the change of generators $T_\beta=\mathrm{id}+\kappa(f_\beta)_R$ and its inverse are even,
   $R$-linear and **exactly** mutually inverse, and intertwine the two brackets;
 - the source recovery holds: the map $\iota_\beta$ is injective with closed image, the recovered
-  bracket is $[X,Y]_0+\kappa\Gamma_\beta(X,Y)$, and that coefficient is unique as an element of
+  bracket is $\lbrack X,Y\rbrack_0+\kappa\Gamma_\beta(X,Y)$, and that coefficient is unique as an element of
   $\mathfrak g_P$.
 
 Together these are the paper's main theorem **for the coefficient recovered from the oscillator
