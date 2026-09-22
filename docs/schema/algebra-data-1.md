@@ -64,13 +64,13 @@ coefficients and an exponent vector of the domain's variable count. Terms are st
 lexicographically, with no duplicate exponent vectors and no zero terms. Zero is `[]`; a constant
 uses the all-zero exponent vector.
 
-**Square-zero value**: `{even, odd}`, both polynomials over the base, representing \(p+\kappa q\)
+**Square-zero value**: `{even, odd}`, both polynomials over the base, representing $p+\kappa q$
 with
 
-\[(p+\kappa q)(r+\kappa s)=pr+\kappa(ps+qr),\qquad \kappa^2=0,\]
+$$(p+\kappa q)(r+\kappa s)=pr+\kappa(ps+qr),\qquad \kappa^2=0,$$
 
 the odd tag having degree one. This is a **codec for such scalars only**: it is not an
-implementation of an ambient relation \(a\kappa=-\kappa a\), nor of a graded extension of a
+implementation of an ambient relation $a\kappa=-\kappa a$, nor of a graded extension of a
 bracket.
 
 **A non-canonical value is rejected, not repaired.** An implementation may normalise its own
@@ -79,7 +79,7 @@ intermediate arithmetic, but never incoming data. Arithmetic is exact.
 ## 5. Modules and vectors
 
 A module has `id`, `coefficient_domain`, `grading` (`ordinary` or `z2`), and an ordered `basis` of
-records with `id`; under `z2` each also carries an integer `degree` in \(\{0,1\}\), and under
+records with `id`; under `z2` each also carries an integer `degree` in $\{0,1\}$, and under
 `ordinary` no degree field appears.
 
 A vector is an array of `{basis, coefficient}` in strictly increasing declared basis order, with
@@ -111,7 +111,7 @@ even scalars — a rational or polynomial domain.
 A map has `id`, `source`, `target`, `degree` (0 or 1), `scalar_behavior` = `linear-even-scalars`,
 and a `basis-table` definition with one entry per source basis ID **including zeros**. Source and
 target share a domain. On a graded module, every non-zero output term has degree
-\(p(\text{input})+\deg\); a zero output satisfies either.
+$p(\text{input})+\deg$; a zero output satisfies either.
 
 This checks **typing and homogeneity only**. That a map is a cocycle, a morphism, or an inverse is
 not asserted or checked here.
@@ -130,7 +130,7 @@ They record where data came from, which is worth recording and is not the same t
 `s-model-bs17-normalized-n1/1` adds a required root field `s_model`, the sole extension the core
 permits: `rank` = 1, `normalization` = `bs17-LF`, `module`, `bracket`, and `roles` mapping
 `{L11, L12, L22, F1, F2}` to distinct basis IDs. The module's basis order is exactly that role
-order, with degrees \(0,0,0,1,1\), over a polynomial domain in exactly `beta1`, `beta2`; the
+order, with degrees $0,0,0,1,1$, over a polynomial domain in exactly `beta1`, `beta2`; the
 bracket is a total canonical table on that module.
 
 The profile's checker verifies the table **against the index formulas**, not merely that it

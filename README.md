@@ -1,21 +1,21 @@
 # osp-triviality
 
 Machine-checked formalization, in Lean 4, of the triviality of inhomogeneous deformations of the
-oscillator Lie superalgebra \(B(0,n)=\mathfrak{osp}(1|2n)\).
+oscillator Lie superalgebra $B(0,n)=\mathfrak{osp}(1|2n)$.
 
 ## What is established
 
-For the symmetrized family studied in the accompanying paper, and **for every \(n\geq1\)** with no
+For the symmetrized family studied in the accompanying paper, and **for every $n\geq1$** with no
 restriction on the rank:
 
-- the coordinate presentation is a Lie superalgebra of the stated shape — the \(\mathbb Z/2\)
+- the coordinate presentation is a Lie superalgebra of the stated shape — the $\mathbb Z/2$
   grading, super-skew symmetry, and the super-Jacobi identity;
-- the deformation coefficient is a coboundary, \(\Gamma_\beta=\delta f_\beta\);
-- the change of generators \(T_\beta=\mathrm{id}+\kappa(f_\beta)_R\) and its inverse are even,
-  \(R\)-linear and **exactly** mutually inverse, and intertwine the two brackets;
-- the source recovery holds: the map \(\iota_\beta\) is injective with closed image, the recovered
-  bracket is \([X,Y]_0+\kappa\Gamma_\beta(X,Y)\), and that coefficient is unique as an element of
-  \(\mathfrak g_P\).
+- the deformation coefficient is a coboundary, $\Gamma_\beta=\delta f_\beta$;
+- the change of generators $T_\beta=\mathrm{id}+\kappa(f_\beta)_R$ and its inverse are even,
+  $R$-linear and **exactly** mutually inverse, and intertwine the two brackets;
+- the source recovery holds: the map $\iota_\beta$ is injective with closed image, the recovered
+  bracket is $[X,Y]_0+\kappa\Gamma_\beta(X,Y)$, and that coefficient is unique as an element of
+  $\mathfrak g_P$.
 
 Together these are the paper's main theorem **for the coefficient recovered from the oscillator
 source**, not merely for the coefficient written down in coordinates.
@@ -33,16 +33,16 @@ Stated so that nothing is inferred beyond what is checked.
   *realized concretely* — generators are exhibited inside an explicit algebra and proved to satisfy
   the defining relations — rather than the algebra presented by those relations being constructed
   and identified with it. The corollary about the complex, and the identity
-  \(f_\beta=h-\mathrm{ad}(2F(v))\), are outside for the same reason.
+  $f_\beta=h-\mathrm{ad}(2F(v))$, are outside for the same reason.
 - **The development does not follow the paper's proof line by line.** It does not construct the
-  isomorphism \(\Phi\); both algebras are realized in one ambient algebra, so the change of lifts
+  isomorphism $\Phi$; both algebras are realized in one ambient algebra, so the change of lifts
   is a computation there. The conclusions agree; the route does not.
-- **One sector of \(\Gamma_\beta\) is forced, but remains a definition.** The concrete algebra
-  admits exactly one coefficient on the \((F,L)\) sector; the declaration equating the definition
+- **One sector of $\Gamma_\beta$ is forced, but remains a definition.** The concrete algebra
+  admits exactly one coefficient on the $(F,L)$ sector; the declaration equating the definition
   with that value proves it by unfolding the definition, so it records the choice rather than
   deriving it.
 - The decoding check described below concerns **one data instance** at rank 1.
-- Nothing is established about other models, other families, or the full \(H^2\).
+- Nothing is established about other models, other families, or the full $H^2$.
 
 ## Contents
 
@@ -175,9 +175,9 @@ format in general or about any parser.
 ## Relation to the earlier version of this repository
 
 An earlier version of this repository provided Python code that verified triviality **for small
-\(n\) numerically**, by solving the cohomology equation by least squares and checking a residual
+$n$ numerically**, by solving the cohomology equation by least squares and checking a residual
 against a tolerance. That work is superseded in strength rather than corrected: what it checked
-for small \(n\) is now proved for **every** \(n\), exactly and machine-checked.
+for small $n$ is now proved for **every** $n$, exactly and machine-checked.
 
 The previous state remains available at the tag
 [`v1-python-arXiv-2604.05252`](../../releases/tag/v1-python-arXiv-2604.05252), so that references
