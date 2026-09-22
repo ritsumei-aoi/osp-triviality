@@ -1,28 +1,3 @@
-# What is proved, and what proves it
-
-Authored by Agent1c for the Human, 2026-09-22 — **Lane B**, exposition, drafted
-for the public repository as `docs/what-is-proved.md`. Not committed: the
-repository is Agent2's and the Human's to operate, and the public push happens
-only under the Human's final confirmation.
-
-**Design.** The Human asked that the output be shown *first* and explained
-*afterwards*, so that a reader can hold their own screen against the page. Part 1
-is therefore verbatim output and nothing else. Parts 2–4 explain it.
-
-**What this document is not.** It does not restate the scope of the result. The
-paper's Appendix A.4, *What is not formalized*, is the authoritative statement of
-the boundary, and it is deliberately not duplicated here — two statements of one
-boundary drift apart. Where this document touches scope it points there.
-
-<!-- ENDPOINT-BOUND(audit-counts): 649/634/15, the profiles 603/16/15, and the
-     Layer B figures 1081/11450 must match the manuscript's subsec:formal-repro,
-     README.md, and RELEASE_PROCEDURE.md step 2. A commit that adds or removes a
-     declaration makes all of them stale together — INCLUDING THE TWO IMAGES IN
-     docs/figures/, which are rendered from the same graph and carry support
-     counts, edge weights and a transitive path that all move with it. -->
-
----
-
 # Part 1 — What you will see
 
 ## 1.1 The build's own report
