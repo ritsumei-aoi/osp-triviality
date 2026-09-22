@@ -1,6 +1,26 @@
-# Part 1 — What you will see
+# What is proved, and what proves it
 
-## 1.1 The build's own report
+Part 1 is output and nothing else — what the build prints, and what the dependency
+extractor prints. Parts 2 to 4 explain it. The intention is that you can hold your
+own screen against the page.
+
+**What this document is not.** It does not restate the scope of the result. The
+paper's Appendix A.4, *What is not formalized*, is the authoritative statement of
+the boundary, and it is deliberately not duplicated here — two statements of one
+boundary drift apart. Where this document touches scope, it points there.
+
+<!-- ENDPOINT-BOUND(audit-counts): 649/634/15, the profiles 603/16/15, and the
+     graph figures 1081 nodes / 11450 edges, must match the paper's Appendix A.5
+     and README.md. A commit that adds or removes a declaration makes all of them
+     stale together -- INCLUDING THE TWO IMAGES IN docs/figures/, which are
+     rendered from the same graph and carry support counts, edge weights and a
+     transitive path that all move with it. -->
+
+---
+
+## Part 1 — What you will see
+
+### 1.1 The build's own report
 
 `lake build InhomogeneousDeformations` prints one line per audited declaration.
 Counted from the transcript:
@@ -21,7 +41,7 @@ and, by which axioms:
  15   [propext]
 ```
 
-## 1.2 Six of those lines, verbatim
+### 1.2 Six of those lines, verbatim
 
 The result the paper calls Theorem 4.1 (`Γ_β = δ f_β`):
 
@@ -57,7 +77,7 @@ info: .../AxiomAudit.lean:1046:0: 'InhomogeneousDeformations.Source.GammaBetaBas
  Quot.sound]
 ```
 
-## 1.3 The dependency graph
+### 1.3 The dependency graph
 
 Running the extractor against the same build (`structure/extract.lean`) prints:
 
@@ -71,9 +91,9 @@ auxiliaries are passed through rather than counted.
 
 ---
 
-# Part 2 — What the audit means
+## Part 2 — What the audit means
 
-## 2.1 What `#print axioms` actually checks
+### 2.1 What `#print axioms` actually checks
 
 It is not a declaration of intent and not a lint. Lean takes the finished proof
 term, walks every constant it uses, transitively, through every lemma those use,
@@ -84,7 +104,7 @@ This is why the report is 649 lines rather than 5: each of the paper's claims is
 carried by a named declaration, and the supporting lemmas are audited too, so the
 reader can see that nothing in the chain was left open.
 
-## 2.2 The three axioms, and why they are not a caveat
+### 2.2 The three axioms, and why they are not a caveat
 
 `propext` (propositional extensionality), `Classical.choice` (the axiom of
 choice), and `Quot.sound` (soundness of quotient types) are the standard axioms of
@@ -108,7 +128,7 @@ polynomial ring use the logic. The module's other eleven `*_rejected`
 declarations do depend on `propext`, so "axiom-free" here is a fact about which
 proofs reduce to computation, not a grading of the checks.
 
-## 2.3 `sorryAx` — the one that carries the weight
+### 2.3 `sorryAx` — the one that carries the weight
 
 `sorry` is Lean's placeholder for an unfinished proof. It elaborates, so a file
 full of `sorry` still *builds*; what it does is poison the proof term with the
@@ -122,7 +142,7 @@ grep -c 'sorryAx' audit.txt   # 0
 That zero is the load-bearing number in the whole report. Everything else
 describes *which* logic was used; this one says the logic was actually completed.
 
-## 2.4 What the audit does **not** tell you
+### 2.4 What the audit does **not** tell you
 
 It says every audited declaration is proved. It says nothing about whether those
 declarations state what the paper says they state. **That binding is made
@@ -134,13 +154,13 @@ Checking the first is reading; checking the second is the command above.
 
 ---
 
-# Part 3 — What the proofs actually use
+## Part 3 — What the proofs actually use
 
 The audit answers "is it proved?". The dependency graph answers a different
 question: **"what did the proof actually use?"** — which is not always what the
 prose suggests, and is worth measuring rather than assuming.
 
-## 3.1 The anti-circularity gate
+### 3.1 The anti-circularity gate
 
 The sharpest use of the graph in this development is a check on the result the
 paper calls *the fourth sector is forced* (Appendix A.2, item P5).
@@ -164,7 +184,7 @@ Measured on the graph, from a fresh build and an independently written extractor
 The gate holds. This is the kind of property that cannot be seen by reading the
 source and cannot be seen in the axiom audit either; it needs the graph.
 
-## 3.2 Where the theorem and the proposition meet — read this carefully
+### 3.2 Where the theorem and the proposition meet — read this carefully
 
 The paper's Theorem 4.1 cites Proposition 3.1. In the formalization the two
 groups of declarations are **mutually unreachable**: the theorem's proof term does
@@ -191,7 +211,7 @@ a contradiction between paper and formalization, and it is not one. Anyone
 re-running the extractor will meet the same shape and deserves the framing with
 it.)*
 
-## 3.3 The shape of the development
+### 3.3 The shape of the development
 
 ![The twenty declarations of Appendix A.3, and the dependencies that hold between them](figures/layerB_a3.png)
 
@@ -230,7 +250,7 @@ against `edges.tsv`.*
 
 ---
 
-# Part 4 — The boundary, and how to check it yourself
+## Part 4 — The boundary, and how to check it yourself
 
 The scope of what is established is stated in the paper, in Appendix A.4, *What is
 not formalized*, and in this repository's own *What is not established*. Those are
