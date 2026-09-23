@@ -79,7 +79,7 @@ intermediate arithmetic, but never incoming data. Arithmetic is exact.
 ## 5. Modules and vectors
 
 A module has `id`, `coefficient_domain`, `grading` (`ordinary` or `z2`), and an ordered `basis` of
-records with `id`; under `z2` each also carries an integer `degree` in $\{0,1\}$, and under
+records with `id`; under `z2` each also carries an integer `degree` in $\lbrace 0,1\rbrace$, and under
 `ordinary` no degree field appears.
 
 A vector is an array of `{basis, coefficient}` in strictly increasing declared basis order, with
