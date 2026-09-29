@@ -1,5 +1,13 @@
 # osp-triviality
 
+> **Also available: a reference port to Lean v4.34.1, with a blueprint.** The branch
+> [`lean-v4.34`](../../tree/lean-v4.34) (tag [`v2.2-lean4.34`](../../releases/tag/v2.2-lean4.34))
+> builds the same development at Lean v4.34.1 and carries a
+> [verso-blueprint](https://github.com/leanprover/verso-blueprint) of the paper, published at
+> <https://ritsumei-aoi.github.io/osp-triviality/blueprint/>. What changed in the port, and why, is
+> in its port notes. This branch, `main`, differs from `v2.1-lint-clean` only by this paragraph,
+> and stays at Lean v4.29.1.
+
 Machine-checked formalization, in Lean 4, of the triviality of inhomogeneous deformations of the
 oscillator Lie superalgebra $B(0,n)=\mathfrak{osp}(1|2n)$.
 
