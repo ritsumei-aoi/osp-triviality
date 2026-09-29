@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.FixtureData
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # T5-T7 — decode success, native correspondence, examples
 
@@ -213,33 +216,32 @@ theorem decodedBracketBasis_eq (i j : Basis5) :
         -(gsign (Basis5.parity i) (Basis5.parity j)) •
           Decode.forwardValue fixtureRawInput.rows (Indexed.basis5Rank j) (Indexed.basis5Rank i))
       = bracketBasis i j := by
-  cases i <;> cases j <;> simp only [Indexed.basis5Rank] <;>
-    first
-    | (rw [if_pos (by decide)]; exact forward_L11_L11)
-    | (rw [if_pos (by decide)]; exact forward_L11_L12)
-    | (rw [if_pos (by decide)]; exact forward_L11_L22)
-    | (rw [if_pos (by decide)]; exact forward_L11_F1)
-    | (rw [if_pos (by decide)]; exact forward_L11_F2)
-    | (rw [if_pos (by decide)]; exact forward_L12_L12)
-    | (rw [if_pos (by decide)]; exact forward_L12_L22)
-    | (rw [if_pos (by decide)]; exact forward_L12_F1)
-    | (rw [if_pos (by decide)]; exact forward_L12_F2)
-    | (rw [if_pos (by decide)]; exact forward_L22_L22)
-    | (rw [if_pos (by decide)]; exact forward_L22_F1)
-    | (rw [if_pos (by decide)]; exact forward_L22_F2)
-    | (rw [if_pos (by decide)]; exact forward_F1_F1)
-    | (rw [if_pos (by decide)]; exact forward_F1_F2)
-    | (rw [if_pos (by decide)]; exact forward_F2_F2)
-    | (rw [if_neg (by decide), forward_L11_L12]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L11_L22]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L12_L22]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L11_F1]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L12_F1]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L22_F1]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L11_F2]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L12_F2]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_L22_F2]; exact gsign_reverse _ _)
-    | (rw [if_neg (by decide), forward_F1_F2]; exact gsign_reverse _ _)
+  cases i <;> cases j <;> simp only [Indexed.basis5Rank]
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L11_L11
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L11_L12
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L11_L22
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L11_F1
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L11_F2
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L11_L12]; exact gsign_reverse _ _
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L12_L12
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L12_L22
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L12_F1
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L12_F2
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L11_L22]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L12_L22]; exact gsign_reverse _ _
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L22_L22
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L22_F1
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_L22_F2
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L11_F1]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L12_F1]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L22_F1]; exact gsign_reverse _ _
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_F1_F1
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_F1_F2
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L11_F2]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L12_F2]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_L22_F2]; exact gsign_reverse _ _
+  · refine (ite_eq_right (by decide)).trans ?_; rw [forward_F1_F2]; exact gsign_reverse _ _
+  · refine (ite_eq_left (by decide)).trans ?_; exact forward_F2_F2
 
 /-- `T6`: the decoded bracket table as a plain function, built from the
 wire rows alone -- the native `bracketBasis`/`Native.lean` formulas are

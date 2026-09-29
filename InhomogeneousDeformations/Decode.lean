@@ -3,6 +3,9 @@ import InhomogeneousDeformations.Carrier
 import InhomogeneousDeformations.Basis
 import InhomogeneousDeformations.N1Specialization
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # T5 — the `n=1` structured-input decision procedure
 

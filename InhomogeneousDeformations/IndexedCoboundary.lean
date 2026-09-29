@@ -2,6 +2,12 @@ import InhomogeneousDeformations.IndexedJacobi
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Algebra.BigOperators.Fin
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+-- Toolchain port (v4.34): `IndexedBasis` is a plain `def`, and the proofs below match on its sum
+-- structure; the pre-v4.34 type-transparency behaviour of `isDefEq` is restored for this file.
+set_option backward.isDefEq.respectTransparency.types false
+
 /-!
 # R2-D (G0-G5) — the coefficient/coboundary identity `Gamma_beta = delta f_beta`
 
@@ -108,13 +114,13 @@ theorem Jn_ne_zero_iff_partner (n : ℕ) (t u : Fin (2 * n)) (h : Jn n t u ≠ 0
   · obtain ⟨he, hs⟩ := h1
     apply Fin.ext
     unfold partnerN
-    rw [dif_neg (show ¬ (u : ℕ) % 2 = 0 by omega)]
+    rw [dite_eq_right (show ¬ (u : ℕ) % 2 = 0 by omega)]
     dsimp only
     omega
   · obtain ⟨he, hs⟩ := h2
     apply Fin.ext
     unfold partnerN
-    rw [dif_pos he]
+    rw [dite_eq_left he]
     dsimp only
     omega
   · exact absurd (cratN_zero n) h
@@ -127,44 +133,47 @@ theorem contraction_identity (n : ℕ) (u : Fin (2 * n)) :
   rw [Finset.sum_eq_single (partnerN n u)]
   · rcases eq_or_ne ((u : ℕ) % 2) 0 with hu | hu
     · have e1 : partnerN n u = ⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ := by
-        unfold partnerN; rw [dif_pos hu]
+        unfold partnerN; rw [dite_eq_left hu]
       rw [e1]
       have hv : vN n (⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) = -betaN n u := by
         have hp : partnerN n (⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) = u := by
           apply Fin.ext
           unfold partnerN
-          rw [dif_neg
+          rw [dite_eq_right
             (show ¬ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
             dsimp only; omega)]
           dsimp only; omega
         unfold vN
-        rw [if_neg (show ¬ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
+        rw [ite_eq_right
+            (show ¬ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
           dsimp only; omega), hp]
       have hj : Jn n (⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) u = -1 := by
         unfold Jn
-        rw [if_neg (by dsimp only; omega),
-            if_pos (show (u : ℕ) % 2 = 0 ∧
+        rw [ite_eq_right (by dsimp only; omega),
+            ite_eq_left (show (u : ℕ) % 2 = 0 ∧
               ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ)
                 = (u : ℕ) + 1 from ⟨hu, by dsimp only⟩)]
         rw [show (-1 : ℚ) = -(1 : ℚ) from rfl, ← cratN_neg, cratN_one]
       rw [hv, hj]
       ring
     · have e1 : partnerN n u = ⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ := by
-        unfold partnerN; rw [dif_neg hu]
+        unfold partnerN; rw [dite_eq_right hu]
       rw [e1]
       have hv : vN n (⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) = betaN n u := by
         have hp : partnerN n (⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) = u := by
           apply Fin.ext
           unfold partnerN
-          rw [dif_pos (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
+          rw [dite_eq_left
+              (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
             dsimp only; omega)]
           dsimp only; omega
         unfold vN
-        rw [if_pos (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
+        rw [ite_eq_left
+            (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
           dsimp only; omega), hp]
       have hj : Jn n (⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) u = 1 := by
         unfold Jn
-        rw [if_pos (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0
+        rw [ite_eq_left (show ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0
               ∧ (u : ℕ) = ((⟨(u : ℕ) - 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) + 1 from
               ⟨by dsimp only; omega, by dsimp only; omega⟩)]
         exact cratN_one n
@@ -233,15 +242,16 @@ theorem fBetaBasis_alt_form (n : ℕ) (u : Fin (2 * n)) :
   have hve : vN n (evenIdx n j) = betaN n (oddIdx n j) := by
     have he : (evenIdx n j : ℕ) % 2 = 0 := by unfold evenIdx; dsimp only; omega
     have hp : partnerN n (evenIdx n j) = oddIdx n j := by
-      apply Fin.ext; unfold partnerN; rw [dif_pos he]; unfold evenIdx oddIdx; dsimp only
+      apply Fin.ext; unfold partnerN; rw [dite_eq_left he]; unfold evenIdx oddIdx; dsimp only
     unfold vN
-    rw [if_pos he, hp]
+    rw [ite_eq_left he, hp]
   have hvo : vN n (oddIdx n j) = -betaN n (evenIdx n j) := by
     have ho : ¬ (oddIdx n j : ℕ) % 2 = 0 := by unfold oddIdx; dsimp only; omega
     have hp : partnerN n (oddIdx n j) = evenIdx n j := by
-      apply Fin.ext; unfold partnerN; rw [dif_neg ho]; unfold evenIdx oddIdx; dsimp only; omega
+      apply Fin.ext; unfold partnerN
+      rw [dite_eq_right ho]; unfold evenIdx oddIdx; dsimp only; omega
     unfold vN
-    rw [if_neg ho, hp]
+    rw [ite_eq_right ho, hp]
   rw [hve, hvo]
   simp only [neg_smul]
   abel
@@ -266,7 +276,7 @@ theorem fBetaN_eN (n : ℕ) (i : IndexedBasis n) : fBetaN n (eN i) = fBetaBasis 
   rw [Finset.sum_eq_single i]
   · simp [eN]
   · intro b _ hb
-    have : eN i b = 0 := by unfold eN; rw [if_neg hb]
+    have : eN i b = 0 := by unfold eN; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ i) h
 
@@ -298,10 +308,10 @@ theorem fBetaN_neg (n : ℕ) (x : IndexedMod n) : fBetaN n (-x) = -fBetaN n x :=
 
 theorem fBetaBasis_Lof (n : ℕ) (a b : Fin (2 * n)) : fBetaBasis n (Lof a b) = 0 := by
   rcases eq_or_ne a b with hab | hab
-  · subst hab; rw [Lof, dif_pos (le_refl a)]; rfl
+  · subst hab; rw [Lof, dite_eq_left (le_refl a)]; rfl
   · rcases lt_or_gt_of_ne hab with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]; rfl
+    · rw [Lof, dite_eq_left hlt.le]; rfl
+    · rw [Lof, dite_eq_right (not_le.mpr hgt)]; rfl
 
 theorem fBetaN_Lof (n : ℕ) (a b : Fin (2 * n)) : fBetaN n (eN (Lof a b)) = 0 := by
   rw [fBetaN_eN, fBetaBasis_Lof]
@@ -342,11 +352,11 @@ theorem bilinearExtend_eN_eN {n : ℕ} (F : IndexedBasis n → IndexedBasis n �
   · rw [Finset.sum_eq_single Y]
     · simp [eN]
     · intro b _ hb
-      have : eN Y b = 0 := by unfold eN; rw [if_neg hb]
+      have : eN Y b = 0 := by unfold eN; rw [ite_eq_right hb]
       simp [this]
     · intro h; exact absurd (Finset.mem_univ Y) h
   · intro b _ hb
-    have : eN X b = 0 := by unfold eN; rw [if_neg hb]
+    have : eN X b = 0 := by unfold eN; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ X) h
 
@@ -414,20 +424,15 @@ noncomputable def GammaBetaN (n : ℕ) (x y : IndexedMod n) : IndexedMod n :=
 /-- `G2`'s map degree: `Gamma_beta(g_{P,i},g_{P,j}) ⊆ g_{P,i+j+1}`. -/
 theorem GammaBetaBasis_degree0 {n : ℕ} (i j k : IndexedBasis n)
     (h : GammaBetaBasis n i j k ≠ 0) : parity k = parity i + parity j + 1 := by
-  match i, j with
-  | .inl ⟨(_, _), _⟩, .inl ⟨(_, _), _⟩ => simp [GammaBetaBasis] at h
-  | .inl ⟨(_, _), _⟩, .inr _ =>
-    match k with
-    | .inr _ => exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
-    | .inl _ => simp only [parity]; decide
-  | .inr _, .inl ⟨(_, _), _⟩ =>
-    match k with
-    | .inr _ => exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
-    | .inl _ => simp only [parity]; decide
-  | .inr _, .inr _ =>
-    match k with
-    | .inl _ => exfalso; apply h; simp [GammaBetaBasis, gammaFFn, Fof, eN]
-    | .inr _ => simp only [parity]; decide
+  rcases i with ⟨⟨_, _⟩, _⟩ | _ <;> rcases j with ⟨⟨_, _⟩, _⟩ | _ <;> rcases k with _ | _
+  · simp [GammaBetaBasis] at h
+  · simp [GammaBetaBasis] at h
+  · simp only [parity]; decide
+  · exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
+  · simp only [parity]; decide
+  · exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
+  · exfalso; apply h; simp [GammaBetaBasis, gammaFFn, Fof, eN]
+  · simp only [parity]; decide
 
 /-! ## G3 -- the coboundary operator, for a general odd `P`-linear map `f` -/
 
@@ -450,23 +455,23 @@ theorem GammaBetaBasis_Lof_Lof (n : ℕ) (a b c d : Fin (2 * n)) :
   rcases eq_or_ne a b with hab | hab
   · subst hab
     rcases eq_or_ne c d with hcd | hcd
-    · subst hcd; rw [Lof, dif_pos (le_refl a), Lof, dif_pos (le_refl c)]; rfl
+    · subst hcd; rw [Lof, dite_eq_left (le_refl a), Lof, dite_eq_left (le_refl c)]; rfl
     · rcases lt_or_gt_of_ne hcd with hlt | hgt
-      · rw [Lof, dif_pos (le_refl a), Lof, dif_pos hlt.le]; rfl
-      · rw [Lof, dif_pos (le_refl a), Lof, dif_neg (not_le.mpr hgt)]; rfl
+      · rw [Lof, dite_eq_left (le_refl a), Lof, dite_eq_left hlt.le]; rfl
+      · rw [Lof, dite_eq_left (le_refl a), Lof, dite_eq_right (not_le.mpr hgt)]; rfl
   · rcases lt_or_gt_of_ne hab with hablt | habgt
-    · rw [Lof, dif_pos hablt.le]
+    · rw [Lof, dite_eq_left hablt.le]
       rcases eq_or_ne c d with hcd | hcd
-      · subst hcd; rw [Lof, dif_pos (le_refl c)]; rfl
+      · subst hcd; rw [Lof, dite_eq_left (le_refl c)]; rfl
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
-        · rw [Lof, dif_pos hlt.le]; rfl
-        · rw [Lof, dif_neg (not_le.mpr hgt)]; rfl
-    · rw [Lof, dif_neg (not_le.mpr habgt)]
+        · rw [Lof, dite_eq_left hlt.le]; rfl
+        · rw [Lof, dite_eq_right (not_le.mpr hgt)]; rfl
+    · rw [Lof, dite_eq_right (not_le.mpr habgt)]
       rcases eq_or_ne c d with hcd | hcd
-      · subst hcd; rw [Lof, dif_pos (le_refl c)]; rfl
+      · subst hcd; rw [Lof, dite_eq_left (le_refl c)]; rfl
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
-        · rw [Lof, dif_pos hlt.le]; rfl
-        · rw [Lof, dif_neg (not_le.mpr hgt)]; rfl
+        · rw [Lof, dite_eq_left hlt.le]; rfl
+        · rw [Lof, dite_eq_right (not_le.mpr hgt)]; rfl
 
 /-- **LL sector**: reduces to "`f_beta` vanishes on the even part" plus
 `P`-linearity, as Agent1's hand analysis predicted. -/
@@ -550,10 +555,10 @@ theorem sum_vN_const_smul_Fof (n : ℕ) (c : Pn n) :
 theorem GammaBetaBasis_Lof_Fof (n : ℕ) (u v w : Fin (2 * n)) :
     GammaBetaBasis n (Lof u v) (Fof w) = gammaLFn n u v w := by
   rcases eq_or_ne u v with heq | hne
-  · subst heq; rw [Lof, dif_pos (le_refl u)]; rfl
+  · subst heq; rw [Lof, dite_eq_left (le_refl u)]; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]
+    · rw [Lof, dite_eq_left hlt.le]; rfl
+    · rw [Lof, dite_eq_right (not_le.mpr hgt)]
       change gammaLFn n v u w = gammaLFn n u v w
       unfold gammaLFn; rw [add_comm]
 
@@ -637,10 +642,10 @@ independent check -/
 theorem GammaBetaBasis_Fof_Lof (n : ℕ) (w u v : Fin (2 * n)) :
     GammaBetaBasis n (Fof w) (Lof u v) = -gammaLFn n u v w := by
   rcases eq_or_ne u v with heq | hne
-  · subst heq; rw [Lof, dif_pos (le_refl u)]; rfl
+  · subst heq; rw [Lof, dite_eq_left (le_refl u)]; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]
+    · rw [Lof, dite_eq_left hlt.le]; rfl
+    · rw [Lof, dite_eq_right (not_le.mpr hgt)]
       change -gammaLFn n v u w = -gammaLFn n u v w
       unfold gammaLFn; rw [add_comm]
 
@@ -683,14 +688,14 @@ theorem G4 (n : ℕ) (i j : IndexedBasis n) : GammaBetaBasis n i j = deltaFBasis
   (fBetaN n) i j := by
   match i, j with
   | .inl ⟨(a, b), h1⟩, .inl ⟨(c, d), h2⟩ =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
-      have e2 : (Sum.inl ⟨(c, d), h2⟩ : IndexedBasis n) = Lof c d := by rw [Lof, dif_pos h2]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
+      have e2 : (Sum.inl ⟨(c, d), h2⟩ : IndexedBasis n) = Lof c d := by rw [Lof, dite_eq_left h2]
       rw [e1, e2]; exact G4_LL n a b c d
   | .inl ⟨(a, b), h1⟩, .inr w =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
       rw [e1]; exact G4_LF n a b w
   | .inr w, .inl ⟨(a, b), h1⟩ =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
       rw [e1]; exact G4_FL n a b w
   | .inr u, .inr v => exact G4_FF n u v
 
