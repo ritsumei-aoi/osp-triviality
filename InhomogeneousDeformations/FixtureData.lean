@@ -34,7 +34,91 @@ def fixtureRawInput : Decode.RawInput where
   opScalarBehavior := "bilinear-even-scalars"
   defKind := "canonical-pair-table"
   coverage := "total"
-  rows := [{ inputs := ["L11", "L11"], output := [] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L11", "L12"], output := [{ basisId := "L11", coeff := [{ coeff := { num := 1, den := 1 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L11", "L22"], output := [{ basisId := "L12", coeff := [{ coeff := { num := 2, den := 1 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L11", "F1"], output := [] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L11", "F2"], output := [{ basisId := "F1", coeff := [{ coeff := { num := 1, den := 1 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L12", "L12"], output := [] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L12", "L22"], output := [{ basisId := "L22", coeff := [{ coeff := { num := 1, den := 1 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L12", "F1"], output := [{ basisId := "F1", coeff := [{ coeff := { num := -1, den := 2 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L12", "F2"], output := [{ basisId := "F2", coeff := [{ coeff := { num := 1, den := 2 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L22", "L22"], output := [] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L22", "F1"], output := [{ basisId := "F2", coeff := [{ coeff := { num := -1, den := 1 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["L22", "F2"], output := [] : InhomogeneousDeformations.Wire.Row }, { inputs := ["F1", "F1"], output := [{ basisId := "L11", coeff := [{ coeff := { num := 1, den := 2 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["F1", "F2"], output := [{ basisId := "L12", coeff := [{ coeff := { num := 1, den := 2 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }, { inputs := ["F2", "F2"], output := [{ basisId := "L22", coeff := [{ coeff := { num := 1, den := 2 : InhomogeneousDeformations.Wire.Rat }, exponents := [0, 0] : InhomogeneousDeformations.Wire.PolyTerm }] : InhomogeneousDeformations.Wire.VectorEntry }] : InhomogeneousDeformations.Wire.Row }]
+  rows := [{ inputs := ["L11", "L11"], output := [] : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L11", "L12"],
+             output := [{ basisId := "L11",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 1 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L11", "L22"],
+             output := [{ basisId := "L12",
+                          coeff := [{ coeff := { num := 2,
+                                                 den := 1 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L11", "F1"], output := [] : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L11", "F2"],
+             output := [{ basisId := "F1",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 1 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L12", "L12"], output := [] : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L12", "L22"],
+             output := [{ basisId := "L22",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 1 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L12", "F1"],
+             output := [{ basisId := "F1",
+                          coeff := [{ coeff := { num := -1,
+                                                 den := 2 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L12", "F2"],
+             output := [{ basisId := "F2",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 2 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L22", "L22"], output := [] : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L22", "F1"],
+             output := [{ basisId := "F2",
+                          coeff := [{ coeff := { num := -1,
+                                                 den := 1 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["L22", "F2"], output := [] : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["F1", "F1"],
+             output := [{ basisId := "L11",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 2 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["F1", "F2"],
+             output := [{ basisId := "L12",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 2 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row },
+           { inputs := ["F2", "F2"],
+             output := [{ basisId := "L22",
+                          coeff := [{ coeff := { num := 1,
+                                                 den := 2 : InhomogeneousDeformations.Wire.Rat },
+                                      exponents := [0, 0]
+                                        : InhomogeneousDeformations.Wire.PolyTerm }]
+                                        : InhomogeneousDeformations.Wire.VectorEntry }]
+                                        : InhomogeneousDeformations.Wire.Row }]
   smBracket := "bracket_n1"
   smModule := "g_n1"
   smNormalization := "bs17-LF"
