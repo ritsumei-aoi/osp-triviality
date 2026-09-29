@@ -61,6 +61,15 @@ This repository's state and the paper are the same: the PDF above is the version
 appendix describes, and the tag [`v2-lean-formalization`](../../releases/tag/v2-lean-formalization)
 is that same state — `main` may move past it, but the tag will not.
 
+**Two tags.** `v2-lean-formalization` is the state of arXiv v2, and it does not move.
+[`v2.1-lint-clean`](../../releases/tag/v2.1-lint-clean) has **identical statements and an identical
+audit** — the same 884 declarations with the same statements and definitions, and the same 649
+audited declarations, each with the same axioms (634 on the standard axioms alone, 15 with none) —
+and the warnings are fixed: `lake build` finishes with 0 warnings under the Mathlib standard linter
+set. Only proofs and formatting differ. Where a linter asked for a change of a statement or a
+definition, that one declaration keeps its text and carries a `set_option linter.… false in` line
+with a one-line reason.
+
 ## Building and checking
 
 Everything below is pinned: the toolchain in [`lean-toolchain`](lean-toolchain), every dependency
