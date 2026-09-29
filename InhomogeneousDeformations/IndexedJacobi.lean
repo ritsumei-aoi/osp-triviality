@@ -157,7 +157,7 @@ theorem bracketBasisN_Fof_Lof {n : ℕ} (x a b : Fin (2 * n)) :
   · rcases lt_or_gt_of_ne hne with hlt | hgt
     · rw [Lof, dif_pos hlt.le]; rfl
     · rw [Lof, dif_neg (not_le.mpr hgt)]
-      show -bracketLFn n b a x = -bracketLFn n a b x
+      change -bracketLFn n b a x = -bracketLFn n a b x
       rw [bracketLFn_comm]
 
 theorem bracketLLn_comm12 {n : ℕ} (u v w z : Fin (2 * n)) :
@@ -175,7 +175,7 @@ theorem bracketBasisN_Lof_Lof {n : ℕ} (a b c d : Fin (2 * n)) :
     · rcases lt_or_gt_of_ne hcd with hlt | hgt
       · rw [Lof, dif_pos (le_refl a), Lof, dif_pos hlt.le]; rfl
       · rw [Lof, dif_pos (le_refl a), Lof, dif_neg (not_le.mpr hgt)]
-        show bracketLLn n a a d c = bracketLLn n a a c d
+        change bracketLLn n a a d c = bracketLLn n a a c d
         rw [bracketLLn_comm34]
   · rcases lt_or_gt_of_ne hab with hablt | habgt
     · rw [Lof, dif_pos hablt.le]
@@ -184,19 +184,19 @@ theorem bracketBasisN_Lof_Lof {n : ℕ} (a b c d : Fin (2 * n)) :
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
         · rw [Lof, dif_pos hlt.le]; rfl
         · rw [Lof, dif_neg (not_le.mpr hgt)]
-          show bracketLLn n a b d c = bracketLLn n a b c d
+          change bracketLLn n a b d c = bracketLLn n a b c d
           rw [bracketLLn_comm34]
     · rw [Lof, dif_neg (not_le.mpr habgt)]
       rcases eq_or_ne c d with hcd | hcd
       · subst hcd; rw [Lof, dif_pos (le_refl c)]
-        show bracketLLn n b a c c = bracketLLn n a b c c
+        change bracketLLn n b a c c = bracketLLn n a b c c
         rw [bracketLLn_comm12]
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
         · rw [Lof, dif_pos hlt.le]
-          show bracketLLn n b a c d = bracketLLn n a b c d
+          change bracketLLn n b a c d = bracketLLn n a b c d
           rw [bracketLLn_comm12]
         · rw [Lof, dif_neg (not_le.mpr hgt)]
-          show bracketLLn n b a d c = bracketLLn n a b c d
+          change bracketLLn n b a d c = bracketLLn n a b c d
           rw [bracketLLn_comm34, bracketLLn_comm12]
 
 /-! ## U4 -- super-Jacobi at basis level, general `n` -/
@@ -246,11 +246,14 @@ theorem jacobiN_LFF {n : ℕ} (u v w z : Fin (2 * n)) :
   unfold bracketFFn bracketLFn
   rw [bracketN_smul_right,
       show bracketN n (eN (Lof u v : IndexedBasis n)) (eN (Lof w z : IndexedBasis n))
-        = bracketLLn n u v w z from (bracketN_eN_eN (Lof u v) (Lof w z)).trans (bracketBasisN_Lof_Lof u v w z)]
+        = bracketLLn n u v w z from (bracketN_eN_eN (Lof u v) (Lof w z)).trans
+          (bracketBasisN_Lof_Lof u v w z)]
   rw [bracketN_add_right, bracketN_add_right, bracketN_smul_right, bracketN_smul_right,
       bracketN_smul_right, bracketN_smul_right]
-  rw [bracketN_eN_eN (Fof w : IndexedBasis n) (Fof u), bracketN_eN_eN (Fof w : IndexedBasis n) (Fof v),
-      bracketN_eN_eN (Fof z : IndexedBasis n) (Fof u), bracketN_eN_eN (Fof z : IndexedBasis n) (Fof v),
+  rw [bracketN_eN_eN (Fof w : IndexedBasis n) (Fof u), bracketN_eN_eN
+    (Fof w : IndexedBasis n) (Fof v),
+      bracketN_eN_eN (Fof z : IndexedBasis n) (Fof u), bracketN_eN_eN
+        (Fof z : IndexedBasis n) (Fof v),
       bracketBasisN_Fof_Fof, bracketBasisN_Fof_Fof, bracketBasisN_Fof_Fof, bracketBasisN_Fof_Fof]
   unfold bracketFFn
   simp only [smul_add, smul_smul, smul_neg]
@@ -279,10 +282,14 @@ theorem jacobiN_LLF {n : ℕ} (u v w z t : Fin (2 * n)) :
       bracketN_add_right,
       bracketN_smul_right, bracketN_smul_right, bracketN_smul_right, bracketN_smul_right,
       bracketN_smul_right, bracketN_smul_right, bracketN_smul_right, bracketN_smul_right]
-  rw [bracketN_eN_eN (Lof u v : IndexedBasis n) (Fof w), bracketN_eN_eN (Lof u v : IndexedBasis n) (Fof z),
-      bracketN_eN_eN (Lof w z : IndexedBasis n) (Fof u), bracketN_eN_eN (Lof w z : IndexedBasis n) (Fof v),
-      bracketN_eN_eN (Fof t : IndexedBasis n) (Lof u z), bracketN_eN_eN (Fof t : IndexedBasis n) (Lof v z),
-      bracketN_eN_eN (Fof t : IndexedBasis n) (Lof u w), bracketN_eN_eN (Fof t : IndexedBasis n) (Lof v w),
+  rw [bracketN_eN_eN (Lof u v : IndexedBasis n) (Fof w), bracketN_eN_eN
+    (Lof u v : IndexedBasis n) (Fof z),
+      bracketN_eN_eN (Lof w z : IndexedBasis n) (Fof u), bracketN_eN_eN
+        (Lof w z : IndexedBasis n) (Fof v),
+      bracketN_eN_eN (Fof t : IndexedBasis n) (Lof u z), bracketN_eN_eN
+        (Fof t : IndexedBasis n) (Lof v z),
+      bracketN_eN_eN (Fof t : IndexedBasis n) (Lof u w), bracketN_eN_eN
+        (Fof t : IndexedBasis n) (Lof v w),
       bracketBasisN_Lof_Fof u v w, bracketBasisN_Lof_Fof u v z,
       bracketBasisN_Lof_Fof w z u, bracketBasisN_Lof_Fof w z v,
       bracketBasisN_Fof_Lof t u z, bracketBasisN_Fof_Lof t v z,
@@ -317,12 +324,18 @@ theorem jacobiN_LLL {n : ℕ} (u v w z s t : Fin (2 * n)) :
       bracketN_smul_right, bracketN_smul_right, bracketN_smul_right, bracketN_smul_right,
       bracketN_smul_right, bracketN_smul_right, bracketN_smul_right, bracketN_smul_right,
       bracketN_smul_right, bracketN_smul_right, bracketN_smul_right, bracketN_smul_right]
-  rw [bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w t), bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof z t),
-      bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w s), bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof z s),
-      bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof s v), bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof t v),
-      bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof s u), bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof t u),
-      bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof u z), bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof v z),
-      bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof u w), bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof v w),
+  rw [bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w t), bracketN_eN_eN
+    (Lof u v : IndexedBasis n) (Lof z t),
+      bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w s), bracketN_eN_eN
+        (Lof u v : IndexedBasis n) (Lof z s),
+      bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof s v), bracketN_eN_eN
+        (Lof w z : IndexedBasis n) (Lof t v),
+      bracketN_eN_eN (Lof w z : IndexedBasis n) (Lof s u), bracketN_eN_eN
+        (Lof w z : IndexedBasis n) (Lof t u),
+      bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof u z), bracketN_eN_eN
+        (Lof s t : IndexedBasis n) (Lof v z),
+      bracketN_eN_eN (Lof s t : IndexedBasis n) (Lof u w), bracketN_eN_eN
+        (Lof s t : IndexedBasis n) (Lof v w),
       bracketBasisN_Lof_Lof u v w t, bracketBasisN_Lof_Lof u v z t,
       bracketBasisN_Lof_Lof u v w s, bracketBasisN_Lof_Lof u v z s,
       bracketBasisN_Lof_Lof w z s v, bracketBasisN_Lof_Lof w z t v,
@@ -427,7 +440,8 @@ theorem expand_basisN {n : ℕ} (x : IndexedMod n) : x = ∑ i : IndexedBasis n,
   · intro h; exact absurd (Finset.mem_univ k) h
 
 theorem bracketN_bilinear_expand {n : ℕ} (x y : IndexedMod n) :
-    bracketN n x y = ∑ i : IndexedBasis n, ∑ j : IndexedBasis n, (x i * y j) • bracketN n (eN i) (eN j) := by
+    bracketN n x y = ∑ i : IndexedBasis n, ∑ j : IndexedBasis n, (x i * y j) • bracketN n
+      (eN i) (eN j) := by
   simp_rw [bracketN_eN_eN]
   rfl
 
