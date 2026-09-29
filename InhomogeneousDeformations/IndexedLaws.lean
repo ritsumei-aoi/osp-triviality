@@ -30,7 +30,7 @@ trap from correction002). -/
 conditions reduce, at `v = u`, to the impossible `u = u + 1`. -/
 theorem Jn_diag (n : ℕ) (u : Fin (2 * n)) : Jn n u u = 0 := by
   have h : (u : ℕ) ≠ (u : ℕ) + 1 := by omega
-  simp [Jn, h]
+  simp [Jn]
 
 /-- `Jn` antisymmetry: `J_{vu} = -J_{uv}`. Decided purely by which of the
 two mutually-exclusive branch conditions (`u` even & `v = u+1`, or `v` even
@@ -211,7 +211,7 @@ theorem bracketBasisN_super_skew {n : ℕ} (i j : IndexedBasis n) :
   | .inl ⟨(u, v), _⟩, .inr w => exact superskew_LF u v w
   | .inr w, .inl ⟨(u, v), _⟩ => exact superskew_FL u v w
   | .inr u, .inr v =>
-    show bracketFFn n u v = -(gsignN n (1 : ZMod 2) (1 : ZMod 2)) • bracketFFn n v u
+    change bracketFFn n u v = -(gsignN n (1 : ZMod 2) (1 : ZMod 2)) • bracketFFn n v u
     rw [gsignN_11, neg_neg, one_smul]
     exact superskew_FF u v
 
