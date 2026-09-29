@@ -76,7 +76,7 @@ theorem aA0_sq (n : ℕ) : aA0 n * aA0 n = (1 / 2 : ℚ) • (1 : A0 n) := by
     (1 : Module.End ℚ (WPoly n)) (⟨Source.a, Source.a_odd⟩ : CGrading 1)
     (⟨1, trivial⟩ : WGrading n 0) (Source.a : C)]
   rw [one_mul, Source.a_sq]
-  show (1 : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] ((1 / 2 : ℚ) • (1 : C)) = (1 / 2 : ℚ) • (1 : A0 n)
+  change (1 : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] ((1 / 2 : ℚ) • (1 : C)) = (1 / 2 : ℚ) • (1 : A0 n)
   unfold GradedTensorProduct.tmul
   rw [TensorProduct.tmul_smul, map_smul, ← GradedTensorProduct.tmul, GradedTensorProduct.tmul,
     ← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one]
@@ -88,7 +88,7 @@ theorem aAB_sq (n : ℕ) : aAB n * aAB n = (1 / 2 : ℚ) • (1 : AB n) := by
     (1 : RRing n) (⟨aA0 n, aA0_mem_A0Grading_one n⟩ : A0Grading n 1)
     (⟨1, SetLike.one_mem_graded (RGradingQ n)⟩ : RGradingQ n 0) (aA0 n)]
   rw [mul_one, aA0_sq]
-  show (1 : RRing n) ᵍ⊗ₜ[ℚ] ((1 / 2 : ℚ) • (1 : A0 n)) = (1 / 2 : ℚ) • (1 : AB n)
+  change (1 : RRing n) ᵍ⊗ₜ[ℚ] ((1 / 2 : ℚ) • (1 : A0 n)) = (1 / 2 : ℚ) • (1 : AB n)
   unfold GradedTensorProduct.tmul
   rw [TensorProduct.tmul_smul, map_smul, ← GradedTensorProduct.tmul, GradedTensorProduct.tmul,
     ← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one]
@@ -284,7 +284,7 @@ theorem BuAB_comm (n : ℕ) (u v : Fin (2 * n)) :
   have hsub : ((1 : RRing n) ᵍ⊗ₜ[ℚ] (Bu0 n u * Bu0 n v) : AB n)
         - (1 : RRing n) ᵍ⊗ₜ[ℚ] (Bu0 n v * Bu0 n u)
       = (1 : RRing n) ᵍ⊗ₜ[ℚ] (Bu0 n u * Bu0 n v - Bu0 n v * Bu0 n u) := by
-    show (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+    change (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
           ((1 : RRing n) ⊗ₜ[ℚ] (Bu0 n u * Bu0 n v)) : AB n)
         - GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
           ((1 : RRing n) ⊗ₜ[ℚ] (Bu0 n v * Bu0 n u))
@@ -310,13 +310,13 @@ theorem BuAB_comm (n : ℕ) (u v : Fin (2 * n)) :
           ((B n u * B n v - B n v * B n u : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (1 : C)) := by
       rw [← map_sub, TensorProduct.sub_tmul]
     rw [hsub2, show B n u * B n v - B n v * B n u = opComm (B n u) (B n v) from rfl, B_comm]
-    show (GradedTensorProduct.of ℚ (WGrading n) CGrading
+    change (GradedTensorProduct.of ℚ (WGrading n) CGrading
         ((JnQ n u v • (1 : Module.End ℚ (WPoly n))) ⊗ₜ[ℚ] (1 : C)) : A0 n)
       = JnQ n u v • (1 : A0 n)
     rw [← TensorProduct.smul_tmul', map_smul, ← Algebra.TensorProduct.one_def,
       GradedTensorProduct.of_one]
   rw [hB]
-  show (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+  change (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
       ((1 : RRing n) ⊗ₜ[ℚ] (JnQ n u v • (1 : A0 n))) : AB n) = JnQ n u v • (1 : AB n)
   rw [TensorProduct.tmul_smul, map_smul, ← Algebra.TensorProduct.one_def,
     GradedTensorProduct.of_one]
