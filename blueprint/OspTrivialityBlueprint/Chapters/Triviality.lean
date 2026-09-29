@@ -36,5 +36,8 @@ item 1).
 :::
 
 :::proof "cor_complex"
-Specialize {uses "thm_main"}[] and {uses "prop_recovery"}[]; specialization is a ring map.
+The polynomial identities of {uses "thm_main"}[] and the inverse maps of {uses "lem_untwist"}[]
+specialize, since specialization is a ring map. Faithfulness needs its own argument: the leading
+symbols and odd linear monomials of {uses "lem_base"}[] remain independent over $`\mathbb C`, so the
+proof of {uses "prop_recovery"}[] applies after specialization.
 :::

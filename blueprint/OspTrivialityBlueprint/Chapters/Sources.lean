@@ -10,7 +10,8 @@ open Informal
 
 Section 2 of the paper. The source algebra $`A_\beta` is generated over $`R = P \oplus \kappa P`
 by even $`b_u` and one odd $`a`, with $`[b_u, b_v] = J_{uv}`, $`a^2 = \tfrac12` and
-$`[b_u, a] = \beta_u \kappa`; $`A_B` is the same algebra with $`\beta = 0`.
+$`[b_u, a] = \beta_u \kappa`. The undeformed algebra is $`A_B = R \otimes_{\mathbb Q} A_0` with
+$`A_0 = W_n \otimes_{\mathbb Q} C`, in which $`a B_u = B_u a`.
 
 :::lemma_ "lem_untwist"
 *Lemma 2.2 (Untwisting the source).* The maps
@@ -27,7 +28,7 @@ Appendix A, "What is not formalized", items 1 and 2).
 *Lemma 2.3 (The undeformed algebra).* The map $`\iota_0 : \mathfrak g \to A_0`,
 $`L_{uv} \mapsto L^0_{uv}`, $`F_u \mapsto F^0_u`, is injective, with image closed under the
 supercommutator, and the induced bracket $`[\cdot,\cdot]_0` is given by the paper's
-equations (2.4)–(2.6).
+equations (2.3)–(2.5).
 
 The coordinate presentation is formalized as item P1 of the paper's Appendix A (in the last
 chapter below); this lemma itself, as a statement about $`A_0`, is not a formal node.

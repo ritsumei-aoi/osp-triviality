@@ -17,7 +17,8 @@ open Informal
 A blueprint of arXiv:2604.05252v2 against this repository's formalization. It is reference
 material on the branch `lean-v4.34` (Lean v4.34.1): the paper cites the tag
 `v2-lean-formalization`, and `main` is `v2.1-lint-clean` at Lean v4.29.1. The statements
-are paraphrased from the paper with its numbering; the paper is authoritative. Each node
+are paraphrased from the paper, and each gives the paper's number; the headings (such as
+"Proposition 2.1") are the blueprint's own numbering. The paper is authoritative. Each node
 names the declarations that the paper's Appendix A assigns to it, and its status is computed
 from them. The `uses` links are those of the paper's proofs.
 
