@@ -50,7 +50,8 @@ Stated so that nothing is inferred beyond what is checked.
 InhomogeneousDeformations/        the Lean 4 development
 InhomogeneousDeformations.lean    the root module
 fixture/s_model_n1.json           the data instance (see below)
-tools/extract_fixture.py          regenerates the fixture's Lean encoding
+tools/extract_fixture.py          regenerates the fixture's Lean encoding (byte for byte; `--report PATH`
+                                  writes its field-by-field report, otherwise printed)
 tools/extract.lean                the dependency-graph extractor (see below)
 docs/schema/algebra-data-1.md     specification of the data format
 docs/what-is-proved.md            what the audit and the dependency graph do and do not show
@@ -64,7 +65,7 @@ is that same state — `main` may move past it, but the tag will not.
 **Two tags.** `v2-lean-formalization` is the state of arXiv v2, and it does not move.
 [`v2.1-lint-clean`](../../releases/tag/v2.1-lint-clean) has **identical statements and an identical
 audit** — the same 884 declarations with the same statements and definitions, and the same 649
-audited declarations, each with the same axioms (634 on the standard axioms alone, 15 with none) —
+audited declarations, each with the same axioms (634 depending only on the standard axioms, 15 depending on none) —
 and the warnings are fixed: `lake build` finishes with 0 warnings under the Mathlib standard linter
 set. Only proofs and formatting differ. Where a linter asked for a change of a statement or a
 definition, that one declaration keeps its text and carries a `set_option linter.… false in` line
@@ -80,7 +81,7 @@ install Lean yourself — `elan` reads `lean-toolchain` and fetches `leanprover/
 first time you run a Lean or Lake command here.
 
 ```bash
-git clone --branch v2-lean-formalization \
+git clone --branch v2.1-lint-clean \
     https://github.com/ritsumei-aoi/osp-triviality.git
 cd osp-triviality
 
@@ -104,9 +105,9 @@ Approximate sizes, measured on a clean run:
 
 | | |
 |---|---|
-| the clone | ~2.7 MB |
+| the clone | ~3.4 MB |
 | mathlib and the other dependencies, cached (in the working copy, `.lake/`) | ~7.0 GB |
-| this project's own build (in `.lake/`) | ~56 MB |
+| this project's own build (in `.lake/`) | ~59 MB |
 | the Lean toolchain (`elan`, one-time, under `~/.elan`, shared across projects) | ~2.5 GB |
 
 The `.lake/` total lands in the working copy (`.gitignore` excludes it); the toolchain lives
@@ -128,6 +129,7 @@ grep -cE 'depends on axioms|does not depend on any axioms' \
 grep -c 'depends on axioms'                 audit.txt   # 634 — depend on axioms
 grep -c 'does not depend on any axioms'     audit.txt   # 15  — depend on none
 grep -c '^error'                            audit.txt   # 0
+grep -c '^warning'                          audit.txt   # 0 at v2.1-lint-clean (468 at v2-lean-formalization)
 ```
 
 And the axiom profiles — which axioms, not just how many. Lean wraps long lines, so join them
@@ -145,16 +147,18 @@ These three are the standard axioms of Lean's own logic; nothing else appears an
 audit. A build with nothing changed replays the same report from cache in about a second, so this
 check can be repeated at any time without forcing a rebuild.
 
-Warnings from mathlib's own style linters (unused `simp` arguments, line-length, and similar) may
-appear during the build. They are not errors and do not affect the audit;
-`grep -c '^error' audit.txt` is the number that should be `0`.
+**Warnings.** The clone command above checks out `v2.1-lint-clean`, whose build prints **no
+warnings**: `grep -c '^warning' audit.txt` is `0`. `v2-lean-formalization`, the state of arXiv v2
+(clone it with `--branch v2-lean-formalization`), prints 468 warnings from mathlib's own style linters
+(unused `simp` arguments, line length, and similar) during the same build. They are not errors, and
+the audit is identical at both tags; `grep -c '^error' audit.txt` is `0` at both.
 
 See [`docs/what-is-proved.md`](docs/what-is-proved.md) for what the audit does and does not tell
 you, and how Appendix A.3's declaration table binds it to the paper's claims.
 
 ### The dependency graph
 
-`tools/extract.lean` (1999 bytes) walks the compiled proof terms and writes `nodes.tsv` and
+`tools/extract.lean` walks the compiled proof terms and writes `nodes.tsv` and
 `edges.tsv` — every declaration in the development, and every real dependency between them, with
 compiler-generated auxiliaries passed through rather than counted. It sits outside
 `InhomogeneousDeformations/` so an ordinary `lake build` does not elaborate it.
@@ -167,8 +171,7 @@ lake env lean --run tools/extract.lean
 ```
 
 `nodes.tsv` and `edges.tsv` are written into the directory you ran the command from, not next to
-the script. `lean --run` also prints a harmless `(interpreter) unknown declaration 'main'`
-trailer afterward — the file has no `def main`, only a top-level `#eval`; this is not an error.
+the script.
 `docs/what-is-proved.md` §3 explains what the graph is used to check.
 
 ## The data instance, and what is proved about it
