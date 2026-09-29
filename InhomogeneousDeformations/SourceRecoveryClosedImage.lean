@@ -332,9 +332,12 @@ theorem iotaBetaR_kappaEmbed (n : ℕ) (w : Indexed.IndexedMod n) :
 theorem algebraMap_gsignN (n : ℕ) (a b : ZMod 2) :
     algebraMap (Indexed.Pn n) (RRing n) (Indexed.gsignN n a b) = gsignNQ n a b • (1 : RRing n) := by
   match a, b with
-  | (0 : ZMod 2), (0 : ZMod 2) => rw [Indexed.gsignN_00, gsignNQ_00, one_smul, map_one]
-  | (0 : ZMod 2), (1 : ZMod 2) => rw [Indexed.gsignN_01, gsignNQ_01, one_smul, map_one]
-  | (1 : ZMod 2), (0 : ZMod 2) => rw [Indexed.gsignN_10, gsignNQ_10, one_smul, map_one]
+  | (0 : ZMod 2), (0 : ZMod 2) =>
+    rw [Indexed.gsignN_00, gsignNQ_00, map_one]; exact (one_smul ℚ (1 : RRing n)).symm
+  | (0 : ZMod 2), (1 : ZMod 2) =>
+    rw [Indexed.gsignN_01, gsignNQ_01, map_one]; exact (one_smul ℚ (1 : RRing n)).symm
+  | (1 : ZMod 2), (0 : ZMod 2) =>
+    rw [Indexed.gsignN_10, gsignNQ_10, map_one]; exact (one_smul ℚ (1 : RRing n)).symm
   | (1 : ZMod 2), (1 : ZMod 2) =>
     rw [Indexed.gsignN_11, gsignNQ_11,
       show (-1 : Indexed.Pn n) = Indexed.cratN n (-1) from by
@@ -343,7 +346,7 @@ theorem algebraMap_gsignN (n : ℕ) (a b : ZMod 2) :
 
 theorem Lof_eq_inl (n : ℕ) (u v : Fin (2 * n)) (h : u ≤ v) :
     Indexed.Lof u v = Sum.inl (⟨(u, v), h⟩ : {p : Fin (2*n) × Fin (2*n) // p.1 ≤ p.2}) := by
-  unfold Indexed.Lof; rw [dif_pos h]
+  unfold Indexed.Lof; simp only [h, ↓reduceDIte]; rfl
 
 theorem iota0_bracketBasisN_unified (n : ℕ) (i j : Indexed.IndexedBasis n) :
     iota0 n (Indexed.bracketBasisN n i j)
