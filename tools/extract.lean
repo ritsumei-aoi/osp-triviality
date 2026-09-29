@@ -56,3 +56,8 @@ def kindOf : ConstantInfo → String
   IO.FS.writeFile "nodes.tsv" (String.intercalate "\n" nodes.toList ++ "\n")
   IO.FS.writeFile "edges.tsv" (String.intercalate "\n" edges.toList ++ "\n")
   IO.println s!"nodes {nodes.size}  edges {edges.size}"
+
+/-- The extraction above runs as a `#eval` while the file is elaborated. `lean --run` also wants a
+`main` to execute afterwards; this one does nothing, so that the run prints only the summary line
+and no `unknown declaration 'main'` notice. -/
+def main : IO Unit := pure ()
