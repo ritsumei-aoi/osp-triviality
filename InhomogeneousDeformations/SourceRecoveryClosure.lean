@@ -79,13 +79,13 @@ theorem liftBeta_eN (n : ℕ) (b : Indexed.IndexedBasis n) :
   unfold liftBeta
   rw [Finset.sum_eq_single b]
   · unfold Indexed.eN
-    rw [if_pos rfl, map_one]
+    rw [ite_eq_left rfl, map_one]
     change (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((1 : RRing n) ⊗ₜ[ℚ] (1 : A0 n)))
         * liftsFamilyBeta n b = liftsFamilyBeta n b
     rw [← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one, one_mul]
   · intro c _ hc
     unfold Indexed.eN
-    rw [if_neg hc, map_zero, AB_zero_tmul, zero_mul]
+    rw [ite_eq_right hc, map_zero, AB_zero_tmul, zero_mul]
   · intro h; exact absurd (Finset.mem_univ b) h
 
 theorem liftBeta_neg (n : ℕ) (x : Indexed.IndexedMod n) : liftBeta n (-x) = -liftBeta n x := by
@@ -140,13 +140,15 @@ theorem iota0_eN_sub_eq (n : ℕ) (b : Indexed.IndexedBasis n) :
         (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
         = Indexed.betaN n u • Indexed.eN (Indexed.Fof v) + Indexed.betaN n v
             • Indexed.eN (Indexed.Fof u) := rfl
-    rw [hh, liftBeta_add, liftBeta_smul, liftBeta_smul, liftBeta_eN, liftBeta_eN, liftBeta_eN]
+    rw [hh, liftBeta_add, liftBeta_smul, liftBeta_smul, liftBeta_eN, liftBeta_eN,
+      liftBeta_eN n (Sum.inl ⟨(u, v), huv⟩ : Indexed.IndexedBasis n)]
     have hL : liftsFamilyBeta n
         (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
         = L0hatBeta n u v := rfl
     have hFv : liftsFamilyBeta n (Indexed.Fof v : Indexed.IndexedBasis n) = F0hatBeta n v := rfl
     have hFu : liftsFamilyBeta n (Indexed.Fof u : Indexed.IndexedBasis n) = F0hatBeta n u := rfl
-    rw [hL, hFv, hFu, ← L0AB_eq_L0hatBeta_sub, iota0_eN]
+    rw [hL, hFv, hFu, ← L0AB_eq_L0hatBeta_sub,
+      iota0_eN n (Sum.inl ⟨(u, v), huv⟩ : Indexed.IndexedBasis n)]
     have hi0 : iota0AB n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
         = L0AB n u v := rfl
     rw [hi0]
@@ -154,9 +156,9 @@ theorem iota0_eN_sub_eq (n : ℕ) (b : Indexed.IndexedBasis n) :
         = liftBeta n (Indexed.eN (Sum.inr u)) - kappaAB n
             * liftBeta n (Indexed.hBasis n (Sum.inr u))
     have hh : Indexed.hBasis n (Sum.inr u : Indexed.IndexedBasis n) = 0 := rfl
-    rw [hh, liftBeta_zero, mul_zero, sub_zero, liftBeta_eN]
+    rw [hh, liftBeta_zero, mul_zero, sub_zero, liftBeta_eN n (Sum.inr u : Indexed.IndexedBasis n)]
     have hF : liftsFamilyBeta n (Sum.inr u : Indexed.IndexedBasis n) = F0hatBeta n u := rfl
-    rw [hF, iota0_eN]
+    rw [hF, iota0_eN n (Sum.inr u : Indexed.IndexedBasis n)]
     have hi0 : iota0AB n (Sum.inr u : Indexed.IndexedBasis n) = F0AB n u := rfl
     rw [hi0]
     exact (F0hatBeta_eq_F0AB n u).symm
@@ -290,8 +292,8 @@ noncomputable def RRingToTriv (n : ℕ) :
     RRing n →ₐ[Indexed.Pn n] TrivSqZeroExt (Indexed.Pn n) (Indexed.Pn n) :=
   CliffordAlgebra.lift (Qzero n)
     ⟨TrivSqZeroExt.inrHom (Indexed.Pn n) (Indexed.Pn n), fun m => by
-      rw [TrivSqZeroExt.inrHom, LinearMap.coe_mk, AddHom.coe_mk, TrivSqZeroExt.inr_mul_inr,
-        show Qzero n m = 0 from rfl, map_zero]⟩
+      change TrivSqZeroExt.inr m * TrivSqZeroExt.inr m = _
+      rw [TrivSqZeroExt.inr_mul_inr, show Qzero n m = 0 from rfl, map_zero]⟩
 
 /-- A retraction `RRing n →ₗ[ℚ] Pn n` of `algebraMap`: `RRingToTriv` followed by projection to
 the first (`Pn n`) coordinate. Since `RRingToTriv` is a `Pn n`-algebra map,
@@ -371,7 +373,7 @@ theorem iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n) (hz : iota0 n z =
       · subst h; simp
       · simp [h]
     simp_rw [hterm]
-    rw [Finset.sum_ite_eq' Finset.univ b0 z, if_pos (Finset.mem_univ b0)]
+    rw [Finset.sum_ite_eq' Finset.univ b0 z, ite_eq_left (Finset.mem_univ b0)]
   rw [hz, map_zero] at hcompute
   simpa using hcompute.symm
 
@@ -488,7 +490,7 @@ theorem kappaAB_iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n)
       · subst h; simp
       · simp [h]
     simp_rw [hterm]
-    rw [Finset.sum_ite_eq' Finset.univ b0 z, if_pos (Finset.mem_univ b0)]
+    rw [Finset.sum_ite_eq' Finset.univ b0 z, ite_eq_left (Finset.mem_univ b0)]
   rw [hz, map_zero] at hcompute
   simpa using hcompute.symm
 
