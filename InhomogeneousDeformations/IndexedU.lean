@@ -37,7 +37,7 @@ theorem hBasis_Lof (n : ℕ) (a b : Fin (2 * n)) :
   · rcases lt_or_gt_of_ne hab with hlt | hgt
     · rw [Lof, dif_pos hlt.le]; rfl
     · rw [Lof, dif_neg (not_le.mpr hgt)]
-      show betaN n b • eN (Fof a) + betaN n a • eN (Fof b)
+      change betaN n b • eN (Fof a) + betaN n a • eN (Fof b)
         = betaN n a • eN (Fof b) + betaN n b • eN (Fof a)
       abel
 
@@ -449,7 +449,7 @@ theorem deltaH_LF (n : ℕ) (u v w : Fin (2 * n)) :
 /-- **V2, FF sector**: closes directly, no Jacobi. -/
 theorem deltaH_FF (n : ℕ) (u v : Fin (2 * n)) :
     deltaFBasis n (hMap n) (Fof u) (Fof v) = GammaBetaBasis n (Fof u) (Fof v) := by
-  show deltaFBasis n (hMap n) (Fof u) (Fof v) = gammaFFn n u v
+  change deltaFBasis n (hMap n) (Fof u) (Fof v) = gammaFFn n u v
   unfold deltaFBasis
   rw [hMap_Fof, bracketN_zero_left, parity_Fof, gsignN_11, hMap_Fof, bracketN_zero_right,
     smul_zero, zero_add, zero_sub]
@@ -559,28 +559,30 @@ theorem intertwiningU_basis (n : ℕ) (p q : RBasis n) :
       _ = iotaR (bracketBasisN n i j) + kappaEmbed Z + kappaEmbed (B + A - Z) := by abel
   · -- (i,false),(j,true)
     rw [UMap_eR_false, UMap_eR_true, bracketRBeta_eR_eR]
-    show bracketR n (eR ((i, false) : RBasis n) + kappaEmbed (hBasis n i)) (eR ((j, true) : RBasis n))
+    show bracketR n (eR ((i, false) : RBasis n) + kappaEmbed (hBasis n i))
+      (eR ((j, true) : RBasis n))
       = UMap n (bracketRBetaBasis n (i, false) (j, true))
     rw [bracketR_add_left, bracketR_eR_eR, bracketR_kappaEmbed_eR_true, add_zero]
     show bracketRBasis n (i, false) (j, true) = UMap n (bracketRBetaBasis n (i, false) (j, true))
-    show kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j)
+    change kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j)
       = UMap n (kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j))
     rw [UMap_eq, falsePart_kappaEmbed, hMap_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
     rw [this, add_zero]
   · -- (i,true),(j,false)
     rw [UMap_eR_true, UMap_eR_false, bracketRBeta_eR_eR]
-    show bracketR n (eR ((i, true) : RBasis n)) (eR ((j, false) : RBasis n) + kappaEmbed (hBasis n j))
+    show bracketR n (eR ((i, true) : RBasis n))
+      (eR ((j, false) : RBasis n) + kappaEmbed (hBasis n j))
       = UMap n (bracketRBetaBasis n (i, true) (j, false))
     rw [bracketR_add_right, bracketR_eR_eR, bracketR_eR_true_kappaEmbed, add_zero]
     show bracketRBasis n (i, true) (j, false) = UMap n (bracketRBetaBasis n (i, true) (j, false))
-    show kappaEmbed (bracketBasisN n i j) = UMap n (kappaEmbed (bracketBasisN n i j))
+    change kappaEmbed (bracketBasisN n i j) = UMap n (kappaEmbed (bracketBasisN n i j))
     rw [UMap_eq, falsePart_kappaEmbed, hMap_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
     rw [this, add_zero]
   · -- (i,true),(j,true)
     rw [UMap_eR_true, UMap_eR_true, bracketRBeta_eR_eR, bracketR_eR_eR]
-    show (0 : RMod n) = UMap n (0 : RMod n)
+    change (0 : RMod n) = UMap n (0 : RMod n)
     have hfp0 : falsePart (0 : RMod n) = 0 := by funext k; simp [falsePart]
     rw [UMap_eq, hfp0, hMap_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
@@ -590,6 +592,8 @@ theorem UMap_zero (n : ℕ) : UMap n (0 : RMod n) = 0 := by
   have hfp0 : falsePart (0 : RMod n) = 0 := by funext k; simp [falsePart]
   rw [UMap_eq, hfp0, hMap_zero, kappaEmbed_zero, add_zero]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem UMap_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n)
     (f : ι → RMod n) : UMap n (∑ i ∈ s, c i • f i) = ∑ i ∈ s, c i • UMap n (f i) := by
   classical
@@ -598,6 +602,8 @@ theorem UMap_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : �
   | @insert a s ha ih =>
     rw [Finset.sum_insert ha, UMap_add, UMap_smul, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem UMap_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → RMod n) :
     UMap n (∑ i ∈ s, f i) = ∑ i ∈ s, UMap n (f i) := by
   classical
@@ -611,7 +617,8 @@ in place of `TBeta`/`TBetaInv`. -/
 theorem intertwiningU (n : ℕ) (x y : RMod n) :
     bracketR n (UMap n x) (UMap n y) = UMap n (bracketRBeta n x y) := by
   have hLHS : bracketR n (UMap n x) (UMap n y)
-      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (UMap n (eR p)) (UMap n (eR q)) := by
+      = ∑ p : RBasis n, ∑ q : RBasis n,
+          (x p * y q) • bracketR n (UMap n (eR p)) (UMap n (eR q)) := by
     conv_lhs => rw [eR_decompose n x, eR_decompose n y]
     rw [UMap_sum', UMap_sum', bracketR_sum_left'']
     apply Finset.sum_congr rfl; intro p _
@@ -619,7 +626,8 @@ theorem intertwiningU (n : ℕ) (x y : RMod n) :
     apply Finset.sum_congr rfl; intro q _
     rw [smul_smul]
   have hRHS : UMap n (bracketRBeta n x y)
-      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (UMap n (eR p)) (UMap n (eR q)) := by
+      = ∑ p : RBasis n, ∑ q : RBasis n,
+          (x p * y q) • bracketR n (UMap n (eR p)) (UMap n (eR q)) := by
     unfold bracketRBeta
     rw [UMap_sum]
     apply Finset.sum_congr rfl; intro p _
