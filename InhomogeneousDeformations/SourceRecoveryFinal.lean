@@ -47,6 +47,8 @@ theorem comm_mul_left_AB (n : ℕ) (x y z : AB n) :
   rw [mul_sub, sub_mul, mul_assoc, mul_assoc, mul_assoc]
   abel
 
+-- the hypotheses keep the `a*c` spelling so the statement text stays unchanged (I116-1)
+set_option linter.style.whitespace false in
 theorem symm_comm_symm_AB (n : ℕ) (a b c d : AB n) (p q r s : ℚ)
     (hac : a*c - c*a = p • (1 : AB n))
     (had : a*d - d*a = q • (1 : AB n))
@@ -84,8 +86,10 @@ theorem L0hatBeta_comm (n : ℕ) (u v w z : Fin (2 * n)) :
       = (1/2 : ℚ) • (JnQ n v w • L0hatBeta n u z + JnQ n u w • L0hatBeta n v z
           + JnQ n v z • L0hatBeta n u w + JnQ n u z • L0hatBeta n v w) := by
   unfold L0hatBeta
-  rw [show (1/4:ℚ) • (bU n u * bU n v + bU n v * bU n u) * ((1/4:ℚ) • (bU n w * bU n z + bU n z * bU n w))
-        - (1/4:ℚ) • (bU n w * bU n z + bU n z * bU n w) * ((1/4:ℚ) • (bU n u * bU n v + bU n v * bU n u))
+  rw [show (1/4:ℚ) • (bU n u * bU n v + bU n v * bU n u)
+      * ((1/4:ℚ) • (bU n w * bU n z + bU n z * bU n w))
+        - (1/4:ℚ) • (bU n w * bU n z + bU n z * bU n w)
+            * ((1/4:ℚ) • (bU n u * bU n v + bU n v * bU n u))
       = (1/16 : ℚ) • ((bU n u * bU n v + bU n v * bU n u) * (bU n w * bU n z + bU n z * bU n w)
           - (bU n w * bU n z + bU n z * bU n w) * (bU n u * bU n v + bU n v * bU n u)) from by
     rw [smul_mul_smul_comm, smul_mul_smul_comm]; module]
@@ -191,8 +195,10 @@ theorem LF_correction (n : ℕ) (u v w : Fin (2 * n)) :
         + (1 / 2 : ℚ) • (betaKappaAB n v * BuAB n u * BuAB n w)
         - (-((1 / 2 : ℚ) • (betaKappaAB n u * BuAB n w * BuAB n v))
             + -((1 / 2 : ℚ) • (betaKappaAB n v * BuAB n w * BuAB n u)))
-      = (1 / 2 : ℚ) • (betaKappaAB n u * BuAB n v * BuAB n w + betaKappaAB n u * BuAB n w * BuAB n v)
-        + (1 / 2 : ℚ) • (betaKappaAB n v * BuAB n u * BuAB n w + betaKappaAB n v * BuAB n w * BuAB n u)
+      = (1 / 2 : ℚ)
+          • (betaKappaAB n u * BuAB n v * BuAB n w + betaKappaAB n u * BuAB n w * BuAB n v)
+        + (1 / 2 : ℚ)
+            • (betaKappaAB n v * BuAB n u * BuAB n w + betaKappaAB n v * BuAB n w * BuAB n u)
       from by module]
   rw [e1, e2]
   rw [show (1 / 4 : ℚ) • ((1 / 2 : ℚ) • (betaKappaAB n u * ((4 : ℚ) • L0AB n v w))
@@ -224,10 +230,11 @@ theorem iota0_gammaLFn (n : ℕ) (u v w : Fin (2 * n)) :
       = (1 / 2 : ℚ) • (betaKappaAB n u * L0AB n v w + betaKappaAB n v * L0AB n u w) := by
   unfold Indexed.gammaLFn
   rw [iota0_smul, iota0_add, iota0_smul_eN, iota0_smul_eN, iota0Basis_Lof, iota0Basis_Lof]
-  rw [show ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.cratN n (1 / 2))) ᵍ⊗ₜ[ℚ] (1 : A0 n) : AB n)
+  rw [show ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.cratN n (1 / 2))) ᵍ⊗ₜ[ℚ]
+      (1 : A0 n) : AB n)
       = (1 / 2 : ℚ) • (1 : AB n) from by
     rw [algebraMap_cratN, AB_tmul_smul_left]
-    show (1 / 2 : ℚ) • (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+    change (1 / 2 : ℚ) • (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
         ((1 : RRing n) ⊗ₜ[ℚ] (1 : A0 n)) : AB n) = (1 / 2 : ℚ) • (1 : AB n)
     rw [← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one]]
   rw [smul_mul_assoc, one_mul, mul_smul_comm, mul_add, kappaAB_mul_algebraMap_tmul_L0,
@@ -283,7 +290,7 @@ theorem hMap_bracketFFn (n : ℕ) (u v : Fin (2 * n)) :
     hMap n (bracketFFn n u v) = -(GammaBetaBasis n (Fof u) (Fof v)) := by
   unfold bracketFFn GammaBetaBasis gammaFFn
   rw [hMap_smul, hMap_Lof]
-  show cratN n (1/2) • (betaN n u • eN (Fof v) + betaN n v • eN (Fof u))
+  change cratN n (1/2) • (betaN n u • eN (Fof v) + betaN n v • eN (Fof u))
       = -(-(cratN n (1 / 2) • (betaN n u • eN (Fof v) + betaN n v • eN (Fof u))))
   rw [neg_neg]
 
@@ -351,7 +358,7 @@ theorem iota0_hMap_term (n : ℕ) (a b c d : Fin (2 * n)) :
         ᵍ⊗ₜ[ℚ] (1 : A0 n) : AB n)
       = ((1 / 2 : ℚ) * JnQ n a b) • (1 : AB n) from by
     rw [algebraMap_cratN_half_mul_Jn, AB_tmul_smul_left]
-    show ((1 / 2 : ℚ) * JnQ n a b) • (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+    change ((1 / 2 : ℚ) * JnQ n a b) • (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
         ((1 : RRing n) ⊗ₜ[ℚ] (1 : A0 n)) : AB n) = ((1 / 2 : ℚ) * JnQ n a b) • (1 : AB n)
     rw [← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one]]
   rw [smul_mul_assoc, one_mul, mul_smul_comm, mul_add, kappaAB_mul_algebraMap_tmul_F0,
@@ -406,7 +413,7 @@ theorem liftsBracket_eq_bridge (n : ℕ) (i j : Indexed.IndexedBasis n) :
   | .inl ⟨(u, v), huv⟩, .inl ⟨(w, z), hwz⟩ =>
     have h := L0hatBeta_bracket_LL n u v w z
     rw [Indexed.bracketBasisN_Lof_Lof] at h
-    show L0hatBeta n u v * L0hatBeta n w z - L0hatBeta n w z * L0hatBeta n u v
+    change L0hatBeta n u v * L0hatBeta n w z - L0hatBeta n w z * L0hatBeta n u v
         = iota0 n (Indexed.bracketLLn n u v w z) + kappaAB n * iota0 n (0 : Indexed.IndexedMod n)
           + kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketLLn n u v w z))
     rw [iota0_zero, mul_zero, add_zero]
@@ -414,7 +421,7 @@ theorem liftsBracket_eq_bridge (n : ℕ) (i j : Indexed.IndexedBasis n) :
   | .inl ⟨(u, v), huv⟩, .inr w =>
     have h := L0hatBeta_bracket_LF n u v w
     rw [Indexed.bracketBasisN_Lof_Fof] at h
-    show L0hatBeta n u v * F0hatBeta n w - F0hatBeta n w * L0hatBeta n u v
+    change L0hatBeta n u v * F0hatBeta n w - F0hatBeta n w * L0hatBeta n u v
         = iota0 n (Indexed.bracketLFn n u v w) + kappaAB n * iota0 n (Indexed.gammaLFn n u v w)
           + kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketLFn n u v w))
     rw [Indexed.hMap_bracketLFn, iota0_zero, mul_zero, add_zero]
@@ -422,7 +429,7 @@ theorem liftsBracket_eq_bridge (n : ℕ) (i j : Indexed.IndexedBasis n) :
   | .inr w, .inl ⟨(u, v), huv⟩ =>
     have h := F0hatBeta_bracket_FL n u v w
     rw [Indexed.bracketBasisN_Fof_Lof, Indexed.GammaBetaBasis_Fof_Lof] at h
-    show F0hatBeta n w * L0hatBeta n u v - L0hatBeta n u v * F0hatBeta n w
+    change F0hatBeta n w * L0hatBeta n u v - L0hatBeta n u v * F0hatBeta n w
         = iota0 n (-Indexed.bracketLFn n u v w)
           + kappaAB n * iota0 n (-Indexed.gammaLFn n u v w)
           + kappaAB n * iota0 n (Indexed.hMap n (-Indexed.bracketLFn n u v w))
@@ -430,7 +437,7 @@ theorem liftsBracket_eq_bridge (n : ℕ) (i j : Indexed.IndexedBasis n) :
     exact h
   | .inr u, .inr v =>
     have h := F0hatBeta_bracket_FF n u v
-    show F0hatBeta n u * F0hatBeta n v + F0hatBeta n v * F0hatBeta n u
+    change F0hatBeta n u * F0hatBeta n v + F0hatBeta n v * F0hatBeta n u
         = iota0 n (Indexed.bracketFFn n u v)
           + kappaAB n * iota0 n (Indexed.GammaBetaBasis n (Indexed.Fof u) (Indexed.Fof v))
           + kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketFFn n u v))
@@ -441,6 +448,8 @@ end Source
 
 namespace Indexed
 
+-- the `DecidableEq` instance is kept: removing it would change the statement
+set_option linter.unusedDecidableInType false in
 /-- `hMap` distributes over a finite sum, exactly as `iota0_sum` does for `iota0`
 (`SourceRecoveryBridge.lean`). -/
 theorem hMap_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → IndexedMod n) :
@@ -450,6 +459,8 @@ theorem hMap_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι
   | empty => simp [hMap_zero]
   | @insert a s ha ih => rw [Finset.sum_insert ha, hMap_add, ih, Finset.sum_insert ha]
 
+-- the `DecidableEq` instance is kept: removing it would change the statement
+set_option linter.unusedDecidableInType false in
 /-- `hMap` distributes over a finite `Pn n`-scaled sum, exactly as `iota0_sum'` does for `iota0`. -/
 theorem hMap_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n)
     (f : ι → IndexedMod n) :
@@ -496,11 +507,13 @@ theorem algebraMap_tmul_mul_kappaAB_mul (n : ℕ) (c : Indexed.Pn n) (z : AB n) 
   rw [← mul_assoc, algebraMap_tmul_comm_kappaAB, mul_assoc]
 
 /-- Generic form of `iota0_bracketN`'s own proof shape, for any bilinearly-extended `F`. -/
-theorem iota0_bilinearExtend (n : ℕ) (F : Indexed.IndexedBasis n → Indexed.IndexedBasis n → Indexed.IndexedMod n)
+theorem iota0_bilinearExtend (n : ℕ) (F : Indexed.IndexedBasis n → Indexed.IndexedBasis n
+    → Indexed.IndexedMod n)
     (x y : Indexed.IndexedMod n) :
     iota0 n (∑ i : Indexed.IndexedBasis n, ∑ j : Indexed.IndexedBasis n, (x i * y j) • F i j)
       = ∑ i : Indexed.IndexedBasis n, ∑ j : Indexed.IndexedBasis n,
-          ((algebraMap (Indexed.Pn n) (RRing n) (x i * y j)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iota0 n (F i j) := by
+          ((algebraMap (Indexed.Pn n) (RRing n) (x i * y j)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+              * iota0 n (F i j) := by
   rw [iota0_sum]
   apply Finset.sum_congr rfl
   intro i _
@@ -558,12 +571,16 @@ is *itself* `kappaAB` times an `algebraMap`-embedded scalar (`betaKappaAB_eq_kap
 below), so `L0hatBeta_eq` rearranges to express the *undeformed* `L0AB` as `L0hatBeta` minus a
 `kappaAB`-multiple of `F0hatBeta`-combinations (`L0AB_eq_L0hatBeta_sub`). Since
 `liftsBracket_general`'s correction terms are built from `iota0 (bracketN x y)` -- a combination of
-*undeformed* `L0`/`F0`, via `L0AB`, not `L0hatBeta` -- the `L0AB`-parts of that correction do **not**
-lie in the bare span of `{L0hatBeta, F0hatBeta}` alone; `L0AB_eq_L0hatBeta_sub` shows exactly what is
-missing: a `kappaAB`-multiple of the family. `F0hatBeta_eq_F0AB` (Y2) already shows the parallel `F0`
+-- the `L0AB`-parts of that correction do **not**
+*undeformed* `L0`/`F0`, via `L0AB`, not `L0hatBeta`
+lie in the bare span of `{L0hatBeta,
+    F0hatBeta}` alone; `L0AB_eq_L0hatBeta_sub` shows exactly what is
+missing: a `kappaAB`-multiple of the family. `F0hatBeta_eq_F0AB` (Y2) already shows the
+    parallel `F0`
 part poses no such obstruction (it is already exactly `F0hatBeta`, no correction). This is a typed
 account of the gap, not a decision that closure is impossible: extending the spanning family to
-`liftsFamilyBeta n b` together with `kappaAB n * liftsFamilyBeta n b` (for every basis vector `b`) is
+`liftsFamilyBeta n b` together with `kappaAB n
+    * liftsFamilyBeta n b` (for every basis vector `b`) is
 the natural fix, mirroring `RMod n = IndexedMod n × Bool`'s own shape, but re-running Y3's
 linear-independence argument and a full closure theorem for that doubled family is not attempted in
 this pass. -/
