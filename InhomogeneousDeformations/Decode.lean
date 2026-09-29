@@ -86,6 +86,8 @@ structure RawInput where
   smRoles : List (String × String)
   deriving Repr
 
+-- lint: the unused pattern variable `cs` is part of the frozen definition.
+set_option linter.unusedVariables false in
 /-- The first adjacent-pair defect in a `Wire.Poly`'s exponent lists, if
 any: `duplicateExponent` for an equal adjacent pair, `unsortedExponents`
 for an out-of-order (but unequal) adjacent pair. Distinguishing these
@@ -126,6 +128,8 @@ order/duplicate defect). -/
 def checkPoly (expectedLen : ℕ) (p : Wire.Poly) : Option Reason :=
   (p.findSome? (checkTerm expectedLen)).orElse (fun _ => firstPolyOrderDefect p)
 
+-- lint: the unused `dite` hypothesis `h` is part of the frozen definition.
+set_option linter.unusedVariables false in
 /-- Check one `Wire.WVector` against the declared basis list: unknown
 basis id first, then duplicate id (adjacent-equal declared index), then
 each entry's own polynomial. -/
@@ -164,7 +168,8 @@ def checkRows (declared : List String) (expectedLen : ℕ) (rows : List Wire.Row
   match rows.findSome? (checkRow declared expectedLen) with
   | some reason => some reason
   | none =>
-      let pairs := rows.map (fun r => (Wire.indexIn declared r.inputs.head!, Wire.indexIn declared (r.inputs.getD 1 "")))
+      let pairs := rows.map (fun r =>
+        (Wire.indexIn declared r.inputs.head!, Wire.indexIn declared (r.inputs.getD 1 "")))
       let rec dup : List (ℕ × ℕ) → Bool
         | [] => false
         | [_] => false
@@ -205,7 +210,8 @@ noncomputable def polyAsCoeff (p : Wire.Poly) : Coeff := (p.map termAsCoeff).sum
 element `b`, sum `polyAsCoeff` over every vector entry whose id resolves
 to `b` (validity guarantees at most one). -/
 noncomputable def rowOutputAsMod (r : Wire.Row) : Mod :=
-  fun b => ((r.output.filter (fun e => basisOfName e.basisId = some b)).map (fun e => polyAsCoeff e.coeff)).sum
+  fun b => ((r.output.filter (fun e => basisOfName e.basisId = some b)).map
+    (fun e => polyAsCoeff e.coeff)).sum
 
 /-- The forward-direction value for the declared-order pair `(p, q)`
 (`p ≤ q`), read off the validated row list. -/
