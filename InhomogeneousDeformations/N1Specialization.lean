@@ -105,7 +105,7 @@ theorem E_parity (p : IndexedBasis 1) : Basis5.parity (E p) = Indexed.parity p :
   match p with
   | .inl ⟨(u, v), h⟩ =>
     fin_cases u <;> fin_cases v <;>
-      first | (simp_all [E, Eforward, Indexed.parity, Basis5.parity]) | omega
+      simp_all [E, Eforward, Indexed.parity, Basis5.parity]
   | .inr u =>
     fin_cases u <;> simp [E, Eforward, Indexed.parity, Basis5.parity]
 
@@ -128,7 +128,7 @@ theorem canonical_order_n1 :
     Ebackward Basis5.L22 < Ebackward Basis5.F1 ∧
     Ebackward Basis5.F1 < Ebackward Basis5.F2 := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;>
-    · show Indexed.orderKey _ < Indexed.orderKey _
+    · change Indexed.orderKey _ < Indexed.orderKey _
       simp [Ebackward, Indexed.orderKey, Prod.Lex.toLex_lt_toLex]
 
 /-- `C1`: `E` preserves the canonical indexed order -- comparing
@@ -138,7 +138,7 @@ construction, so this identifies `E`'s action with the canonical position
 sequence proved above. -/
 theorem E_preserves_order (p q : IndexedBasis 1) :
     p < q ↔ basis5Rank (E p) < basis5Rank (E q) := by
-  show Indexed.orderKey p < Indexed.orderKey q ↔ basis5Rank (E p) < basis5Rank (E q)
+  change Indexed.orderKey p < Indexed.orderKey q ↔ basis5Rank (E p) < basis5Rank (E q)
   have hp : p = Ebackward (E p) := (E.symm_apply_apply p).symm
   have hq : q = Ebackward (E q) := (E.symm_apply_apply q).symm
   conv_lhs => rw [hp, hq]
@@ -181,7 +181,7 @@ theorem IsHomog_Phi_iff (x : IndexedMod 1) (d : ZMod 2) :
     rw [hb2, hp]
   · intro h p hp
     have hb : Phi x (E p) ≠ 0 := by
-      simp [Phi, rho, E.symm_apply_apply]; exact hp
+      simp only [Phi, rho, E.symm_apply_apply, id_eq, ne_eq]; exact hp
     have := h (E p) hb
     rwa [E_parity] at this
 
@@ -190,8 +190,10 @@ theorem IsHomog_Phi_iff (x : IndexedMod 1) (d : ZMod 2) :
 lemma rho_neg (p : Pn 1) : rho (-p) = -(rho p) := rfl
 
 theorem Phi_neg (x : IndexedMod 1) : Phi (-x) = -(Phi x) := by
-  funext b; simp [Phi, rho_neg, indexedMod_neg_apply]
+  funext b; simp [Phi]
 
+-- `[DecidableEq ι]` is part of the published statement; kept unchanged.
+set_option linter.unusedDecidableInType false in
 /-- `Phi` distributes over an arbitrary finite sum. -/
 lemma Phi_sum {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → IndexedMod 1) :
     Phi (∑ i ∈ s, f i) = ∑ i ∈ s, Phi (f i) := by
@@ -239,15 +241,15 @@ theorem Phi_bracketFFn (u v : Fin 2) :
 `L,F` bracket formula, for every `u v w : Fin 2`. -/
 theorem Phi_bracketLFn (u v w : Fin 2) :
     Phi (bracketLFn 1 u v w) = InhomogeneousDeformations.bracketLF u v w := by
-  simp only [bracketLFn, InhomogeneousDeformations.bracketLF, Phi_add, Phi_smul, rho_mul, rho_C, rho_Jn,
-    Phi_eN, E_Fof]
+  simp only [bracketLFn, InhomogeneousDeformations.bracketLF, Phi_add, Phi_smul, rho_mul, rho_C,
+    rho_Jn, Phi_eN, E_Fof]
 
 /-- General bridge: `Phi` of the indexed `L,L` bracket formula is the native
 `L,L` bracket formula, for every `u v w z : Fin 2`. -/
 theorem Phi_bracketLLn (u v w z : Fin 2) :
     Phi (bracketLLn 1 u v w z) = InhomogeneousDeformations.bracketLL u v w z := by
-  simp only [bracketLLn, InhomogeneousDeformations.bracketLL, Phi_add, Phi_smul, rho_mul, rho_C, rho_Jn,
-    Phi_eN, E_Lof]
+  simp only [bracketLLn, InhomogeneousDeformations.bracketLL, Phi_add, Phi_smul, rho_mul, rho_C,
+    rho_Jn, Phi_eN, E_Lof]
 
 /-- `C2` basis-pair compatibility table: 25 separately named lemmas, one per
 `(E p, E q)` branch, each closed by a single bridge-lemma application (or a
@@ -384,7 +386,8 @@ theorem Phi_bracket_basis_F2_F2 :
       = bracket (e Basis5.F2) (e Basis5.F2) := by
   rw [bracket_e_e]; exact Phi_bracketFFn 1 1
 
-set_option maxHeartbeats 4000000 in
+set_option maxHeartbeats 400000 in
+-- Needed, measured 2026-09-29: 200000 times out at `whnf`; 400000 passes (was 4000000).
 /-- `C2`: the general basis-pair compatibility lemma, for ALL `p q :
 IndexedBasis 1` (not just the 25 concretely-named ones above), by rewriting
 `p`/`q` to `E.symm (E p)`/`E.symm (E q)` (defeq to `Ebackward (E p)`/
@@ -439,7 +442,7 @@ theorem Phi_bracket (x y : IndexedMod 1) :
     show (rho (x p) * rho (y q)) • bracket (e (E p)) (e (E q))
       = (rho (x p) * Phi y (E q)) • bracket (e (E p)) (e (E q))
     congr 2
-    show rho (y q) = rho (y (E.symm (E q)))
+    change rho (y q) = rho (y (E.symm (E q)))
     rw [E.symm_apply_apply]
   have outer : (∑ p : IndexedBasis 1, ∑ q : IndexedBasis 1,
         (rho (x p) * rho (y q)) • bracket (e (E p)) (e (E q)))
@@ -451,7 +454,7 @@ theorem Phi_bracket (x y : IndexedMod 1) :
       = ∑ j : Basis5, (Phi x (E p) * Phi y j) • bracket (e (E p)) (e j)
     apply Finset.sum_congr rfl; intro j _
     congr 2
-    show rho (x p) = rho (x (E.symm (E p)))
+    change rho (x p) = rho (x (E.symm (E p)))
     rw [E.symm_apply_apply]
   rw [outer]
 
