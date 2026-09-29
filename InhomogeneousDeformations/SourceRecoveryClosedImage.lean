@@ -51,7 +51,6 @@ theorem L0AB_comm_kappaAB (n : ℕ) (u v : Fin (2 * n)) :
     rw [kappaAB_mul_algebraMap_tmul, map_one, mul_one]
   rw [e1, e2]
 
-set_option maxHeartbeats 1000000 in
 theorem F0AB_comm_kappaAB (n : ℕ) (u : Fin (2 * n)) :
     F0AB n u * kappaAB n = -(kappaAB n * F0AB n u) := by
   unfold F0AB kappaAB
@@ -108,15 +107,17 @@ theorem iota0_hMap_eN_comm_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
   rw [Indexed.hMap_eN]
   match i with
   | .inl ⟨(u, v), huv⟩ =>
-    show iota0 n (Indexed.hBasis n (Sum.inl ⟨(u, v), huv⟩)) * kappaAB n
+    change iota0 n (Indexed.hBasis n (Sum.inl ⟨(u, v), huv⟩)) * kappaAB n
         = -(kappaAB n * iota0 n (Indexed.hBasis n (Sum.inl ⟨(u, v), huv⟩)))
-    have hh : Indexed.hBasis n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
-        = Indexed.betaN n u • Indexed.eN (Indexed.Fof v) + Indexed.betaN n v • Indexed.eN (Indexed.Fof u) := rfl
+    have hh : Indexed.hBasis n (Sum.inl (⟨(u, v), huv⟩ :
+          {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
+        = Indexed.betaN n u • Indexed.eN (Indexed.Fof v) + Indexed.betaN n v
+            • Indexed.eN (Indexed.Fof u) := rfl
     rw [hh, iota0_add, iota0_smul_eN, iota0_smul_eN, iota0Basis_Fof, iota0Basis_Fof]
     rw [add_mul, mul_add, algebraMap_tmul_F0_comm_kappaAB, algebraMap_tmul_F0_comm_kappaAB]
     abel
   | .inr u =>
-    show iota0 n (Indexed.hBasis n (Sum.inr u)) * kappaAB n
+    change iota0 n (Indexed.hBasis n (Sum.inr u)) * kappaAB n
         = -(kappaAB n * iota0 n (Indexed.hBasis n (Sum.inr u)))
     have hh : Indexed.hBasis n (Sum.inr u : Indexed.IndexedBasis n) = 0 := rfl
     rw [hh, iota0_zero, zero_mul, mul_zero, neg_zero]
@@ -159,10 +160,12 @@ noncomputable def iotaBetaRBracket (n : ℕ) (p q : Indexed.RBasis n) : AB n :=
 /-! ## W0 — the image characterization -/
 
 theorem iotaBetaR_image_eq (n : ℕ) (r : Indexed.RMod n) :
-    ∃ z1 z2 : Indexed.IndexedMod n, r = Indexed.iotaR z1 + Indexed.kappaEmbed (z2 - Indexed.hMap n z1)
+    ∃ z1 z2 : Indexed.IndexedMod n, r = Indexed.iotaR z1 + Indexed.kappaEmbed (z2
+        - Indexed.hMap n z1)
       ∧ iotaBetaR n r = iota0 n z1 + kappaAB n * iota0 n z2 := by
   refine ⟨Indexed.falsePart r, Indexed.hMap n (Indexed.falsePart r) + Indexed.truePart r, ?_, ?_⟩
-  · have h1 : Indexed.hMap n (Indexed.falsePart r) + Indexed.truePart r - Indexed.hMap n (Indexed.falsePart r)
+  · have h1 : Indexed.hMap n (Indexed.falsePart r) + Indexed.truePart r
+      - Indexed.hMap n (Indexed.falsePart r)
         = Indexed.truePart r := by abel
     rw [h1]
     exact Indexed.decompose r
@@ -192,31 +195,35 @@ theorem iotaBetaRBracket_false_false (n : ℕ) (i j : Indexed.IndexedBasis n) :
     constructor <;> (unfold Indexed.parityR; simp)
   unfold iotaBetaRBracket
   rw [hpar.1, hpar.2, iotaBetaR_eR_false, iotaBetaR_eR_false]
-  show liftsFamilyBeta n i * liftsFamilyBeta n j
-      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j * liftsFamilyBeta n i)
+  change liftsFamilyBeta n i * liftsFamilyBeta n j
+      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j
+          * liftsFamilyBeta n i)
       = iotaBetaR n (Indexed.bracketRBetaBasis n (i, false) (j, false))
-  show liftsFamilyBeta n i * liftsFamilyBeta n j
-      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j * liftsFamilyBeta n i)
-      = iotaBetaR n (Indexed.iotaR (Indexed.bracketBasisN n i j) + Indexed.kappaEmbed (Indexed.GammaBetaBasis n i j))
+  change liftsFamilyBeta n i * liftsFamilyBeta n j
+      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j
+          * liftsFamilyBeta n i)
+      = iotaBetaR n (Indexed.iotaR (Indexed.bracketBasisN n i j)
+          + Indexed.kappaEmbed (Indexed.GammaBetaBasis n i j))
   rw [iotaBetaR_iotaR_add_kappaEmbed]
   have hlift : liftsFamilyBeta n i * liftsFamilyBeta n j
-      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j * liftsFamilyBeta n i)
+      - gsignNQ n (Indexed.parity i) (Indexed.parity j) • (liftsFamilyBeta n j
+          * liftsFamilyBeta n i)
       = liftsBracket n i j := by
     match i, j with
     | .inl ⟨(u, v), huv⟩, .inl ⟨(w, z), hwz⟩ =>
-      show L0hatBeta n u v * L0hatBeta n w z
+      change L0hatBeta n u v * L0hatBeta n w z
           - gsignNQ n 0 0 • (L0hatBeta n w z * L0hatBeta n u v) = liftsBracket n _ _
       rw [gsignNQ_00, one_smul]; rfl
     | .inl ⟨(u, v), huv⟩, .inr w =>
-      show L0hatBeta n u v * F0hatBeta n w
+      change L0hatBeta n u v * F0hatBeta n w
           - gsignNQ n 0 1 • (F0hatBeta n w * L0hatBeta n u v) = liftsBracket n _ _
       rw [gsignNQ_01, one_smul]; rfl
     | .inr w, .inl ⟨(u, v), huv⟩ =>
-      show F0hatBeta n w * L0hatBeta n u v
+      change F0hatBeta n w * L0hatBeta n u v
           - gsignNQ n 1 0 • (L0hatBeta n u v * F0hatBeta n w) = liftsBracket n _ _
       rw [gsignNQ_10, one_smul]; rfl
     | .inr u, .inr v =>
-      show F0hatBeta n u * F0hatBeta n v
+      change F0hatBeta n u * F0hatBeta n v
           - gsignNQ n 1 1 • (F0hatBeta n v * F0hatBeta n u) = liftsBracket n _ _
       rw [gsignNQ_11, neg_smul, one_smul, sub_neg_eq_add]
       rfl
@@ -226,7 +233,8 @@ theorem iotaBetaRBracket_false_false (n : ℕ) (i j : Indexed.IndexedBasis n) :
 correction term dies against the outer `kappaAB` via `kappaAB_sq_eq_zero`. -/
 theorem kappaAB_mul_liftsFamilyBeta (n : ℕ) (i : Indexed.IndexedBasis n) :
     kappaAB n * liftsFamilyBeta n i = kappaAB n * iota0AB n i := by
-  have h : liftsFamilyBeta n i = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
+  have h : liftsFamilyBeta n i
+    = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
     rw [← liftBeta_eN, liftBeta_eq_iota0_add, iota0_eN]
   rw [h, mul_add, ← mul_assoc, kappaAB_sq_eq_zero, zero_mul, add_zero]
 
@@ -237,12 +245,12 @@ theorem kappaAB_mul_iota0AB_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
     kappaAB n * iota0AB n i * kappaAB n = 0 := by
   match i with
   | .inl ⟨(u, v), huv⟩ =>
-    show kappaAB n * iota0AB n (Sum.inl ⟨(u, v), huv⟩) * kappaAB n = 0
+    change kappaAB n * iota0AB n (Sum.inl ⟨(u, v), huv⟩) * kappaAB n = 0
     rw [show iota0AB n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2*n) × Fin (2*n) // p.1 ≤ p.2}))
         = L0AB n u v from rfl]
     rw [mul_assoc, L0AB_comm_kappaAB, ← mul_assoc, kappaAB_sq_eq_zero, zero_mul]
   | .inr u =>
-    show kappaAB n * iota0AB n (Sum.inr u) * kappaAB n = 0
+    change kappaAB n * iota0AB n (Sum.inr u) * kappaAB n = 0
     rw [show iota0AB n (Sum.inr u : Indexed.IndexedBasis n) = F0AB n u from rfl]
     rw [mul_assoc, F0AB_comm_kappaAB, mul_neg, ← mul_assoc, kappaAB_sq_eq_zero, zero_mul, neg_zero]
 
@@ -251,13 +259,14 @@ theorem iotaBetaRBracket_true_true (n : ℕ) (i j : Indexed.IndexedBasis n) :
     iotaBetaRBracket n (i, true) (j, true)
       = iotaBetaR n (Indexed.bracketRBetaBasis n (i, true) (j, true)) := by
   unfold iotaBetaRBracket
-  rw [iotaBetaR_eR_true, iotaBetaR_eR_true, kappaAB_mul_liftsFamilyBeta, kappaAB_mul_liftsFamilyBeta]
+  rw [iotaBetaR_eR_true, iotaBetaR_eR_true, kappaAB_mul_liftsFamilyBeta,
+      kappaAB_mul_liftsFamilyBeta]
   have hz1 : kappaAB n * iota0AB n i * (kappaAB n * iota0AB n j) = 0 := by
     rw [← mul_assoc, kappaAB_mul_iota0AB_mul_kappaAB, zero_mul]
   have hz2 : kappaAB n * iota0AB n j * (kappaAB n * iota0AB n i) = 0 := by
     rw [← mul_assoc, kappaAB_mul_iota0AB_mul_kappaAB, zero_mul]
   rw [hz1, hz2, smul_zero, sub_zero]
-  show (0 : AB n) = iotaBetaR n (0 : Indexed.RMod n)
+  change (0 : AB n) = iotaBetaR n (0 : Indexed.RMod n)
   have hfp : Indexed.falsePart (0 : Indexed.RMod n) = 0 := by
     funext k; simp [Indexed.falsePart]
   have htp : Indexed.truePart (0 : Indexed.RMod n) = 0 := by
@@ -270,7 +279,7 @@ theorem iota0AB_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
     iota0AB n i * kappaAB n = gsignNQ n (Indexed.parity i) 1 • (kappaAB n * iota0AB n i) := by
   match i with
   | .inl ⟨(u, v), huv⟩ =>
-    show iota0AB n (Sum.inl ⟨(u, v), huv⟩) * kappaAB n
+    change iota0AB n (Sum.inl ⟨(u, v), huv⟩) * kappaAB n
         = gsignNQ n (Indexed.parity (Sum.inl ⟨(u, v), huv⟩)) 1
           • (kappaAB n * iota0AB n (Sum.inl ⟨(u, v), huv⟩))
     rw [show iota0AB n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2*n) × Fin (2*n) // p.1 ≤ p.2}))
@@ -278,7 +287,7 @@ theorem iota0AB_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
         {p : Fin (2*n) × Fin (2*n) // p.1 ≤ p.2})) = 0 from rfl,
       gsignNQ_01, one_smul, L0AB_comm_kappaAB]
   | .inr u =>
-    show iota0AB n (Sum.inr u) * kappaAB n
+    change iota0AB n (Sum.inr u) * kappaAB n
         = gsignNQ n (Indexed.parity (Sum.inr u : Indexed.IndexedBasis n)) 1
           • (kappaAB n * iota0AB n (Sum.inr u))
     rw [show iota0AB n (Sum.inr u : Indexed.IndexedBasis n) = F0AB n u from rfl,
@@ -288,7 +297,8 @@ theorem iota0AB_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
 /-- `liftsFamilyBeta n i * kappaAB` collapses the same way `kappaAB * liftsFamilyBeta n i` does. -/
 theorem liftsFamilyBeta_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
     liftsFamilyBeta n i * kappaAB n = iota0AB n i * kappaAB n := by
-  have h : liftsFamilyBeta n i = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
+  have h : liftsFamilyBeta n i
+    = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
     rw [← liftBeta_eN, liftBeta_eq_iota0_add, iota0_eN]
   rw [h, add_mul]
   have hz : kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) * kappaAB n = 0 := by
@@ -301,13 +311,16 @@ theorem liftsFamilyBeta_mul_kappaAB (n : ℕ) (i : Indexed.IndexedBasis n) :
 correction term's own extra `kappaAB` back into range of the outer one. -/
 theorem kappaAB_mul_iota0AB_mul_liftsFamilyBeta (n : ℕ) (i j : Indexed.IndexedBasis n) :
     kappaAB n * iota0AB n j * liftsFamilyBeta n i = kappaAB n * iota0AB n j * iota0AB n i := by
-  have h : liftsFamilyBeta n i = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
+  have h : liftsFamilyBeta n i
+    = iota0AB n i + kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)) := by
     rw [← liftBeta_eN, liftBeta_eq_iota0_add, iota0_eN]
   rw [h, mul_add]
   have step1 : iota0AB n j * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)))
-      = gsignNQ n (Indexed.parity j) 1 • (kappaAB n * (iota0AB n j * iota0 n (Indexed.hMap n (Indexed.eN i)))) := by
+      = gsignNQ n (Indexed.parity j) 1 • (kappaAB n * (iota0AB n j
+          * iota0 n (Indexed.hMap n (Indexed.eN i)))) := by
     rw [← mul_assoc, iota0AB_mul_kappaAB, smul_mul_assoc, mul_assoc]
-  have hz : kappaAB n * iota0AB n j * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i))) = 0 := by
+  have hz : kappaAB n * iota0AB n j * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.eN i)))
+    = 0 := by
     rw [mul_assoc, step1, mul_smul_comm, ← mul_assoc, kappaAB_sq_eq_zero, zero_mul, smul_zero]
   rw [hz, add_zero]
 
@@ -400,17 +413,18 @@ theorem iotaBetaRBracket_true_false (n : ℕ) (i j : Indexed.IndexedBasis n) :
       = gsignNQ n (Indexed.parity j) 1 • (kappaAB n * (iota0AB n j * iota0AB n i)) := by
     rw [← mul_assoc, liftsFamilyBeta_mul_kappaAB, iota0AB_mul_kappaAB, smul_mul_assoc, mul_assoc]
   rw [hGpGq, hGqGp]
-  show kappaAB n * (iota0AB n i * iota0AB n j)
+  change kappaAB n * (iota0AB n i * iota0AB n j)
       - gsignNQ n (Indexed.parity i + 1) (Indexed.parity j)
         • (gsignNQ n (Indexed.parity j) 1 • (kappaAB n * (iota0AB n j * iota0AB n i)))
       = iotaBetaR n (Indexed.bracketRBetaBasis n (i, true) (j, false))
-  show kappaAB n * (iota0AB n i * iota0AB n j)
+  change kappaAB n * (iota0AB n i * iota0AB n j)
       - gsignNQ n (Indexed.parity i + 1) (Indexed.parity j)
         • (gsignNQ n (Indexed.parity j) 1 • (kappaAB n * (iota0AB n j * iota0AB n i)))
       = iotaBetaR n (Indexed.kappaEmbed (Indexed.bracketBasisN n i j))
   rw [show iotaBetaR n (Indexed.kappaEmbed (Indexed.bracketBasisN n i j))
       = kappaAB n * liftBeta n (Indexed.bracketBasisN n i j) from iotaBetaR_kappaEmbed n _]
-  have hkill : kappaAB n * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketBasisN n i j))) = 0 := by
+  have hkill : kappaAB n * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketBasisN n i j)))
+    = 0 := by
     rw [← mul_assoc, kappaAB_sq_eq_zero, zero_mul]
   rw [liftBeta_eq_iota0_add, mul_add, hkill, add_zero]
   rw [iota0_bracketBasisN_unified, mul_sub]
@@ -434,19 +448,22 @@ theorem iotaBetaRBracket_false_true (n : ℕ) (i j : Indexed.IndexedBasis n) :
       = kappaAB n * (iota0AB n j * iota0AB n i) := by
     rw [kappaAB_mul_iota0AB_mul_liftsFamilyBeta, mul_assoc]
   rw [hGpGq, hGqGp]
-  show gsignNQ n (Indexed.parity i) 1 • (kappaAB n * (iota0AB n i * iota0AB n j))
-      - gsignNQ n (Indexed.parity i) (Indexed.parity j + 1) • (kappaAB n * (iota0AB n j * iota0AB n i))
+  change gsignNQ n (Indexed.parity i) 1 • (kappaAB n * (iota0AB n i * iota0AB n j))
+      - gsignNQ n (Indexed.parity i) (Indexed.parity j + 1) • (kappaAB n * (iota0AB n j
+          * iota0AB n i))
       = iotaBetaR n (Indexed.bracketRBetaBasis n (i, false) (j, true))
-  show gsignNQ n (Indexed.parity i) 1 • (kappaAB n * (iota0AB n i * iota0AB n j))
-      - gsignNQ n (Indexed.parity i) (Indexed.parity j + 1) • (kappaAB n * (iota0AB n j * iota0AB n i))
+  change gsignNQ n (Indexed.parity i) 1 • (kappaAB n * (iota0AB n i * iota0AB n j))
+      - gsignNQ n (Indexed.parity i) (Indexed.parity j + 1) • (kappaAB n * (iota0AB n j
+          * iota0AB n i))
       = iotaBetaR n (Indexed.kappaEmbed (Indexed.gsignN n (Indexed.parity i) 1
           • Indexed.bracketBasisN n i j))
   rw [iotaBetaR_kappaEmbed, liftBeta_smul, algebraMap_gsignN, AB_tmul_smul_left]
   rw [show (1 : RRing n) ᵍ⊗ₜ[ℚ] (1 : A0 n) = (1 : AB n) from by
-    show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((1:RRing n) ⊗ₜ[ℚ] (1:A0 n)) = 1
+    change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((1:RRing n) ⊗ₜ[ℚ] (1:A0 n)) = 1
     rw [← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one]]
   rw [smul_mul_assoc, one_mul, mul_smul_comm]
-  have hkill : kappaAB n * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketBasisN n i j))) = 0 := by
+  have hkill : kappaAB n * (kappaAB n * iota0 n (Indexed.hMap n (Indexed.bracketBasisN n i j)))
+    = 0 := by
     rw [← mul_assoc, kappaAB_sq_eq_zero, zero_mul]
   rw [liftBeta_eq_iota0_add, mul_add, smul_add, hkill, smul_zero, add_zero]
   rw [iota0_bracketBasisN_unified, mul_sub, mul_smul_comm]
@@ -454,6 +471,8 @@ theorem iotaBetaRBracket_false_true (n : ℕ) (i j : Indexed.IndexedBasis n) :
 
 /-! ## W2 -- the closure theorem, assembling all four rows -/
 
+-- The `[DecidableEq ι]` argument is unused in the type; kept so the statement is unchanged.
+set_option linter.unusedDecidableInType false in
 theorem iotaBetaR_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι)
     (f : ι → Indexed.RMod n) :
     iotaBetaR n (∑ i ∈ s, f i) = ∑ i ∈ s, iotaBetaR n (f i) := by
@@ -462,10 +481,13 @@ theorem iotaBetaR_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι)
   | empty => simp [iotaBetaR_zero]
   | @insert a s ha ih => rw [Finset.sum_insert ha, iotaBetaR_add, ih, Finset.sum_insert ha]
 
+-- The `[DecidableEq ι]` argument is unused in the type; kept so the statement is unchanged.
+set_option linter.unusedDecidableInType false in
 theorem iotaBetaR_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Indexed.Pn n)
     (f : ι → Indexed.RMod n) :
     iotaBetaR n (∑ i ∈ s, c i • f i)
-      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iotaBetaR n (f i) := by
+      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+        * iotaBetaR n (f i) := by
   classical
   induction s using Finset.induction with
   | empty => simp [iotaBetaR_zero]
@@ -474,14 +496,16 @@ theorem iotaBetaR_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (
 
 /-- **W2, the strong closure theorem**: the bilinear sum of concrete (anti)commutators of
 `iotaBetaR`-images over ALL of `RBasis n` (not just the `IndexedBasis n`-indexed, undoubled
-family) lands exactly in `iotaBetaR`'s own image -- `iotaBetaR n (bracketRBeta n r s)`, `bracketRBeta`
+family) lands exactly in `iotaBetaR`'s own image -- `iotaBetaR n (bracketRBeta n r s)`,
+`bracketRBeta`
 the frozen R1 object. Closure is then immediate: the value is manifestly an `iotaBetaR`-image by
 construction. (Stated with the `algebraMap (...) ᵍ⊗ₜ 1`-wrapped coefficient, matching
 `liftsBracket_general`'s/`iota0_bracketN`'s own established shape -- `AB n` carries no native
 `Pn n`-scalar action, only the `RRing n`-embedded one already used throughout this project.) -/
 theorem iotaBetaR_bracket_closed (n : ℕ) (r s : Indexed.RMod n) :
     ∑ p : Indexed.RBasis n, ∑ q : Indexed.RBasis n,
-        ((algebraMap (Indexed.Pn n) (RRing n) (r p * s q)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iotaBetaRBracket n p q
+        ((algebraMap (Indexed.Pn n) (RRing n) (r p * s q)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+            * iotaBetaRBracket n p q
       = iotaBetaR n (Indexed.bracketRBeta n r s) := by
   unfold Indexed.bracketRBeta
   rw [iotaBetaR_sum]
@@ -509,19 +533,19 @@ theorem iotaBetaRBracket_false_false_eq_liftsBracket (n : ℕ) (i j : Indexed.In
   rw [hpar.1, hpar.2, iotaBetaR_eR_false, iotaBetaR_eR_false]
   match i, j with
   | .inl ⟨(u, v), huv⟩, .inl ⟨(w, z), hwz⟩ =>
-    show L0hatBeta n u v * L0hatBeta n w z
+    change L0hatBeta n u v * L0hatBeta n w z
         - gsignNQ n 0 0 • (L0hatBeta n w z * L0hatBeta n u v) = liftsBracket n _ _
     rw [gsignNQ_00, one_smul]; rfl
   | .inl ⟨(u, v), huv⟩, .inr w =>
-    show L0hatBeta n u v * F0hatBeta n w
+    change L0hatBeta n u v * F0hatBeta n w
         - gsignNQ n 0 1 • (F0hatBeta n w * L0hatBeta n u v) = liftsBracket n _ _
     rw [gsignNQ_01, one_smul]; rfl
   | .inr w, .inl ⟨(u, v), huv⟩ =>
-    show F0hatBeta n w * L0hatBeta n u v
+    change F0hatBeta n w * L0hatBeta n u v
         - gsignNQ n 1 0 • (L0hatBeta n u v * F0hatBeta n w) = liftsBracket n _ _
     rw [gsignNQ_10, one_smul]; rfl
   | .inr u, .inr v =>
-    show F0hatBeta n u * F0hatBeta n v
+    change F0hatBeta n u * F0hatBeta n v
         - gsignNQ n 1 1 • (F0hatBeta n v * F0hatBeta n u) = liftsBracket n _ _
     rw [gsignNQ_11, neg_smul, one_smul, sub_neg_eq_add]; rfl
 
@@ -536,7 +560,8 @@ theorem iotaBetaR_bracket_closed_specializes (n : ℕ) (x y : Indexed.IndexedMod
         ((algebraMap (Indexed.Pn n) (RRing n) ((Indexed.iotaR x) p * (Indexed.iotaR y) q))
           ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iotaBetaRBracket n p q
       = ∑ i : Indexed.IndexedBasis n, ∑ j : Indexed.IndexedBasis n,
-          ((algebraMap (Indexed.Pn n) (RRing n) (x i * y j)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * liftsBracket n i j := by
+          ((algebraMap (Indexed.Pn n) (RRing n) (x i * y j)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+            * liftsBracket n i j := by
   simp only [Fintype.sum_prod_type]
   apply Finset.sum_congr rfl; intro i _
   rw [Indexed.sum_bool_eq]
@@ -549,14 +574,17 @@ theorem iotaBetaR_bracket_closed_specializes (n : ℕ) (x y : Indexed.IndexedMod
   rw [h1, zero_add]
   apply Finset.sum_congr rfl; intro j _
   rw [Indexed.sum_bool_eq]
-  have h2 : ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.iotaR x (i, false) * Indexed.iotaR y (j, true)))
+  have h2 : ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.iotaR x (i, false)
+      * Indexed.iotaR y (j, true)))
       ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iotaBetaRBracket n (i, false) (j, true) = 0 := by
     simp [Indexed.iotaR, AB_zero_tmul]
   rw [h2, zero_add]
-  show ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.iotaR x (i, false) * Indexed.iotaR y (j, false)))
+  change ((algebraMap (Indexed.Pn n) (RRing n) (Indexed.iotaR x (i, false)
+      * Indexed.iotaR y (j, false)))
       ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iotaBetaRBracket n (i, false) (j, false)
       = ((algebraMap (Indexed.Pn n) (RRing n) (x i * y j)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * liftsBracket n i j
-  rw [show Indexed.iotaR x (i, false) = x i from rfl, show Indexed.iotaR y (j, false) = y j from rfl,
+  rw [show Indexed.iotaR x (i, false) = x i from rfl, show Indexed.iotaR y (j, false) = y j
+      from rfl,
     iotaBetaRBracket_false_false_eq_liftsBracket]
 
 /-! ## W3 -- `prop:recovery` assembled
