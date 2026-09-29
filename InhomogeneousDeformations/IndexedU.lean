@@ -1,6 +1,12 @@
 import InhomogeneousDeformations.IndexedKappa
 import Mathlib.Tactic.Module
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+-- Toolchain port (v4.34): `IndexedBasis` is a plain `def` whose sum structure the proofs
+-- use; restore the pre-v4.34 type-transparency behaviour of `isDefEq` for this file.
+set_option backward.isDefEq.respectTransparency.types false
+
 /-!
 # I106 R1 — the U-conjugation identity (V0-V4)
 
@@ -33,10 +39,10 @@ noncomputable def hBasis (n : ℕ) : IndexedBasis n → IndexedMod n
 theorem hBasis_Lof (n : ℕ) (a b : Fin (2 * n)) :
     hBasis n (Lof a b) = betaN n a • eN (Fof b) + betaN n b • eN (Fof a) := by
   rcases eq_or_ne a b with hab | hab
-  · subst hab; rw [Lof, dif_pos (le_refl a)]; rfl
+  · subst hab; rw [Lof, dite_eq_left (le_refl a)]; rfl
   · rcases lt_or_gt_of_ne hab with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]
+    · rw [Lof, dite_eq_left hlt.le]; rfl
+    · rw [Lof, dite_eq_right (not_le.mpr hgt)]
       change betaN n b • eN (Fof a) + betaN n a • eN (Fof b)
         = betaN n a • eN (Fof b) + betaN n b • eN (Fof a)
       abel
@@ -53,7 +59,7 @@ theorem hMap_eN (n : ℕ) (i : IndexedBasis n) : hMap n (eN i) = hBasis n i := b
   rw [Finset.sum_eq_single i]
   · simp [eN]
   · intro b _ hb
-    have : eN i b = 0 := by unfold eN; rw [if_neg hb]
+    have : eN i b = 0 := by unfold eN; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ i) h
 
@@ -246,7 +252,7 @@ theorem eN_isHomogN {n : ℕ} (i : IndexedBasis n) : IsHomogN (eN i) (parity i) 
   by_contra hne
   apply hk
   unfold eN
-  apply if_neg
+  apply ite_eq_right
   intro heq
   exact hne (by rw [heq])
 
@@ -386,8 +392,7 @@ theorem FVecBeta_deriv_Lof_Lof (n : ℕ) (a b c d : Fin (2 * n)) :
   rw [hL, hR1, hR2, ← Finset.sum_add_distrib]
   apply Finset.sum_congr rfl; intro t _
   rw [← smul_add]
-  congr 1
-  exact twoFVecBeta_deriv_Lof_Lof_term n t a b c d
+  exact congrArg (fun z => vN n t • z) (twoFVecBeta_deriv_Lof_Lof_term n t a b c d)
 
 /-- The single-`F_t` derivation identity, lifted to `twoFVecBeta n` (with the
 scalar `2` carried through by `bracketN_smul_left`/`smul_add`). -/
@@ -486,14 +491,14 @@ theorem deltaH (n : ℕ) (i j : IndexedBasis n) :
     deltaFBasis n (hMap n) i j = GammaBetaBasis n i j := by
   match i, j with
   | .inl ⟨(a, b), h1⟩, .inl ⟨(c, d), h2⟩ =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
-      have e2 : (Sum.inl ⟨(c, d), h2⟩ : IndexedBasis n) = Lof c d := by rw [Lof, dif_pos h2]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
+      have e2 : (Sum.inl ⟨(c, d), h2⟩ : IndexedBasis n) = Lof c d := by rw [Lof, dite_eq_left h2]
       rw [e1, e2]; exact deltaH_LL n a b c d
   | .inl ⟨(a, b), h1⟩, .inr w =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
       rw [e1]; exact deltaH_LF n a b w
   | .inr w, .inl ⟨(a, b), h1⟩ =>
-      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dite_eq_left h1]
       rw [e1]; exact deltaH_FL n a b w
   | .inr u, .inr v => exact deltaH_FF n u v
 

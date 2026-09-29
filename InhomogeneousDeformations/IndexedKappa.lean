@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.IndexedCoboundary
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # R2-E -- the `kappa` extension and the trivializing map `T_beta` (P3)
 
@@ -255,11 +258,11 @@ theorem bracketR_eR_eR (n : ℕ) (p q : RBasis n) :
   · rw [Finset.sum_eq_single q]
     · simp [eR]
     · intro b _ hb
-      have : eR q b = 0 := by unfold eR; rw [if_neg hb]
+      have : eR q b = 0 := by unfold eR; rw [ite_eq_right hb]
       simp [this]
     · intro h; exact absurd (Finset.mem_univ q) h
   · intro b _ hb
-    have : eR p b = 0 := by unfold eR; rw [if_neg hb]
+    have : eR p b = 0 := by unfold eR; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ p) h
 
@@ -611,11 +614,11 @@ theorem bracketRBeta_eR_eR (n : ℕ) (p q : RBasis n) :
   · rw [Finset.sum_eq_single q]
     · simp [eR]
     · intro b _ hb
-      have : eR q b = 0 := by unfold eR; rw [if_neg hb]
+      have : eR q b = 0 := by unfold eR; rw [ite_eq_right hb]
       simp [this]
     · intro h; exact absurd (Finset.mem_univ q) h
   · intro b _ hb
-    have : eR p b = 0 := by unfold eR; rw [if_neg hb]
+    have : eR p b = 0 := by unfold eR; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ p) h
 
@@ -683,7 +686,7 @@ theorem bracketR_eR_left (n : ℕ) (p : RBasis n) (x : RMod n) :
   rw [Finset.sum_eq_single p]
   · apply Finset.sum_congr rfl; intro q _; simp [eR]
   · intro b _ hb
-    have : eR p b = 0 := by unfold eR; rw [if_neg hb]
+    have : eR p b = 0 := by unfold eR; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ p) h
 
@@ -694,7 +697,7 @@ theorem bracketR_eR_right (n : ℕ) (x : RMod n) (q : RBasis n) :
   rw [Finset.sum_eq_single q]
   · simp [eR]
   · intro b _ hb
-    have : eR q b = 0 := by unfold eR; rw [if_neg hb]
+    have : eR q b = 0 := by unfold eR; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ q) h
 
@@ -708,7 +711,7 @@ theorem kappaEmbed_eq_sum (n : ℕ) (y : IndexedMod n) :
   · intro k _ hk
     have : eR ((k, true) : RBasis n) (l, b) = 0 := by
       unfold eR
-      rw [if_neg (fun h => hk (congrArg Prod.fst h).symm)]
+      rw [ite_eq_right (fun h => hk (congrArg Prod.fst h).symm)]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ l) h
 
@@ -719,7 +722,7 @@ theorem bracketN_eN_left_eq_sum (n : ℕ) (i : IndexedBasis n) (y : IndexedMod n
   · apply Finset.sum_congr rfl; intro k _; simp [eN]
   · intro a _ ha
     apply Finset.sum_eq_zero; intro k _
-    have : eN i a = 0 := by unfold eN; rw [if_neg ha]
+    have : eN i a = 0 := by unfold eN; rw [ite_eq_right ha]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ i) h
 
@@ -730,7 +733,7 @@ theorem bracketN_eN_right_eq_sum (n : ℕ) (y : IndexedMod n) (j : IndexedBasis 
   rw [Finset.sum_eq_single j]
   · simp [eN]
   · intro a _ ha
-    have : eN j a = 0 := by unfold eN; rw [if_neg ha]
+    have : eN j a = 0 := by unfold eN; rw [ite_eq_right ha]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ j) h
 
@@ -904,7 +907,7 @@ theorem eR_decompose (n : ℕ) (r : RMod n) : r = ∑ p : RBasis n, r p • eR p
   rw [Finset.sum_eq_single l]
   · simp [eR]
   · intro k _ hk
-    have : eR k l = 0 := by unfold eR; rw [if_neg (Ne.symm hk)]
+    have : eR k l = 0 := by unfold eR; rw [ite_eq_right (Ne.symm hk)]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ l) h
 
