@@ -122,7 +122,8 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
   rw [Fintype.linearIndependent_iff]
   intro g hg u
   have hφeven : ∀ j : Fin n, ∀ v : Fin (2 * n),
-      MvPolynomial.coeff 0 ((B n v) (MvPolynomial.X j)) = if v = Indexed.evenIdx n j then 1 else 0 := by
+      MvPolynomial.coeff 0 ((B n v) (MvPolynomial.X j))
+        = if v = Indexed.evenIdx n j then 1 else 0 := by
     intro j v
     by_cases hv : (v : ℕ) % 2 = 0
     · obtain ⟨i, rfl⟩ : ∃ i, v = Indexed.evenIdx n i := ⟨wIndex n v, u_eq_evenIdx_of_even n v hv⟩
@@ -160,17 +161,20 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
     rw [MvPolynomial.coeff_sum] at hcoeff
     simp only [MvPolynomial.coeff_smul, smul_eq_mul] at hcoeff
     rw [Finset.sum_congr rfl (fun v _ => by rw [hφeven j v, mul_boole])] at hcoeff
-    rwa [Finset.sum_ite_eq' Finset.univ (Indexed.evenIdx n j) g, if_pos (Finset.mem_univ _)] at hcoeff
+    rwa [Finset.sum_ite_eq' Finset.univ (Indexed.evenIdx n j) g,
+      if_pos (Finset.mem_univ _)] at hcoeff
   · obtain ⟨j, rfl⟩ : ∃ j, u = Indexed.oddIdx n j := ⟨wIndex n u, u_eq_oddIdx_of_odd n u hu⟩
     have hsum : (∑ v, g v • B n v) (1 : WPoly n) = 0 := by rw [hg]; simp
-    have hcoeff : MvPolynomial.coeff (Finsupp.single j 1) ((∑ v, g v • B n v) (1 : WPoly n)) = 0 := by
+    have hcoeff :
+        MvPolynomial.coeff (Finsupp.single j 1) ((∑ v, g v • B n v) (1 : WPoly n)) = 0 := by
       rw [hsum]; simp
     rw [LinearMap.sum_apply] at hcoeff
     simp only [LinearMap.smul_apply] at hcoeff
     rw [MvPolynomial.coeff_sum] at hcoeff
     simp only [MvPolynomial.coeff_smul, smul_eq_mul] at hcoeff
     rw [Finset.sum_congr rfl (fun v _ => by rw [hφodd j v, mul_boole])] at hcoeff
-    rwa [Finset.sum_ite_eq' Finset.univ (Indexed.oddIdx n j) g, if_pos (Finset.mem_univ _)] at hcoeff
+    rwa [Finset.sum_ite_eq' Finset.univ (Indexed.oddIdx n j) g,
+      if_pos (Finset.mem_univ _)] at hcoeff
 
 /-- `F^0_u = (1/2)(B_u ᵍ⊗ₜ a)`: the transcribed `F0 n u = (1/2) • (aA0 n * Bu0 n u)` collapsed
 via the "no sign" formula, since the `W_n`-factor `1` is always degree `0`. -/
@@ -195,7 +199,7 @@ theorem F0_linearIndependent (n : ℕ) : LinearIndependent ℚ (F0 n) := by
       (GradedTensorProduct.of ℚ (WGrading n) CGrading).symm.toLinearMap with hΨdef
   have hΨB : ∀ v : Fin (2 * n), Ψ ((B n v) ᵍ⊗ₜ[ℚ] (Source.a : C)) = B n v := by
     intro v
-    show Ψ (GradedTensorProduct.of ℚ (WGrading n) CGrading (B n v ⊗ₜ (Source.a : C))) = B n v
+    change Ψ (GradedTensorProduct.of ℚ (WGrading n) CGrading (B n v ⊗ₜ (Source.a : C))) = B n v
     rw [hΨdef]
     simp [TensorProduct.map_tmul, hφ]
   have key : Ψ (∑ v, g v • F0 n v) = (1 / 2 : ℚ) • (∑ v, g v • B n v) := by
