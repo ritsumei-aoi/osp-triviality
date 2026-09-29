@@ -436,7 +436,8 @@ namespace InhomogeneousDeformations
 #print axioms Indexed.GammaBetaN_eq_deltaFN
 #print axioms Indexed.GammaBetaN_eq_deltaFN_homog
 
--- R2-E, K0 (IndexedKappa.lean): the model g_R, its embedding/decomposition, and kappa-multiplication; K0c (kappa^2=0, non-injectivity).
+-- R2-E, K0 (IndexedKappa.lean): the model g_R, its embedding/decomposition, and
+-- kappa-multiplication; K0c (kappa^2=0, non-injectivity).
 #print axioms Indexed.rMod_zero_apply
 #print axioms Indexed.rMod_add_apply
 #print axioms Indexed.rMod_smul_apply
@@ -459,7 +460,8 @@ namespace InhomogeneousDeformations
 #print axioms Indexed.kappaMulR_sq
 #print axioms Indexed.kappaMulR_not_injective
 
--- R2-E, K1 (IndexedKappa.lean): the extended undeformed bracket, eq:scalar-rule, and K1a's restriction to bracketN.
+-- R2-E, K1 (IndexedKappa.lean): the extended undeformed bracket, eq:scalar-rule, and K1a's
+-- restriction to bracketN.
 #print axioms Indexed.bracketR_eR_eR
 #print axioms Indexed.bracketR_zero_left
 #print axioms Indexed.bracketR_zero_right
@@ -474,7 +476,8 @@ namespace InhomogeneousDeformations
 #print axioms Indexed.iotaR_sum
 #print axioms Indexed.bracketR_iotaR_iotaR
 
--- R2-E, K1c (IndexedKappa.lean): super-skew symmetry on g_R, the convention-pinning check, proved before K5.
+-- R2-E, K1c (IndexedKappa.lean): super-skew symmetry on g_R, the convention-pinning check, proved
+-- before K5.
 #print axioms Indexed.zmod2_cases
 #print axioms Indexed.gsignN_comm
 #print axioms Indexed.gsignN_mul_one_left
@@ -484,7 +487,8 @@ namespace InhomogeneousDeformations
 #print axioms Indexed.bracketRBasis_super_skew
 #print axioms Indexed.bracketR_super_skew_homog
 
--- R2-E, K2 (IndexedKappa.lean): the odd extension (f_beta)_R, with the two extension-rule cases proved.
+-- R2-E, K2 (IndexedKappa.lean): the odd extension (f_beta)_R, with the two extension-rule cases
+-- proved.
 #print axioms Indexed.falsePart_add
 #print axioms Indexed.truePart_add
 #print axioms Indexed.falsePart_smul
@@ -512,14 +516,16 @@ namespace InhomogeneousDeformations
 #print axioms Indexed.IsHomogR_falsePart
 #print axioms Indexed.TBeta_isHomogR
 
--- R2-E, K4 (IndexedKappa.lean): the deformed bracket, eq:deformed-bracket, restricting to bracketN + kappa GammaBetaN.
+-- R2-E, K4 (IndexedKappa.lean): the deformed bracket, eq:deformed-bracket, restricting to bracketN
+-- + kappa GammaBetaN.
 #print axioms Indexed.bracketRBeta_eR_eR
 #print axioms Indexed.kappaEmbed_zero
 #print axioms Indexed.kappaEmbed_sum
 #print axioms Indexed.kappaEmbed_sum_smul
 #print axioms Indexed.bracketRBeta_iotaR_iotaR
 
--- R2-E, K5 (IndexedKappa.lean): the intertwining, eq:intertwining -- basis level (citing G4) and unconditional for arbitrary elements.
+-- R2-E, K5 (IndexedKappa.lean): the intertwining, eq:intertwining -- basis level (citing G4) and
+-- unconditional for arbitrary elements.
 #print axioms Indexed.bracketR_eR_left
 #print axioms Indexed.bracketR_eR_right
 #print axioms Indexed.kappaEmbed_eq_sum
@@ -1033,7 +1039,8 @@ namespace InhomogeneousDeformations
 -- flip in A_B, never citing F0hatBeta_bracket_FL or liftsBracket_eq_bridge. U3
 -- (GammaBetaBasis_Fof_Lof_forced_FL_free) pins the FL coefficient to -(gammaLFn n u v w) via R6's
 -- kappaAB_iota0_eq_zero_imp, never inspecting GammaBetaBasis. Agent1c's own mechanical checker
--- (BFS over compiled proof-term dependencies to InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof) was
+-- (BFS over compiled proof-term dependencies to
+-- InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof) was
 -- run on all five theorems below, independently in this round's implementation and again in
 -- Agent2c's own verification pass, and found no dependency path from any of them to the FL row
 -- lemma; Agent1c's own independent re-check is part of this round's review. Full account:
