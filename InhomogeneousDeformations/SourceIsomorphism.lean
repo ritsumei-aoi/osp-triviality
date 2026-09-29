@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.SourceLifts
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # I106 R4 — `lem:source-isomorphism` (X0-X4)
 

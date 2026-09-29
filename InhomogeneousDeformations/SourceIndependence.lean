@@ -2,6 +2,9 @@ import InhomogeneousDeformations.SourceLifts
 import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
 import Mathlib.LinearAlgebra.Dual.Lemmas
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # I106 R2, W4 — the independence statement, written and assessed
 
@@ -122,7 +125,7 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
   rw [Fintype.linearIndependent_iff]
   intro g hg u
   have hφeven : ∀ j : Fin n, ∀ v : Fin (2 * n),
-      MvPolynomial.coeff 0 ((B n v) (MvPolynomial.X j))
+      ((B n v) (MvPolynomial.X j)).coeff 0
         = if v = Indexed.evenIdx n j then 1 else 0 := by
     intro j v
     by_cases hv : (v : ℕ) % 2 = 0
@@ -130,31 +133,31 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
       rw [B_evenIdx, Derivation.coeFn_coe]
       by_cases hij : i = j
       · subst hij; rw [MvPolynomial.pderiv_X_self]; simp
-      · rw [MvPolynomial.pderiv_X_of_ne (Ne.symm hij), if_neg (even_ne_even i j hij)]
+      · rw [MvPolynomial.pderiv_X_of_ne (Ne.symm hij), ite_eq_right (even_ne_even i j hij)]
         simp
     · obtain ⟨i, rfl⟩ : ∃ i, v = Indexed.oddIdx n i := ⟨wIndex n v, u_eq_oddIdx_of_odd n v hv⟩
-      rw [B_oddIdx, LinearMap.mulLeft_apply, if_neg (Ne.symm (even_ne_odd j i)),
+      rw [B_oddIdx, LinearMap.mulLeft_apply, ite_eq_right (Ne.symm (even_ne_odd j i)),
         ← MvPolynomial.constantCoeff_eq, map_mul, MvPolynomial.constantCoeff_X,
         MvPolynomial.constantCoeff_X, mul_zero]
   have hφodd : ∀ j : Fin n, ∀ v : Fin (2 * n),
-      MvPolynomial.coeff (Finsupp.single j 1) ((B n v) (1 : WPoly n)) =
+      ((B n v) (1 : WPoly n)).coeff (Finsupp.single j 1) =
         if v = Indexed.oddIdx n j then 1 else 0 := by
     intro j v
     by_cases hv : (v : ℕ) % 2 = 0
     · obtain ⟨i, rfl⟩ : ∃ i, v = Indexed.evenIdx n i := ⟨wIndex n v, u_eq_evenIdx_of_even n v hv⟩
       rw [B_evenIdx, Derivation.coeFn_coe, MvPolynomial.pderiv_one]
-      rw [if_neg (even_ne_odd i j)]
+      rw [ite_eq_right (even_ne_odd i j)]
       simp
     · obtain ⟨i, rfl⟩ : ∃ i, v = Indexed.oddIdx n i := ⟨wIndex n v, u_eq_oddIdx_of_odd n v hv⟩
-      rw [B_oddIdx, LinearMap.mulLeft_apply, mul_one, MvPolynomial.coeff_X']
+      rw [B_oddIdx, LinearMap.mulLeft_apply, mul_one, MvPolynomial.coeff_X]
       simp only [Finsupp.single_left_inj (one_ne_zero (α := ℕ))]
       by_cases hij : i = j
       · subst hij; simp
-      · rw [if_neg hij, if_neg (odd_ne_odd i j hij)]
+      · rw [ite_eq_right hij, ite_eq_right (odd_ne_odd i j hij)]
   by_cases hu : (u : ℕ) % 2 = 0
   · obtain ⟨j, rfl⟩ : ∃ j, u = Indexed.evenIdx n j := ⟨wIndex n u, u_eq_evenIdx_of_even n u hu⟩
     have hsum : (∑ v, g v • B n v) (MvPolynomial.X j) = 0 := by rw [hg]; simp
-    have hcoeff : MvPolynomial.coeff 0 ((∑ v, g v • B n v) (MvPolynomial.X j)) = 0 := by
+    have hcoeff : ((∑ v, g v • B n v) (MvPolynomial.X j)).coeff 0 = 0 := by
       rw [hsum]; simp
     rw [LinearMap.sum_apply] at hcoeff
     simp only [LinearMap.smul_apply] at hcoeff
@@ -162,11 +165,11 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
     simp only [MvPolynomial.coeff_smul, smul_eq_mul] at hcoeff
     rw [Finset.sum_congr rfl (fun v _ => by rw [hφeven j v, mul_boole])] at hcoeff
     rwa [Finset.sum_ite_eq' Finset.univ (Indexed.evenIdx n j) g,
-      if_pos (Finset.mem_univ _)] at hcoeff
+      ite_eq_left (Finset.mem_univ _)] at hcoeff
   · obtain ⟨j, rfl⟩ : ∃ j, u = Indexed.oddIdx n j := ⟨wIndex n u, u_eq_oddIdx_of_odd n u hu⟩
     have hsum : (∑ v, g v • B n v) (1 : WPoly n) = 0 := by rw [hg]; simp
     have hcoeff :
-        MvPolynomial.coeff (Finsupp.single j 1) ((∑ v, g v • B n v) (1 : WPoly n)) = 0 := by
+        ((∑ v, g v • B n v) (1 : WPoly n)).coeff (Finsupp.single j 1) = 0 := by
       rw [hsum]; simp
     rw [LinearMap.sum_apply] at hcoeff
     simp only [LinearMap.smul_apply] at hcoeff
@@ -174,7 +177,7 @@ theorem B_linearIndependent (n : ℕ) : LinearIndependent ℚ (B n) := by
     simp only [MvPolynomial.coeff_smul, smul_eq_mul] at hcoeff
     rw [Finset.sum_congr rfl (fun v _ => by rw [hφodd j v, mul_boole])] at hcoeff
     rwa [Finset.sum_ite_eq' Finset.univ (Indexed.oddIdx n j) g,
-      if_pos (Finset.mem_univ _)] at hcoeff
+      ite_eq_left (Finset.mem_univ _)] at hcoeff
 
 /-- `F^0_u = (1/2)(B_u ᵍ⊗ₜ a)`: the transcribed `F0 n u = (1/2) • (aA0 n * Bu0 n u)` collapsed
 via the "no sign" formula, since the `W_n`-factor `1` is always degree `0`. -/
