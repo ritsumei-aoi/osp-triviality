@@ -1,5 +1,12 @@
 # osp-triviality
 
+> **This branch is a reference port to Lean v4.34.1 (mathlib v4.34.1).** The paper cites the tag
+> [`v2-lean-formalization`](../../releases/tag/v2-lean-formalization), and `main`
+> (= [`v2.1-lint-clean`](../../releases/tag/v2.1-lint-clean)) stays at Lean v4.29.1. Here the
+> statements and definitions are those of `main`, except for the mathlib changes listed in the
+> port notes (`docs/port-v4.34.md`), and the audit covers the same 649 declarations. Nothing on
+> `main` or on the tags has moved.
+
 Machine-checked formalization, in Lean 4, of the triviality of inhomogeneous deformations of the
 oscillator Lie superalgebra $B(0,n)=\mathfrak{osp}(1|2n)$.
 
