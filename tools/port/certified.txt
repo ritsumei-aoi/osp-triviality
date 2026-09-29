@@ -1,0 +1,8 @@
+# declarations whose statement change is covered by PortCertificate.lean
+InhomogeneousDeformations.Source.coeff_smul_one_eq_zero
+InhomogeneousDeformations.Source.coeff_single_add_single_X_mul_X
+InhomogeneousDeformations.Source.hval1
+InhomogeneousDeformations.Source.hval2
+InhomogeneousDeformations.Source.hval0
+InhomogeneousDeformations.Source.hval3
+InhomogeneousDeformations.Source.hval4

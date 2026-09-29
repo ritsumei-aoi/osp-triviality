@@ -1,0 +1,317 @@
+{"9":
+ "<code>Algebra.algebraMap.{u, v} (R : Type u) (A : Type v) {inst✝ : CommSemiring R} {inst✝¹ : Semiring A}\n  [self : Algebra R A] : R →+* A</code><span class=\"sep\"></span><code class=\"docstring\">Embedding `R →+* A` given by `Algebra` structure. </code>",
+ "86":
+ "<code>InhomogeneousDeformations.bracket (x y : InhomogeneousDeformations.Mod) : InhomogeneousDeformations.Mod</code><span class=\"sep\"></span><code class=\"docstring\">`T0`: finite-sum `Coeff`-bilinear extension of `bracketBasis` to the whole module. </code>",
+ "85":
+ "<code>InhomogeneousDeformations.Bridge.decodedBracket (x y : InhomogeneousDeformations.Mod) : InhomogeneousDeformations.Mod</code><span class=\"sep\"></span><code class=\"docstring\">`T6`, extended to the whole module: literally the same finite-sum\nbilinear-extension SHAPE as `bracket` itself (`Native.lean`'s `T0`), so\nthe extension is immediate from the basis-pair equality by\n`Finset.sum_congr` -- no separate bilinearity argument is restated. </code>",
+ "84":
+ "<code>InhomogeneousDeformations.Mod : Type</code><span class=\"sep\"></span><code class=\"docstring\">The free `Coeff`-module on the five-element basis. </code>",
+ "83": "<code>InhomogeneousDeformations.Mod</code>",
+ "82":
+ "<code>InhomogeneousDeformations.Bridge.decodedBracket_eq_bracket (x y : InhomogeneousDeformations.Mod) :\n  InhomogeneousDeformations.Bridge.decodedBracket x y = InhomogeneousDeformations.bracket x y</code>",
+ "81":
+ "<code>InhomogeneousDeformations.Indexed.bracketRBeta_iotaR_iotaR (n : ℕ)\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.bracketRBeta n (InhomogeneousDeformations.Indexed.iotaR x)\n      (InhomogeneousDeformations.Indexed.iotaR y) =\n    InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed (InhomogeneousDeformations.Indexed.GammaBetaN n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K4**: on the image of `g_P -&gt; g_R`, `bracketRBeta` restricts exactly\nto `bracketN + kappa GammaBetaN`. </code>",
+ "80":
+ "<code>Not (a : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Not p`, or `¬p`, is the negation of `p`. It is defined to be `p → False`,\nso if your goal is `¬p` you can use `intro h` to turn the goal into\n`h : p ⊢ False`, and if you have `hn : ¬p` and `h : p` then `hn h : False`\nand `(hn h).elim` will prove anything.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `¬` in identifiers is `not`.</code>",
+ "8": "<code>InhomogeneousDeformations.Indexed.IndexedBasis n</code>",
+ "79":
+ "<code>LT.lt.{u} {α : Type u} [self : LT α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-than relation: `x &lt; y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;` in identifiers is `lt`.</code>",
+ "78": "<code>0 &lt; n</code>",
+ "77":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR_not_injective (n : ℕ) (hn : 0 &lt; n) :\n  ¬Function.Injective InhomogeneousDeformations.Indexed.kappaMulR</code><span class=\"sep\"></span><code class=\"docstring\">**K0c**: multiplication by `kappa` is not claimed, and is not, injective\non `g_R` -- the manuscript's own explicit disclaimer (lines 270-272),\nwitnessed concretely: `0` and `kappa e_i` (for any fixed even-pair basis\nelement, hence nonzero) have the same image `0`. </code>",
+ "76":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR {n : ℕ} (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`kappa`-multiplication on `g_R`: `kappa * (x0 + kappa x1) = kappa x0`. </code>",
+ "75":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR_sq (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.kappaMulR (InhomogeneousDeformations.Indexed.kappaMulR r) = 0</code><span class=\"sep\"></span><code class=\"docstring\">**K0c**: `kappa^2 = 0` on `g_R`, as a stated theorem. </code>",
+ "74": "<code>InhomogeneousDeformations.Indexed.IsHomogR y dy</code>",
+ "73": "<code>InhomogeneousDeformations.Indexed.IsHomogR x dx</code>",
+ "72":
+ "<code>InhomogeneousDeformations.Indexed.bracketR_super_skew_homog (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n)\n  (dx dy : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogR x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogR y dy) :\n  InhomogeneousDeformations.Indexed.bracketR n x y =\n    -InhomogeneousDeformations.Indexed.gsignN n dx dy • InhomogeneousDeformations.Indexed.bracketR n y x</code><span class=\"sep\"></span><code class=\"docstring\">**K1c**, extended to arbitrary homogeneous elements of `RMod n` -- the\nsame finite-sum bilinear argument as the accepted `bracketN_super_skew_homog`,\ntransposed to `RBasis n`. </code>",
+ "71":
+ "<code>InhomogeneousDeformations.Indexed.bracketR_iotaR_iotaR (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.bracketR n (InhomogeneousDeformations.Indexed.iotaR x)\n      (InhomogeneousDeformations.Indexed.iotaR y) =\n    InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K1a**: on the image of `g_P -&gt; g_R`, `bracketR` restricts exactly to\n`bracketN`. </code>",
+ "70": "<code>InhomogeneousDeformations.Indexed.IsHomogN z dz</code>",
+ "7":
+ "<code>InhomogeneousDeformations.Indexed.IndexedMod (n : ℕ) : Type</code>",
+ "69":
+ "<code>InhomogeneousDeformations.Indexed.jacobiN_homog {n : ℕ} (x y z : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (dx dy dz : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) (hz : InhomogeneousDeformations.Indexed.IsHomogN z dz) :\n  InhomogeneousDeformations.Indexed.gsignN n dx dz •\n          InhomogeneousDeformations.Indexed.bracketN n x (InhomogeneousDeformations.Indexed.bracketN n y z) +\n        InhomogeneousDeformations.Indexed.gsignN n dy dx •\n          InhomogeneousDeformations.Indexed.bracketN n y (InhomogeneousDeformations.Indexed.bracketN n z x) +\n      InhomogeneousDeformations.Indexed.gsignN n dz dy •\n        InhomogeneousDeformations.Indexed.bracketN n z (InhomogeneousDeformations.Indexed.bracketN n x y) =\n    0</code><span class=\"sep\"></span><code class=\"docstring\">`U5`: the graded Jacobi identity for arbitrary homogeneous elements of\n`IndexedMod n`, general `n`, **unconditional** since `U4`'s `jacobiN_basis`\ncovers all eight basis-triple shapes. Transposed from `N1Proofs.lean`'s\n`jacobi_homog`: the same triple-sum expansion and reduction to the\nbasis-level identity, with `jacobiN_basis` in place of `jacobi125`. On\n`Pn n` every coefficient is even, so this bilinear/trilinear extension\nintroduces no graded sign of its own beyond U4's own `gsignN` factors. </code>",
+ "68":
+ "<code>HSMul.hSMul.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSMul α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a • b` computes the product of `a` and `b`.\nThe meaning of this notation is type-dependent, but it is intended to be used for left actions. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `•` in identifiers is `smul`.</code>",
+ "67":
+ "<code>InhomogeneousDeformations.Indexed.gsignN (n : ℕ) (p q : ZMod 2) : InhomogeneousDeformations.Indexed.Pn n</code>",
+ "66":
+ "<code>InhomogeneousDeformations.Indexed.bracketN_super_skew_homog {n : ℕ}\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) (dx dy : ZMod 2)\n  (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx) (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) :\n  InhomogeneousDeformations.Indexed.bracketN n x y =\n    -InhomogeneousDeformations.Indexed.gsignN n dx dy • InhomogeneousDeformations.Indexed.bracketN n y x</code><span class=\"sep\"></span><code class=\"docstring\">`U3`: super-skew symmetry extended to arbitrary homogeneous elements\nof `IndexedMod n`, by the finite-sum bilinear expansion `bracketN` itself\nalready uses -- transposed from `N1Proofs.lean`'s `bracket_super_skew_homog`\n(`T4`), the same shape, with `U2`'s `bracketBasisN_super_skew` in place of\n`bracket_super_skew`. No graded sign beyond `U2`'s own is introduced by the\nbilinear extension, since every coefficient of `Pn n` is even. </code>",
+ "65": "<code>InhomogeneousDeformations.Indexed.IsHomogN y dy</code>",
+ "64":
+ "<code>InhomogeneousDeformations.Indexed.IsHomogN {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) (d : ZMod 2) :\n  Prop</code><span class=\"sep\"></span><code class=\"docstring\">General-rank homogeneity predicate, transposed from `Native.lean`'s\n`n=1`-only `IsHomog` (which is stated over the fixed `Mod = Basis5 → Coeff`\nand cannot itself be reused here). </code>",
+ "63": "<code>InhomogeneousDeformations.Indexed.IsHomogN x dx</code>",
+ "62":
+ "<code>InhomogeneousDeformations.Indexed.bracketN_isHomogN {n : ℕ} (x y : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (dx dy : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) :\n  InhomogeneousDeformations.Indexed.IsHomogN (InhomogeneousDeformations.Indexed.bracketN n x y) (dx + dy)</code><span class=\"sep\"></span><code class=\"docstring\">Degree law extended to arbitrary homogeneous elements of `IndexedMod n`.\nTransposed from `HomogeneousDegree.lean`'s `bracket_isHomog`: that argument\nis rank-independent (it only uses the basis-level degree law and the\ndouble-sum shape `bracketN` itself already has), so it transposes with no\nstructural change beyond the renamed general-rank objects. </code>",
+ "61":
+ "<code>InhomogeneousDeformations.Indexed.bracketR (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code>",
+ "60":
+ "<code>InhomogeneousDeformations.Indexed.intertwining (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.bracketR n (InhomogeneousDeformations.Indexed.TBeta n x)\n      (InhomogeneousDeformations.Indexed.TBeta n y) =\n    InhomogeneousDeformations.Indexed.TBeta n (InhomogeneousDeformations.Indexed.bracketRBeta n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K5**: the intertwining `eq:intertwining`, for **arbitrary** elements\nof `g_R` -- **unconditional**, with no homogeneity hypothesis, exactly as\n`GammaBetaN_eq_deltaFN` was for P2: `T_beta` is `Pn n`-linear\n(`TBeta_add`/`TBeta_smul`), so it commutes with the basis expansion, and\n`bracketR`/`bracketRBeta` are both bilinear, so the whole identity reduces\nto `intertwining_basis` pointwise via two nested `Finset.sum_congr`s. </code>",
+ "6": "<code>InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "59":
+ "<code>InhomogeneousDeformations.Indexed.IsHomogR {n : ℕ} (r : InhomogeneousDeformations.Indexed.RMod n) (d : ZMod 2) : Prop</code>",
+ "58": "<code>InhomogeneousDeformations.Indexed.IsHomogR r d</code>",
+ "57":
+ "<code>ZMod : ℕ → Type</code><span class=\"sep\"></span><code class=\"docstring\">The integers modulo `n : ℕ`. </code>",
+ "56": "<code>ZMod 2</code>",
+ "55":
+ "<code>InhomogeneousDeformations.Indexed.TBeta_isHomogR (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) (d : ZMod 2)\n  (hr : InhomogeneousDeformations.Indexed.IsHomogR r d) :\n  InhomogeneousDeformations.Indexed.IsHomogR (InhomogeneousDeformations.Indexed.TBeta n r) d</code><span class=\"sep\"></span><code class=\"docstring\">**K3**: `T_beta` is even (parity-preserving). </code>",
+ "54":
+ "<code>InhomogeneousDeformations.Indexed.TBeta_TBetaInv (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.TBeta n (InhomogeneousDeformations.Indexed.TBetaInv n r) = r</code>",
+ "53":
+ "<code>InhomogeneousDeformations.Indexed.TBeta (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`T_beta = id + kappa (f_beta)_R` -- `eq:splitting`, literal. </code>",
+ "52":
+ "<code>InhomogeneousDeformations.Indexed.TBetaInv (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`T_beta^{-1} = id - kappa (f_beta)_R` -- `eq:splitting`, literal. </code>",
+ "51":
+ "<code>InhomogeneousDeformations.Indexed.TBetaInv_TBeta (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.TBetaInv n (InhomogeneousDeformations.Indexed.TBeta n r) = r</code><span class=\"sep\"></span><code class=\"docstring\">**K3**: `T_beta` and `T_beta^{-1}` are mutually inverse, exactly, with\nno truncation -- `eq:splitting`. </code>",
+ "50":
+ "<code>InhomogeneousDeformations.Indexed.deltaFBasis (n : ℕ)\n  (f : InhomogeneousDeformations.Indexed.IndexedMod n → InhomogeneousDeformations.Indexed.IndexedMod n)\n  (X Y : InhomogeneousDeformations.Indexed.IndexedBasis n) : InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`(delta f)(X,Y) = [f(X),Y]_0 + (-1)^{p(X)}[X,f(Y)]_0 - f([X,Y]_0)` on\nbasis pairs, using the accepted `bracketN` and `gsignN n (parity X) 1 =\n(-1)^{p(X)}` (`gsignN`'s own `q=1` slice). </code>",
+ "5":
+ "<code>InhomogeneousDeformations.Source.prop_recovery (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  ∑ i,\n      ∑ j,\n        (algebraMap (InhomogeneousDeformations.Indexed.Pn n) (InhomogeneousDeformations.Source.RRing n))\n              (x i * y j) ᵍ⊗ₜ[ℚ]\n            1 *\n          InhomogeneousDeformations.Source.liftsBracket n i j =\n    InhomogeneousDeformations.Source.iotaBetaR n\n      (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n        InhomogeneousDeformations.Indexed.kappaEmbed (InhomogeneousDeformations.Indexed.GammaBetaN n x y))</code>",
+ "49":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaBasis (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`Gamma_beta` on all four basis sectors: `eq:gamma-ll` (`0`),\n`gammaLFn` (LF, transcribed), `-gammaLFn` (FL, the declared convention of\nG2 -- `Gamma_beta(Y,X) = -(-1)^{p(X)p(Y)} Gamma_beta(X,Y)` specialized to\n`X=L_uv,Y=F_w`, giving `-(1/2)(beta_uL_vw+beta_vL_uw)` exactly), and\n`gammaFFn` (FF, transcribed). </code>",
+ "48":
+ "<code>InhomogeneousDeformations.Indexed.IndexedBasis (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">The genuinely rank-indexed basis: the disjoint union of even sorted pairs\n`(u,v)`, `u ≤ v`, and odd indices `u`, both ranging over `I_n = Fin (2n)`. </code>",
+ "47":
+ "<code>InhomogeneousDeformations.Indexed.G4 (n : ℕ) (i j : InhomogeneousDeformations.Indexed.IndexedBasis n) :\n  InhomogeneousDeformations.Indexed.GammaBetaBasis n i j =\n    InhomogeneousDeformations.Indexed.deltaFBasis n (InhomogeneousDeformations.Indexed.fBetaN n) i j</code>",
+ "46":
+ "<code>InhomogeneousDeformations.Indexed.fBetaN (n : ℕ) (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`f_beta` extended `P`-linearly to all of `IndexedMod n`. </code>",
+ "45":
+ "<code>InhomogeneousDeformations.Indexed.deltaFN (n : ℕ)\n  (f : InhomogeneousDeformations.Indexed.IndexedMod n → InhomogeneousDeformations.Indexed.IndexedMod n)\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) : InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "44":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaN_eq_deltaFN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.GammaBetaN n x y =\n    InhomogeneousDeformations.Indexed.deltaFN n (InhomogeneousDeformations.Indexed.fBetaN n) x y</code>",
+ "43":
+ "<code>InhomogeneousDeformations.Indexed.gammaLFn (n : ℕ) (u v w : Fin (2 * n)) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`eq:gamma-lf`: `Gamma_beta(L_uv,F_w) = (1/2)(beta_u L_vw + beta_v L_uw)`. </code>",
+ "42":
+ "<code>Neg.neg.{u} {α : Type u} [self : Neg α] : α → α</code><span class=\"sep\"></span><code class=\"docstring\">`-a` computes the negative or opposite of `a`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `neg` (when used as a unary operator).</code>",
+ "41":
+ "<code>InhomogeneousDeformations.Source.kappaAB (n : ℕ) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`κ`, embedded into `A_B` as `κ ᵍ⊗ₜ 1`. </code>",
+ "40":
+ "<code>InhomogeneousDeformations.Indexed.Lof {n : ℕ} (u v : Fin (2 * n)) : InhomogeneousDeformations.Indexed.IndexedBasis n</code><span class=\"sep\"></span><code class=\"docstring\">`L(u,v)`: sorts the two indices, no sign. </code>",
+ "4":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Source.AB n</code>",
+ "39":
+ "<code>InhomogeneousDeformations.Indexed.Fof {n : ℕ} (u : Fin (2 * n)) : InhomogeneousDeformations.Indexed.IndexedBasis n</code>",
+ "38":
+ "<code>InhomogeneousDeformations.Indexed.bracketBasisN (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">Structure constants on all ordered basis pairs, from the rank-indexed\nformulas: `[F_u,F_v]_n=(1/2)L_uv`, `[L_uv,F_w]_n=(1/2)(J_vw F_u+J_uw F_v)`,\n`[L_uv,L_wz]_n=(1/2)(J_vw L_uz+J_uw L_vz+J_vz L_uw+J_uz L_vw)`,\n`[F_w,L_uv]_n=-[L_uv,F_w]_n`. </code>",
+ "37":
+ "<code>InhomogeneousDeformations.Source.iota0 (n : ℕ) (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">The bridge map itself: `x ↦ ∑_b algebraMap(x b) ᵍ⊗ₜ (iota0Basis b)`. Targets `AB n`, not\n`A0 n` -- `A0 n` carries no `Pn n`-module structure, so a general (non-constant-coefficient)\n`x : IndexedMod n` cannot scale an `A0 n`-element directly; `Pn n` embeds into `RRing n` (`R`'s\nown base ring, `SourceTensor.lean`'s `RRing_algebra_rat`/`RRing_isScalarTower`), and `AB n = R\nᵍ⊗[ℚ] A0 n` is exactly where that embedding can act. </code>",
+ "36":
+ "<code>HSub.hSub.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSub α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a - b` computes the difference of `a` and `b`.\nThe meaning of this notation is type-dependent.\n* For natural numbers, this operator saturates at 0: `a - b = 0` when `a ≤ b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `sub` (when used as a binary operator).</code>",
+ "35":
+ "<code>InhomogeneousDeformations.Source.L0hatBeta (n : ℕ) (u v : Fin (2 * n)) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`\\widehat L_{uv} = (1/4)(b_ub_v+b_vb_u)`, manuscript `eq:lifts`. </code>",
+ "34":
+ "<code>InhomogeneousDeformations.Source.F0hatBeta (n : ℕ) (u : Fin (2 * n)) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`\\widehat F_u = (1/4)(ab_u+b_ua)`, manuscript `eq:lifts`. **Not** simplified to\n`(1/2)•(aAB n * bU n u)` here — `a` does not commute with `b_u` (`bU_comm_aAB` shows\n`[b_u,a]=\\beta_u\\kappa \\ne 0`), so the two terms are genuinely different before Y2's own\ncomputation shows they average to a known target. </code>",
+ "33":
+ "<code>InhomogeneousDeformations.Source.F0hatBeta n w * InhomogeneousDeformations.Source.L0hatBeta n u v -\n    InhomogeneousDeformations.Source.L0hatBeta n u v * InhomogeneousDeformations.Source.F0hatBeta n w =\n  InhomogeneousDeformations.Source.iota0 n\n      (InhomogeneousDeformations.Indexed.bracketBasisN n (InhomogeneousDeformations.Indexed.Fof w)\n        (InhomogeneousDeformations.Indexed.Lof u v)) +\n    InhomogeneousDeformations.Source.kappaAB n * InhomogeneousDeformations.Source.iota0 n c</code>",
+ "32":
+ "<code>Fin (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">Natural numbers less than some upper bound.\n\nIn particular, a `Fin n` is a natural number `i` with the constraint that `i &lt; n`. It is the\ncanonical type with `n` elements.\n</code>",
+ "31": "<code>Fin (2 * n)</code>",
+ "30":
+ "<code>InhomogeneousDeformations.Source.GammaBetaBasis_Fof_Lof_forced_FL_free (n : ℕ) (u v w : Fin (2 * n))\n  (c : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (h :\n    InhomogeneousDeformations.Source.F0hatBeta n w * InhomogeneousDeformations.Source.L0hatBeta n u v -\n        InhomogeneousDeformations.Source.L0hatBeta n u v * InhomogeneousDeformations.Source.F0hatBeta n w =\n      InhomogeneousDeformations.Source.iota0 n\n          (InhomogeneousDeformations.Indexed.bracketBasisN n (InhomogeneousDeformations.Indexed.Fof w)\n            (InhomogeneousDeformations.Indexed.Lof u v)) +\n        InhomogeneousDeformations.Source.kappaAB n * InhomogeneousDeformations.Source.iota0 n c) :\n  c = -InhomogeneousDeformations.Indexed.gammaLFn n u v w</code>",
+ "3":
+ "<code>Function.Injective.{u_1, u_2} {α : Sort u_1} {β : Sort u_2} (f : α → β) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A function `f : α → β` is called injective if `f x = f y` implies `x = y`. </code>",
+ "29":
+ "<code>InhomogeneousDeformations.Indexed.bracketRBeta (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code>",
+ "28":
+ "<code>InhomogeneousDeformations.Source.iotaBetaRBracket (n : ℕ) (p q : InhomogeneousDeformations.Indexed.RBasis n) :\n  InhomogeneousDeformations.Source.AB n</code>",
+ "27": "<code>InhomogeneousDeformations.Indexed.RBasis n</code>",
+ "26": "<code>InhomogeneousDeformations.Indexed.RMod (n : ℕ) : Type</code>",
+ "25": "<code>InhomogeneousDeformations.Indexed.RMod n</code>",
+ "24":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR_bracket_closed (n : ℕ) (r s : InhomogeneousDeformations.Indexed.RMod n) :\n  ∑ p,\n      ∑ q,\n        (algebraMap (InhomogeneousDeformations.Indexed.Pn n) (InhomogeneousDeformations.Source.RRing n))\n              (r p * s q) ᵍ⊗ₜ[ℚ]\n            1 *\n          InhomogeneousDeformations.Source.iotaBetaRBracket n p q =\n    InhomogeneousDeformations.Source.iotaBetaR n (InhomogeneousDeformations.Indexed.bracketRBeta n r s)</code><span class=\"sep\"></span><code class=\"docstring\">**W2, the strong closure theorem**: the bilinear sum of concrete (anti)commutators of\n`iotaBetaR`-images over ALL of `RBasis n` (not just the `IndexedBasis n`-indexed, undoubled\nfamily) lands exactly in `iotaBetaR`'s own image -- `iotaBetaR n (bracketRBeta n r s)`,\n`bracketRBeta`\nthe frozen R1 object. Closure is then immediate: the value is manifestly an `iotaBetaR`-image by\nconstruction. (Stated with the `algebraMap (...) ᵍ⊗ₜ 1`-wrapped coefficient, matching\n`liftsBracket_general`'s/`iota0_bracketN`'s own established shape -- `AB n` carries no native\n`Pn n`-scalar action, only the `RRing n`-embedded one already used throughout this project.) </code>",
+ "23":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR n\n    (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed w1) =\n  InhomogeneousDeformations.Source.iotaBetaR n\n    (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed w2)</code>",
+ "22":
+ "<code>InhomogeneousDeformations.Source.coefficient_unique (n : ℕ) (x y w1 w2 : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (h :\n    InhomogeneousDeformations.Source.iotaBetaR n\n        (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n          InhomogeneousDeformations.Indexed.kappaEmbed w1) =\n      InhomogeneousDeformations.Source.iotaBetaR n\n        (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n          InhomogeneousDeformations.Indexed.kappaEmbed w2)) :\n  w1 = w2</code><span class=\"sep\"></span><code class=\"docstring\">**Uniqueness of the coefficient** (the manuscript's own \"`g_R=g_P⊕\\kappa g_P`, so the\ncoefficient is unique\", lines 270-272), via `iotaBetaR_injective` and the `iotaR`/`kappaEmbed`\nsplitting: two candidate `IndexedMod n`-valued coefficients giving the same `iotaBetaR`-value on\n`iotaR (bracketN x y) + kappaEmbed w` must coincide. </code>",
+ "21":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "20":
+ "<code>InhomogeneousDeformations.Indexed.kappaEmbed {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">Embeds `x` scaled by `kappa`, directly into the `true` slot. </code>",
+ "2":
+ "<code>Nat : Type</code><span class=\"sep\"></span><code class=\"docstring\">The natural numbers, starting at zero.\n\nThis type is special-cased by both the kernel and the compiler, and overridden with an efficient\nimplementation. Both use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)); at runtime, `Nat` values that are sufficiently small are unboxed.\n</code>",
+ "19":
+ "<code>InhomogeneousDeformations.Indexed.bracketN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`C1.1`: the total `P_n`-bilinear bracket, by finite coefficient sums over\nthe whole indexed module, for every rank `n`. </code>",
+ "18":
+ "<code>InhomogeneousDeformations.Indexed.iotaR {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">The embedding `iota_R : g_P -&gt; g_R` into the `false` (un-scaled) slot. </code>",
+ "17":
+ "<code>HAdd.hAdd.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAdd α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a + b` computes the sum of `a` and `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `+` in identifiers is `add`.</code>",
+ "16":
+ "<code>Eq.{u_1} {α : Sort u_1} : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The equality relation. It has one introduction rule, `Eq.refl`.\nWe use `a = b` as notation for `Eq a b`.\nA fundamental property of equality is that it is an equivalence relation.\n```\nvariable (α : Type) (a b c d : α)\nvariable (hab : a = b) (hcb : c = b) (hcd : c = d)\n\nexample : a = d :=\n  Eq.trans (Eq.trans hab (Eq.symm hcb)) hcd\n```\nEquality is much more than an equivalence relation, however. It has the important property that every assertion\nrespects the equivalence, in the sense that we can substitute equal expressions without changing the truth value.\nThat is, given `h1 : a = b` and `h2 : p a`, we can construct a proof for `p b` using substitution: `Eq.subst h1 h2`.\nExample:\n```\nexample (α : Type) (a b : α) (p : α → Prop)\n        (h1 : a = b) (h2 : p a) : p b :=\n  Eq.subst h1 h2\n\nexample (α : Type) (a b : α) (p : α → Prop)\n    (h1 : a = b) (h2 : p a) : p b :=\n  h1 ▸ h2\n```\nThe triangle in the second presentation is a macro built on top of `Eq.subst` and `Eq.symm`, and you can enter it by typing `\\t`.\nFor more information: [Equality](https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html#equality)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `=` in identifiers is `eq`.</code>",
+ "15":
+ "<code>InhomogeneousDeformations.Source.liftsBracket (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">The concrete counterpart of `bracketBasisN`/`GammaBetaBasis`'s own four-way match: a commutator\non every sector except `Fof,Fof` (anticommutator there), applied to `liftsFamilyBeta`. </code>",
+ "14":
+ "<code>Rat : Type</code><span class=\"sep\"></span><code class=\"docstring\">Rational numbers, implemented as a pair of integers `num / den` such that the\ndenominator is positive and the numerator and denominator are coprime.\n</code>",
+ "13":
+ "<code>GradedTensorProduct.tmul.{u_1, u_2, u_3, u_4} (R : Type u_1) {ι : Type u_2} {A : Type u_3} {B : Type u_4}\n  [CommSemiring ι] [DecidableEq ι] [CommRing R] [Ring A] [Ring B] [Algebra R A] [Algebra R B] {𝒜 : ι → Submodule R A}\n  {ℬ : ι → Submodule R B} [GradedAlgebra 𝒜] [GradedAlgebra ℬ] (a : A) (b : B) : GradedTensorProduct R 𝒜 ℬ</code><span class=\"sep\"></span><code class=\"docstring\">The graded tensor product of two elements of graded rings. </code>",
+ "12":
+ "<code>HMul.hMul.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HMul α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a * b` computes the product of `a` and `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `*` in identifiers is `mul`.</code>",
+ "11":
+ "<code>InhomogeneousDeformations.Source.RRing (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">`R`, built as `CliffordAlgebra (Qzero n)`. </code>",
+ "1000086":
+ "<code>InhomogeneousDeformations.Source.liftsBracket (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">The concrete counterpart of `bracketBasisN`/`GammaBetaBasis`'s own four-way match: a commutator\non every sector except `Fof,Fof` (anticommutator there), applied to `liftsFamilyBeta`. </code>",
+ "1000085":
+ "<code>InhomogeneousDeformations.Source.prop_recovery (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  ∑ i,\n      ∑ j,\n        (algebraMap (InhomogeneousDeformations.Indexed.Pn n) (InhomogeneousDeformations.Source.RRing n))\n              (x i * y j) ᵍ⊗ₜ[ℚ]\n            1 *\n          InhomogeneousDeformations.Source.liftsBracket n i j =\n    InhomogeneousDeformations.Source.iotaBetaR n\n      (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n        InhomogeneousDeformations.Indexed.kappaEmbed (InhomogeneousDeformations.Indexed.GammaBetaN n x y))</code>",
+ "1000084":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR_injective (n : ℕ) :\n  Function.Injective (InhomogeneousDeformations.Source.iotaBetaR n)</code><span class=\"sep\"></span><code class=\"docstring\">**Z3c**: `iotaBetaR` is injective. </code>",
+ "1000083":
+ "<code>InhomogeneousDeformations.Source.iotaBetaRBracket (n : ℕ) (p q : InhomogeneousDeformations.Indexed.RBasis n) :\n  InhomogeneousDeformations.Source.AB n</code>",
+ "1000082":
+ "<code>Rat : Type</code><span class=\"sep\"></span><code class=\"docstring\">Rational numbers, implemented as a pair of integers `num / den` such that the\ndenominator is positive and the numerator and denominator are coprime.\n</code>",
+ "1000081":
+ "<code>GradedTensorProduct.tmul.{u_1, u_2, u_3, u_4} (R : Type u_1) {ι : Type u_2} {A : Type u_3} {B : Type u_4}\n  [CommSemiring ι] [DecidableEq ι] [CommRing R] [Ring A] [Ring B] [Algebra R A] [Algebra R B] {𝒜 : ι → Submodule R A}\n  {ℬ : ι → Submodule R B} [GradedAlgebra 𝒜] [GradedAlgebra ℬ] (a : A) (b : B) : GradedTensorProduct R 𝒜 ℬ</code><span class=\"sep\"></span><code class=\"docstring\">The graded tensor product of two elements of graded rings. </code>",
+ "1000080":
+ "<code>InhomogeneousDeformations.Source.RRing (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">`R`, built as `CliffordAlgebra (Qzero n)`. </code>",
+ "1000079":
+ "<code>InhomogeneousDeformations.Indexed.Pn (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">`P_n = Q[beta_0,...,beta_(2n-1)]`. </code>",
+ "1000078":
+ "<code>Algebra.algebraMap.{u, v} (R : Type u) (A : Type v) {inst✝ : CommSemiring R} {inst✝¹ : Semiring A}\n  [self : Algebra R A] : R →+* A</code><span class=\"sep\"></span><code class=\"docstring\">Embedding `R →+* A` given by `Algebra` structure. </code>",
+ "1000077": "<code>InhomogeneousDeformations.Indexed.RBasis n</code>",
+ "1000076":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR_bracket_closed (n : ℕ) (r s : InhomogeneousDeformations.Indexed.RMod n) :\n  ∑ p,\n      ∑ q,\n        (algebraMap (InhomogeneousDeformations.Indexed.Pn n) (InhomogeneousDeformations.Source.RRing n))\n              (r p * s q) ᵍ⊗ₜ[ℚ]\n            1 *\n          InhomogeneousDeformations.Source.iotaBetaRBracket n p q =\n    InhomogeneousDeformations.Source.iotaBetaR n (InhomogeneousDeformations.Indexed.bracketRBeta n r s)</code><span class=\"sep\"></span><code class=\"docstring\">**W2, the strong closure theorem**: the bilinear sum of concrete (anti)commutators of\n`iotaBetaR`-images over ALL of `RBasis n` (not just the `IndexedBasis n`-indexed, undoubled\nfamily) lands exactly in `iotaBetaR`'s own image -- `iotaBetaR n (bracketRBeta n r s)`,\n`bracketRBeta`\nthe frozen R1 object. Closure is then immediate: the value is manifestly an `iotaBetaR`-image by\nconstruction. (Stated with the `algebraMap (...) ᵍ⊗ₜ 1`-wrapped coefficient, matching\n`liftsBracket_general`'s/`iota0_bracketN`'s own established shape -- `AB n` carries no native\n`Pn n`-scalar action, only the `RRing n`-embedded one already used throughout this project.) </code>",
+ "1000075":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Source.AB n</code>",
+ "1000074":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR n\n    (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed w1) =\n  InhomogeneousDeformations.Source.iotaBetaR n\n    (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed w2)</code>",
+ "1000073":
+ "<code>InhomogeneousDeformations.Source.coefficient_unique (n : ℕ) (x y w1 w2 : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (h :\n    InhomogeneousDeformations.Source.iotaBetaR n\n        (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n          InhomogeneousDeformations.Indexed.kappaEmbed w1) =\n      InhomogeneousDeformations.Source.iotaBetaR n\n        (InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n          InhomogeneousDeformations.Indexed.kappaEmbed w2)) :\n  w1 = w2</code><span class=\"sep\"></span><code class=\"docstring\">**Uniqueness of the coefficient** (the manuscript's own \"`g_R=g_P⊕\\kappa g_P`, so the\ncoefficient is unique\", lines 270-272), via `iotaBetaR_injective` and the `iotaR`/`kappaEmbed`\nsplitting: two candidate `IndexedMod n`-valued coefficients giving the same `iotaBetaR`-value on\n`iotaR (bracketN x y) + kappaEmbed w` must coincide. </code>",
+ "1000072":
+ "<code>InhomogeneousDeformations.Indexed.gammaLFn (n : ℕ) (u v w : Fin (2 * n)) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`eq:gamma-lf`: `Gamma_beta(L_uv,F_w) = (1/2)(beta_u L_vw + beta_v L_uw)`. </code>",
+ "1000071":
+ "<code>InhomogeneousDeformations.Source.kappaAB (n : ℕ) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`κ`, embedded into `A_B` as `κ ᵍ⊗ₜ 1`. </code>",
+ "1000070":
+ "<code>InhomogeneousDeformations.Indexed.Lof {n : ℕ} (u v : Fin (2 * n)) : InhomogeneousDeformations.Indexed.IndexedBasis n</code><span class=\"sep\"></span><code class=\"docstring\">`L(u,v)`: sorts the two indices, no sign. </code>",
+ "1000069":
+ "<code>InhomogeneousDeformations.Indexed.Fof {n : ℕ} (u : Fin (2 * n)) : InhomogeneousDeformations.Indexed.IndexedBasis n</code>",
+ "1000068":
+ "<code>InhomogeneousDeformations.Indexed.bracketBasisN (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">Structure constants on all ordered basis pairs, from the rank-indexed\nformulas: `[F_u,F_v]_n=(1/2)L_uv`, `[L_uv,F_w]_n=(1/2)(J_vw F_u+J_uw F_v)`,\n`[L_uv,L_wz]_n=(1/2)(J_vw L_uz+J_uw L_vz+J_vz L_uw+J_uz L_vw)`,\n`[F_w,L_uv]_n=-[L_uv,F_w]_n`. </code>",
+ "1000067":
+ "<code>InhomogeneousDeformations.Source.iota0 (n : ℕ) (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">The bridge map itself: `x ↦ ∑_b algebraMap(x b) ᵍ⊗ₜ (iota0Basis b)`. Targets `AB n`, not\n`A0 n` -- `A0 n` carries no `Pn n`-module structure, so a general (non-constant-coefficient)\n`x : IndexedMod n` cannot scale an `A0 n`-element directly; `Pn n` embeds into `RRing n` (`R`'s\nown base ring, `SourceTensor.lean`'s `RRing_algebra_rat`/`RRing_isScalarTower`), and `AB n = R\nᵍ⊗[ℚ] A0 n` is exactly where that embedding can act. </code>",
+ "1000066":
+ "<code>HSub.hSub.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSub α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a - b` computes the difference of `a` and `b`.\nThe meaning of this notation is type-dependent.\n* For natural numbers, this operator saturates at 0: `a - b = 0` when `a ≤ b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `sub` (when used as a binary operator).</code>",
+ "1000065":
+ "<code>InhomogeneousDeformations.Source.L0hatBeta (n : ℕ) (u v : Fin (2 * n)) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`\\widehat L_{uv} = (1/4)(b_ub_v+b_vb_u)`, manuscript `eq:lifts`. </code>",
+ "1000064":
+ "<code>InhomogeneousDeformations.Source.F0hatBeta (n : ℕ) (u : Fin (2 * n)) : InhomogeneousDeformations.Source.AB n</code><span class=\"sep\"></span><code class=\"docstring\">`\\widehat F_u = (1/4)(ab_u+b_ua)`, manuscript `eq:lifts`. **Not** simplified to\n`(1/2)•(aAB n * bU n u)` here — `a` does not commute with `b_u` (`bU_comm_aAB` shows\n`[b_u,a]=\\beta_u\\kappa \\ne 0`), so the two terms are genuinely different before Y2's own\ncomputation shows they average to a known target. </code>",
+ "1000063":
+ "<code>InhomogeneousDeformations.Source.F0hatBeta n w * InhomogeneousDeformations.Source.L0hatBeta n u v -\n    InhomogeneousDeformations.Source.L0hatBeta n u v * InhomogeneousDeformations.Source.F0hatBeta n w =\n  InhomogeneousDeformations.Source.iota0 n\n      (InhomogeneousDeformations.Indexed.bracketBasisN n (InhomogeneousDeformations.Indexed.Fof w)\n        (InhomogeneousDeformations.Indexed.Lof u v)) +\n    InhomogeneousDeformations.Source.kappaAB n * InhomogeneousDeformations.Source.iota0 n c</code>",
+ "1000062":
+ "<code>HMul.hMul.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HMul α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a * b` computes the product of `a` and `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `*` in identifiers is `mul`.</code>",
+ "1000061":
+ "<code>Fin (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">Natural numbers less than some upper bound.\n\nIn particular, a `Fin n` is a natural number `i` with the constraint that `i &lt; n`. It is the\ncanonical type with `n` elements.\n</code>",
+ "1000060": "<code>Fin (2 * n)</code>",
+ "1000059":
+ "<code>InhomogeneousDeformations.Source.GammaBetaBasis_Fof_Lof_forced_FL_free (n : ℕ) (u v w : Fin (2 * n))\n  (c : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (h :\n    InhomogeneousDeformations.Source.F0hatBeta n w * InhomogeneousDeformations.Source.L0hatBeta n u v -\n        InhomogeneousDeformations.Source.L0hatBeta n u v * InhomogeneousDeformations.Source.F0hatBeta n w =\n      InhomogeneousDeformations.Source.iota0 n\n          (InhomogeneousDeformations.Indexed.bracketBasisN n (InhomogeneousDeformations.Indexed.Fof w)\n            (InhomogeneousDeformations.Indexed.Lof u v)) +\n        InhomogeneousDeformations.Source.kappaAB n * InhomogeneousDeformations.Source.iota0 n c) :\n  c = -InhomogeneousDeformations.Indexed.gammaLFn n u v w</code>",
+ "1000058":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR_sq (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.kappaMulR (InhomogeneousDeformations.Indexed.kappaMulR r) = 0</code><span class=\"sep\"></span><code class=\"docstring\">**K0c**: `kappa^2 = 0` on `g_R`, as a stated theorem. </code>",
+ "1000057":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR {n : ℕ} (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`kappa`-multiplication on `g_R`: `kappa * (x0 + kappa x1) = kappa x0`. </code>",
+ "1000056":
+ "<code>Function.Injective.{u_1, u_2} {α : Sort u_1} {β : Sort u_2} (f : α → β) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A function `f : α → β` is called injective if `f x = f y` implies `x = y`. </code>",
+ "1000055":
+ "<code>Not (a : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Not p`, or `¬p`, is the negation of `p`. It is defined to be `p → False`,\nso if your goal is `¬p` you can use `intro h` to turn the goal into\n`h : p ⊢ False`, and if you have `hn : ¬p` and `h : p` then `hn h : False`\nand `(hn h).elim` will prove anything.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `¬` in identifiers is `not`.</code>",
+ "1000054":
+ "<code>LT.lt.{u} {α : Type u} [self : LT α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-than relation: `x &lt; y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;` in identifiers is `lt`.</code>",
+ "1000053": "<code>0 &lt; n</code>",
+ "1000052":
+ "<code>InhomogeneousDeformations.Indexed.kappaMulR_not_injective (n : ℕ) (hn : 0 &lt; n) :\n  ¬Function.Injective InhomogeneousDeformations.Indexed.kappaMulR</code><span class=\"sep\"></span><code class=\"docstring\">**K0c**: multiplication by `kappa` is not claimed, and is not, injective\non `g_R` -- the manuscript's own explicit disclaimer (lines 270-272),\nwitnessed concretely: `0` and `kappa e_i` (for any fixed even-pair basis\nelement, hence nonzero) have the same image `0`. </code>",
+ "1000051": "<code>InhomogeneousDeformations.Indexed.IsHomogN z dz</code>",
+ "1000050":
+ "<code>InhomogeneousDeformations.Indexed.jacobiN_homog {n : ℕ} (x y z : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (dx dy dz : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) (hz : InhomogeneousDeformations.Indexed.IsHomogN z dz) :\n  InhomogeneousDeformations.Indexed.gsignN n dx dz •\n          InhomogeneousDeformations.Indexed.bracketN n x (InhomogeneousDeformations.Indexed.bracketN n y z) +\n        InhomogeneousDeformations.Indexed.gsignN n dy dx •\n          InhomogeneousDeformations.Indexed.bracketN n y (InhomogeneousDeformations.Indexed.bracketN n z x) +\n      InhomogeneousDeformations.Indexed.gsignN n dz dy •\n        InhomogeneousDeformations.Indexed.bracketN n z (InhomogeneousDeformations.Indexed.bracketN n x y) =\n    0</code><span class=\"sep\"></span><code class=\"docstring\">`U5`: the graded Jacobi identity for arbitrary homogeneous elements of\n`IndexedMod n`, general `n`, **unconditional** since `U4`'s `jacobiN_basis`\ncovers all eight basis-triple shapes. Transposed from `N1Proofs.lean`'s\n`jacobi_homog`: the same triple-sum expansion and reduction to the\nbasis-level identity, with `jacobiN_basis` in place of `jacobi125`. On\n`Pn n` every coefficient is even, so this bilinear/trilinear extension\nintroduces no graded sign of its own beyond U4's own `gsignN` factors. </code>",
+ "1000049":
+ "<code>InhomogeneousDeformations.Indexed.intertwining (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.bracketR n (InhomogeneousDeformations.Indexed.TBeta n x)\n      (InhomogeneousDeformations.Indexed.TBeta n y) =\n    InhomogeneousDeformations.Indexed.TBeta n (InhomogeneousDeformations.Indexed.bracketRBeta n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K5**: the intertwining `eq:intertwining`, for **arbitrary** elements\nof `g_R` -- **unconditional**, with no homogeneity hypothesis, exactly as\n`GammaBetaN_eq_deltaFN` was for P2: `T_beta` is `Pn n`-linear\n(`TBeta_add`/`TBeta_smul`), so it commutes with the basis expansion, and\n`bracketR`/`bracketRBeta` are both bilinear, so the whole identity reduces\nto `intertwining_basis` pointwise via two nested `Finset.sum_congr`s. </code>",
+ "1000048": "<code>InhomogeneousDeformations.Indexed.IsHomogR y dy</code>",
+ "1000047": "<code>InhomogeneousDeformations.Indexed.IsHomogR x dx</code>",
+ "1000046":
+ "<code>InhomogeneousDeformations.Indexed.bracketR_super_skew_homog (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n)\n  (dx dy : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogR x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogR y dy) :\n  InhomogeneousDeformations.Indexed.bracketR n x y =\n    -InhomogeneousDeformations.Indexed.gsignN n dx dy • InhomogeneousDeformations.Indexed.bracketR n y x</code><span class=\"sep\"></span><code class=\"docstring\">**K1c**, extended to arbitrary homogeneous elements of `RMod n` -- the\nsame finite-sum bilinear argument as the accepted `bracketN_super_skew_homog`,\ntransposed to `RBasis n`. </code>",
+ "1000045":
+ "<code>InhomogeneousDeformations.Indexed.bracketR (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code>",
+ "1000044":
+ "<code>InhomogeneousDeformations.Indexed.bracketR_iotaR_iotaR (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.bracketR n (InhomogeneousDeformations.Indexed.iotaR x)\n      (InhomogeneousDeformations.Indexed.iotaR y) =\n    InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K1a**: on the image of `g_P -&gt; g_R`, `bracketR` restricts exactly to\n`bracketN`. </code>",
+ "1000043":
+ "<code>InhomogeneousDeformations.Indexed.kappaEmbed {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">Embeds `x` scaled by `kappa`, directly into the `true` slot. </code>",
+ "1000042":
+ "<code>InhomogeneousDeformations.Indexed.iotaR {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">The embedding `iota_R : g_P -&gt; g_R` into the `false` (un-scaled) slot. </code>",
+ "1000041":
+ "<code>InhomogeneousDeformations.Indexed.bracketRBeta (n : ℕ) (x y : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code>",
+ "1000040":
+ "<code>InhomogeneousDeformations.Indexed.bracketRBeta_iotaR_iotaR (n : ℕ)\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.bracketRBeta n (InhomogeneousDeformations.Indexed.iotaR x)\n      (InhomogeneousDeformations.Indexed.iotaR y) =\n    InhomogeneousDeformations.Indexed.iotaR (InhomogeneousDeformations.Indexed.bracketN n x y) +\n      InhomogeneousDeformations.Indexed.kappaEmbed (InhomogeneousDeformations.Indexed.GammaBetaN n x y)</code><span class=\"sep\"></span><code class=\"docstring\">**K4**: on the image of `g_P -&gt; g_R`, `bracketRBeta` restricts exactly\nto `bracketN + kappa GammaBetaN`. </code>",
+ "1000039":
+ "<code>HSMul.hSMul.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSMul α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a • b` computes the product of `a` and `b`.\nThe meaning of this notation is type-dependent, but it is intended to be used for left actions. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `•` in identifiers is `smul`.</code>",
+ "1000038":
+ "<code>InhomogeneousDeformations.Indexed.gsignN (n : ℕ) (p q : ZMod 2) : InhomogeneousDeformations.Indexed.Pn n</code>",
+ "1000037":
+ "<code>Neg.neg.{u} {α : Type u} [self : Neg α] : α → α</code><span class=\"sep\"></span><code class=\"docstring\">`-a` computes the negative or opposite of `a`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `neg` (when used as a unary operator).</code>",
+ "1000036":
+ "<code>InhomogeneousDeformations.Indexed.bracketN_super_skew_homog {n : ℕ}\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) (dx dy : ZMod 2)\n  (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx) (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) :\n  InhomogeneousDeformations.Indexed.bracketN n x y =\n    -InhomogeneousDeformations.Indexed.gsignN n dx dy • InhomogeneousDeformations.Indexed.bracketN n y x</code><span class=\"sep\"></span><code class=\"docstring\">`U3`: super-skew symmetry extended to arbitrary homogeneous elements\nof `IndexedMod n`, by the finite-sum bilinear expansion `bracketN` itself\nalready uses -- transposed from `N1Proofs.lean`'s `bracket_super_skew_homog`\n(`T4`), the same shape, with `U2`'s `bracketBasisN_super_skew` in place of\n`bracket_super_skew`. No graded sign beyond `U2`'s own is introduced by the\nbilinear extension, since every coefficient of `Pn n` is even. </code>",
+ "1000035":
+ "<code>HAdd.hAdd.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAdd α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a + b` computes the sum of `a` and `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `+` in identifiers is `add`.</code>",
+ "1000034":
+ "<code>InhomogeneousDeformations.Indexed.bracketN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`C1.1`: the total `P_n`-bilinear bracket, by finite coefficient sums over\nthe whole indexed module, for every rank `n`. </code>",
+ "1000033": "<code>InhomogeneousDeformations.Indexed.IsHomogN y dy</code>",
+ "1000032":
+ "<code>InhomogeneousDeformations.Indexed.IsHomogN {n : ℕ} (x : InhomogeneousDeformations.Indexed.IndexedMod n) (d : ZMod 2) :\n  Prop</code><span class=\"sep\"></span><code class=\"docstring\">General-rank homogeneity predicate, transposed from `Native.lean`'s\n`n=1`-only `IsHomog` (which is stated over the fixed `Mod = Basis5 → Coeff`\nand cannot itself be reused here). </code>",
+ "1000031": "<code>InhomogeneousDeformations.Indexed.IsHomogN x dx</code>",
+ "1000030":
+ "<code>InhomogeneousDeformations.Indexed.bracketN_isHomogN {n : ℕ} (x y : InhomogeneousDeformations.Indexed.IndexedMod n)\n  (dx dy : ZMod 2) (hx : InhomogeneousDeformations.Indexed.IsHomogN x dx)\n  (hy : InhomogeneousDeformations.Indexed.IsHomogN y dy) :\n  InhomogeneousDeformations.Indexed.IsHomogN (InhomogeneousDeformations.Indexed.bracketN n x y) (dx + dy)</code><span class=\"sep\"></span><code class=\"docstring\">Degree law extended to arbitrary homogeneous elements of `IndexedMod n`.\nTransposed from `HomogeneousDegree.lean`'s `bracket_isHomog`: that argument\nis rank-independent (it only uses the basis-level degree law and the\ndouble-sum shape `bracketN` itself already has), so it transposes with no\nstructural change beyond the renamed general-rank objects. </code>",
+ "1000029":
+ "<code>InhomogeneousDeformations.Indexed.IsHomogR {n : ℕ} (r : InhomogeneousDeformations.Indexed.RMod n) (d : ZMod 2) : Prop</code>",
+ "1000028": "<code>InhomogeneousDeformations.Indexed.IsHomogR r d</code>",
+ "1000027":
+ "<code>ZMod : ℕ → Type</code><span class=\"sep\"></span><code class=\"docstring\">The integers modulo `n : ℕ`. </code>",
+ "1000026": "<code>ZMod 2</code>",
+ "1000025":
+ "<code>InhomogeneousDeformations.Indexed.TBeta_isHomogR (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) (d : ZMod 2)\n  (hr : InhomogeneousDeformations.Indexed.IsHomogR r d) :\n  InhomogeneousDeformations.Indexed.IsHomogR (InhomogeneousDeformations.Indexed.TBeta n r) d</code><span class=\"sep\"></span><code class=\"docstring\">**K3**: `T_beta` is even (parity-preserving). </code>",
+ "1000024":
+ "<code>InhomogeneousDeformations.Indexed.TBeta_TBetaInv (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.TBeta n (InhomogeneousDeformations.Indexed.TBetaInv n r) = r</code>",
+ "1000023":
+ "<code>InhomogeneousDeformations.Indexed.TBeta (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`T_beta = id + kappa (f_beta)_R` -- `eq:splitting`, literal. </code>",
+ "1000022":
+ "<code>InhomogeneousDeformations.Indexed.TBetaInv (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.RMod n</code><span class=\"sep\"></span><code class=\"docstring\">`T_beta^{-1} = id - kappa (f_beta)_R` -- `eq:splitting`, literal. </code>",
+ "1000021":
+ "<code>InhomogeneousDeformations.Indexed.RMod (n : ℕ) : Type</code>",
+ "1000020": "<code>InhomogeneousDeformations.Indexed.RMod n</code>",
+ "1000019":
+ "<code>InhomogeneousDeformations.Indexed.TBetaInv_TBeta (n : ℕ) (r : InhomogeneousDeformations.Indexed.RMod n) :\n  InhomogeneousDeformations.Indexed.TBetaInv n (InhomogeneousDeformations.Indexed.TBeta n r) = r</code><span class=\"sep\"></span><code class=\"docstring\">**K3**: `T_beta` and `T_beta^{-1}` are mutually inverse, exactly, with\nno truncation -- `eq:splitting`. </code>",
+ "1000018":
+ "<code>InhomogeneousDeformations.Indexed.deltaFN (n : ℕ)\n  (f : InhomogeneousDeformations.Indexed.IndexedMod n → InhomogeneousDeformations.Indexed.IndexedMod n)\n  (x y : InhomogeneousDeformations.Indexed.IndexedMod n) : InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "1000017":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "1000016":
+ "<code>InhomogeneousDeformations.Indexed.IndexedMod (n : ℕ) : Type</code>",
+ "1000015": "<code>InhomogeneousDeformations.Indexed.IndexedMod n</code>",
+ "1000014":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaN_eq_deltaFN (n : ℕ) (x y : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.GammaBetaN n x y =\n    InhomogeneousDeformations.Indexed.deltaFN n (InhomogeneousDeformations.Indexed.fBetaN n) x y</code>",
+ "1000013":
+ "<code>InhomogeneousDeformations.Indexed.fBetaN (n : ℕ) (x : InhomogeneousDeformations.Indexed.IndexedMod n) :\n  InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`f_beta` extended `P`-linearly to all of `IndexedMod n`. </code>",
+ "1000012":
+ "<code>InhomogeneousDeformations.Indexed.deltaFBasis (n : ℕ)\n  (f : InhomogeneousDeformations.Indexed.IndexedMod n → InhomogeneousDeformations.Indexed.IndexedMod n)\n  (X Y : InhomogeneousDeformations.Indexed.IndexedBasis n) : InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`(delta f)(X,Y) = [f(X),Y]_0 + (-1)^{p(X)}[X,f(Y)]_0 - f([X,Y]_0)` on\nbasis pairs, using the accepted `bracketN` and `gsignN n (parity X) 1 =\n(-1)^{p(X)}` (`gsignN`'s own `q=1` slice). </code>",
+ "1000011":
+ "<code>InhomogeneousDeformations.Indexed.GammaBetaBasis (n : ℕ) :\n  InhomogeneousDeformations.Indexed.IndexedBasis n →\n    InhomogeneousDeformations.Indexed.IndexedBasis n → InhomogeneousDeformations.Indexed.IndexedMod n</code><span class=\"sep\"></span><code class=\"docstring\">`Gamma_beta` on all four basis sectors: `eq:gamma-ll` (`0`),\n`gammaLFn` (LF, transcribed), `-gammaLFn` (FL, the declared convention of\nG2 -- `Gamma_beta(Y,X) = -(-1)^{p(X)p(Y)} Gamma_beta(X,Y)` specialized to\n`X=L_uv,Y=F_w`, giving `-(1/2)(beta_uL_vw+beta_vL_uw)` exactly), and\n`gammaFFn` (FF, transcribed). </code>",
+ "1000010":
+ "<code>InhomogeneousDeformations.Indexed.IndexedBasis (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">The genuinely rank-indexed basis: the disjoint union of even sorted pairs\n`(u,v)`, `u ≤ v`, and odd indices `u`, both ranging over `I_n = Fin (2n)`. </code>",
+ "1000009": "<code>InhomogeneousDeformations.Indexed.IndexedBasis n</code>",
+ "1000008":
+ "<code>Nat : Type</code><span class=\"sep\"></span><code class=\"docstring\">The natural numbers, starting at zero.\n\nThis type is special-cased by both the kernel and the compiler, and overridden with an efficient\nimplementation. Both use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)); at runtime, `Nat` values that are sufficiently small are unboxed.\n</code>",
+ "1000007": "<code>ℕ</code>",
+ "1000006":
+ "<code>InhomogeneousDeformations.Indexed.G4 (n : ℕ) (i j : InhomogeneousDeformations.Indexed.IndexedBasis n) :\n  InhomogeneousDeformations.Indexed.GammaBetaBasis n i j =\n    InhomogeneousDeformations.Indexed.deltaFBasis n (InhomogeneousDeformations.Indexed.fBetaN n) i j</code>",
+ "1000005":
+ "<code>InhomogeneousDeformations.bracket (x y : InhomogeneousDeformations.Mod) : InhomogeneousDeformations.Mod</code><span class=\"sep\"></span><code class=\"docstring\">`T0`: finite-sum `Coeff`-bilinear extension of `bracketBasis` to the whole module. </code>",
+ "1000004":
+ "<code>Eq.{u_1} {α : Sort u_1} : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The equality relation. It has one introduction rule, `Eq.refl`.\nWe use `a = b` as notation for `Eq a b`.\nA fundamental property of equality is that it is an equivalence relation.\n```\nvariable (α : Type) (a b c d : α)\nvariable (hab : a = b) (hcb : c = b) (hcd : c = d)\n\nexample : a = d :=\n  Eq.trans (Eq.trans hab (Eq.symm hcb)) hcd\n```\nEquality is much more than an equivalence relation, however. It has the important property that every assertion\nrespects the equivalence, in the sense that we can substitute equal expressions without changing the truth value.\nThat is, given `h1 : a = b` and `h2 : p a`, we can construct a proof for `p b` using substitution: `Eq.subst h1 h2`.\nExample:\n```\nexample (α : Type) (a b : α) (p : α → Prop)\n        (h1 : a = b) (h2 : p a) : p b :=\n  Eq.subst h1 h2\n\nexample (α : Type) (a b : α) (p : α → Prop)\n    (h1 : a = b) (h2 : p a) : p b :=\n  h1 ▸ h2\n```\nThe triangle in the second presentation is a macro built on top of `Eq.subst` and `Eq.symm`, and you can enter it by typing `\\t`.\nFor more information: [Equality](https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html#equality)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `=` in identifiers is `eq`.</code>",
+ "1000003":
+ "<code>InhomogeneousDeformations.Bridge.decodedBracket (x y : InhomogeneousDeformations.Mod) : InhomogeneousDeformations.Mod</code><span class=\"sep\"></span><code class=\"docstring\">`T6`, extended to the whole module: literally the same finite-sum\nbilinear-extension SHAPE as `bracket` itself (`Native.lean`'s `T0`), so\nthe extension is immediate from the basis-pair equality by\n`Finset.sum_congr` -- no separate bilinearity argument is restated. </code>",
+ "1000002":
+ "<code>InhomogeneousDeformations.Mod : Type</code><span class=\"sep\"></span><code class=\"docstring\">The free `Coeff`-module on the five-element basis. </code>",
+ "1000001": "<code>InhomogeneousDeformations.Mod</code>",
+ "1000000":
+ "<code>InhomogeneousDeformations.Bridge.decodedBracket_eq_bracket (x y : InhomogeneousDeformations.Mod) :\n  InhomogeneousDeformations.Bridge.decodedBracket x y = InhomogeneousDeformations.bracket x y</code>",
+ "10":
+ "<code>InhomogeneousDeformations.Indexed.Pn (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">`P_n = Q[beta_0,...,beta_(2n-1)]`. </code>",
+ "1": "<code>ℕ</code>",
+ "0":
+ "<code>InhomogeneousDeformations.Source.iotaBetaR_injective (n : ℕ) :\n  Function.Injective (InhomogeneousDeformations.Source.iotaBetaR n)</code><span class=\"sep\"></span><code class=\"docstring\">**Z3c**: `iotaBetaR` is injective. </code>"}

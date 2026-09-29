@@ -1,0 +1,6 @@
+# Definitions whose text differs from v2.1-lint-clean only inside proofs (reviewed line by line);
+# the header, i.e. the type, is unchanged. See docs/port-v4.34.md.
+InhomogeneousDeformations.Source.A0Grading_setLike
+InhomogeneousDeformations.Source.ABGrading_setLike
+InhomogeneousDeformations.Source.RRingToTriv
+InhomogeneousDeformations.Source.WGradedAlgebra

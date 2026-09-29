@@ -4,8 +4,9 @@
 > [`v2-lean-formalization`](../../releases/tag/v2-lean-formalization), and `main`
 > (= [`v2.1-lint-clean`](../../releases/tag/v2.1-lint-clean)) stays at Lean v4.29.1. Here the
 > statements and definitions are those of `main`, except for the mathlib changes listed in the
-> port notes (`docs/port-v4.34.md`), and the audit covers the same 649 declarations. Nothing on
-> `main` or on the tags has moved.
+> port notes ([`docs/port-v4.34.md`](docs/port-v4.34.md)), and the audit covers the same 649
+> declarations. Nothing on `main` or on the older tags has moved. This branch also carries a
+> **blueprint** of the paper, published at <https://ritsumei-aoi.github.io/osp-triviality/blueprint/>.
 
 Machine-checked formalization, in Lean 4, of the triviality of inhomogeneous deformations of the
 oscillator Lie superalgebra $B(0,n)=\mathfrak{osp}(1|2n)$.
@@ -62,6 +63,11 @@ tools/extract_fixture.py          regenerates the fixture's Lean encoding (byte 
 tools/extract.lean                the dependency-graph extractor (see below)
 docs/schema/algebra-data-1.md     specification of the data format
 docs/what-is-proved.md            what the audit and the dependency graph do and do not show
+docs/port-v4.34.md                the port notes: what changed from v2.1-lint-clean, and why
+tools/port/                       the port certificate and its lists (see the port notes)
+blueprint/                        the blueprint, a separate Lake package, with check_a3.py and
+                                  publish_site.py (see below)
+docs/blueprint/                   the rendered blueprint, served by GitHub Pages
 aoi2026_triviality_osp1_2n.pdf    the paper
 ```
 
@@ -69,7 +75,7 @@ This repository's state and the paper are the same: the PDF above is the version
 appendix describes, and the tag [`v2-lean-formalization`](../../releases/tag/v2-lean-formalization)
 is that same state — `main` may move past it, but the tag will not.
 
-**Two tags.** `v2-lean-formalization` is the state of arXiv v2, and it does not move.
+**Two tags on `main`.** `v2-lean-formalization` is the state of arXiv v2, and it does not move.
 [`v2.1-lint-clean`](../../releases/tag/v2.1-lint-clean) has **identical statements and an identical
 audit** — the same 884 declarations with the same statements and definitions, and the same 649
 audited declarations, each with the same axioms (634 depending only on the standard axioms, 15 depending on none) —
@@ -78,17 +84,23 @@ set. Only proofs and formatting differ. Where a linter asked for a change of a s
 definition, that one declaration keeps its text and carries a `set_option linter.… false in` line
 with a one-line reason.
 
+**A third tag, on this branch.** `v2.2-lean4.34` is the port to Lean v4.34.1: the same 884
+declarations and the same 649 audited, with the differences stated in the
+[port notes](docs/port-v4.34.md) — seven statements that mathlib's removal of `MvPolynomial.coeff`
+forced to change, each certified in Lean to be the old statement; four definitions changed only
+inside proofs; and one declaration whose axiom set gains `Classical.choice` from mathlib.
+
 ## Building and checking
 
 Everything below is pinned: the toolchain in [`lean-toolchain`](lean-toolchain), every dependency
 revision in [`lake-manifest.json`](lake-manifest.json). Nothing needs to be chosen.
 
 **Prerequisites.** `git`, and [`elan`](https://github.com/leanprover/elan). You do not need to
-install Lean yourself — `elan` reads `lean-toolchain` and fetches `leanprover/lean4:v4.29.1` the
+install Lean yourself — `elan` reads `lean-toolchain` and fetches `leanprover/lean4:v4.34.1` the
 first time you run a Lean or Lake command here.
 
 ```bash
-git clone --branch v2.1-lint-clean \
+git clone --branch v2.2-lean4.34 \
     https://github.com/ritsumei-aoi/osp-triviality.git
 cd osp-triviality
 
@@ -102,19 +114,19 @@ describe.
 
 **Do not skip `lake exe cache get`.** Skipping it does not fail — it silently falls back to
 *compiling mathlib from source*, which is hours of CPU on a laptop where the cache step is
-minutes. Measured with mathlib's archives already in the local cache store: `lake exe cache get`
-took 1 min 35 s to decompress them; a machine fetching that revision for the first time also
-downloads roughly 400 MB before that step. The project's own `lake build` afterward took 2 min
-25 s for its own files and did not recompile anything upstream. A second, fully cached
-`lake build` took about a second and printed the identical report.
+minutes. Measured on this branch with mathlib's archives already in the local cache store,
+`lake exe cache get` followed by `lake build` took 2 min 55 s in total and recompiled nothing
+upstream; a machine fetching that revision for the first time also downloads the archives
+(several hundred MB) first. A second, fully cached `lake build` replays the identical report.
 
 Approximate sizes, measured on a clean run:
 
 | | |
 |---|---|
 | the clone | ~3.4 MB |
-| mathlib and the other dependencies, cached (in the working copy, `.lake/`) | ~7.0 GB |
-| this project's own build (in `.lake/`) | ~59 MB |
+| mathlib and the other dependencies, cached (in the working copy, `.lake/`) | ~7.6 GB |
+| this project's own build (in `.lake/`) | ~68 MB |
+| the blueprint package's own `blueprint/.lake/` (its own copy of the dependencies) | ~8.8 GB |
 | the Lean toolchain (`elan`, one-time, under `~/.elan`, shared across projects) | ~2.5 GB |
 
 The `.lake/` total lands in the working copy (`.gitignore` excludes it); the toolchain lives
@@ -136,7 +148,7 @@ grep -cE 'depends on axioms|does not depend on any axioms' \
 grep -c 'depends on axioms'                 audit.txt   # 634 — depend on axioms
 grep -c 'does not depend on any axioms'     audit.txt   # 15  — depend on none
 grep -c '^error'                            audit.txt   # 0
-grep -c '^warning'                          audit.txt   # 0 at v2.1-lint-clean (468 at v2-lean-formalization)
+grep -c '^warning'                          audit.txt   # 0 on this branch and at v2.1-lint-clean (468 at v2-lean-formalization)
 ```
 
 And the axiom profiles — which axioms, not just how many. Lean wraps long lines, so join them
@@ -145,17 +157,18 @@ first:
 ```bash
 tr '\n' ' ' < audit.txt | grep -o 'depends on axioms: \[[^]]*\]' \
   | tr -d ' ' | sort | uniq -c | sort -rn
-#  603 dependsonaxioms:[propext,Classical.choice,Quot.sound]
-#   16 dependsonaxioms:[propext,Quot.sound]
+#  604 dependsonaxioms:[propext,Classical.choice,Quot.sound]
+#   15 dependsonaxioms:[propext,Quot.sound]
 #   15 dependsonaxioms:[propext]
 ```
 
 These three are the standard axioms of Lean's own logic; nothing else appears anywhere in the
-audit. A build with nothing changed replays the same report from cache in about a second, so this
+audit. At `v2.1-lint-clean` the profile is 603 / 16 / 15: one declaration, `Indexed.sum_bool_eq`,
+gains `Classical.choice` here through mathlib's own `Bool.fintype` (the port notes, item 3). A build with nothing changed replays the same report from cache in about a second, so this
 check can be repeated at any time without forcing a rebuild.
 
-**Warnings.** The clone command above checks out `v2.1-lint-clean`, whose build prints **no
-warnings**: `grep -c '^warning' audit.txt` is `0`. `v2-lean-formalization`, the state of arXiv v2
+**Warnings.** The clone command above checks out `v2.2-lean4.34`, whose build prints **no
+warnings**: `grep -c '^warning' audit.txt` is `0`, as at `v2.1-lint-clean` (Lean v4.29.1). `v2-lean-formalization`, the state of arXiv v2
 (clone it with `--branch v2-lean-formalization`), prints 468 warnings from mathlib's own style linters
 (unused `simp` arguments, line length, and similar) during the same build. They are not errors, and
 the audit is identical at both tags; `grep -c '^error' audit.txt` is `0` at both.
@@ -174,12 +187,49 @@ Run it deliberately, **from the repository root**, after building:
 
 ```bash
 lake env lean --run tools/extract.lean
-# nodes 1081  edges 11450
+# nodes 1079  edges 11440   (1081 / 11450 at v2.1-lint-clean; the port notes, item 4)
 ```
 
 `nodes.tsv` and `edges.tsv` are written into the directory you ran the command from, not next to
 the script.
 `docs/what-is-proved.md` §3 explains what the graph is used to check.
+
+## The blueprint
+
+[`blueprint/`](blueprint/) is a [verso-blueprint](https://github.com/leanprover/verso-blueprint) of
+arXiv:2604.05252v2: the paper's statements, each linked to the declarations that the paper's
+Appendix A.3 names, with the formalization status computed from them and a dependency graph. It is a
+separate Lake package that requires this formalization by path; it changes nothing in
+`InhomogeneousDeformations/`. The rendered site is committed in [`docs/blueprint/`](docs/blueprint/)
+and served at <https://ritsumei-aoi.github.io/osp-triviality/blueprint/>. The statements are paraphrases; the paper is authoritative.
+
+To rebuild it (after the build above; this fetches the blueprint's own copy of the dependencies):
+
+```bash
+cd blueprint
+lake update && lake exe cache get
+lake exe vbp build            # writes _out/site/html-multi/
+```
+
+Two checks, since `vbp build` exits 0 even when a declaration name does not resolve:
+
+```bash
+# 1. no warning from this package (the only warnings are inside VersoBlueprint itself)
+lake exe vbp build 2>&1 | grep -E '^(warning|error)' | grep -v 'VersoBlueprint'   # nothing
+# 2. the declaration lists equal the paper's Appendix A.3, node by node
+cd .. && python3 blueprint/check_a3.py aoi2026_triviality_osp1_2n.tex .          # RESULT: ALL MATCH
+```
+
+The renderer records source locations as absolute paths of the machine that built it, so the
+published copy is written by a script that makes them relative to the repository root and refuses to
+leave any absolute local path. A fresh render then equals `docs/blueprint/` up to the build stamp
+(the time, and the commit it was built from, shown on the front page) and the order of the
+`<script>` blocks, which the renderer does not fix:
+
+```bash
+python3 blueprint/publish_site.py --check   # SAME (up to the build stamp and script order)
+python3 blueprint/publish_site.py           # rewrites docs/blueprint/ from blueprint/_out/
+```
 
 ## The data instance, and what is proved about it
 
