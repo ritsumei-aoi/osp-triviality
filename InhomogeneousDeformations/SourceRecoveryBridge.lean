@@ -11,7 +11,8 @@ definitions/theorems.
 **Scope (stage 1 of Y4 only)**: build `iota0 : IndexedMod n → AB n`, the `Pn n`-linear extension
 of the basis map `Lof u v ↦ L0 n u v`, `Fof u ↦ F0 n u`, and show it intertwines the *undeformed*
 abstract bracket `bracketN` with the concrete (super-)commutator structure of `A_0 n`/`AB n`, using
-only `SourceRecoveryBase.lean`'s three already-proved facts (`L0hat_comm`, `L0_comm_F0`, `F0_comm_F0`).
+only `SourceRecoveryBase.lean`'s three already-proved facts (`L0hat_comm`, `L0_comm_F0`,
+    `F0_comm_F0`).
 The *deformed* bracket / `GammaBetaN` connection (stage 2) is explicitly out of scope here.
 -/
 
@@ -48,7 +49,8 @@ theorem Jn_eq_C_JnQ (n : ℕ) (u v : Fin (2 * n)) :
 
 theorem algebraMap_Jn (n : ℕ) (u v : Fin (2 * n)) :
     algebraMap (Indexed.Pn n) (RRing n) (Indexed.Jn n u v) = (JnQ n u v) • (1 : RRing n) := by
-  rw [Jn_eq_C_JnQ, ← MvPolynomial.algebraMap_eq, ← IsScalarTower.algebraMap_apply ℚ (Indexed.Pn n) (RRing n),
+  rw [Jn_eq_C_JnQ, ← MvPolynomial.algebraMap_eq,
+      ← IsScalarTower.algebraMap_apply ℚ (Indexed.Pn n) (RRing n),
     Algebra.algebraMap_eq_smul_one]
 
 theorem algebraMap_cratN (n : ℕ) (q : ℚ) :
@@ -80,7 +82,7 @@ theorem iota0_add (n : ℕ) (x y : Indexed.IndexedMod n) :
   apply Finset.sum_congr rfl
   intro b _
   rw [Indexed.indexedMod_add_apply, map_add]
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
       ((algebraMap (Indexed.Pn n) (RRing n) (x b) + algebraMap (Indexed.Pn n) (RRing n) (y b))
         ⊗ₜ[ℚ] (iota0Basis n b))
     = GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
@@ -115,7 +117,7 @@ theorem iota0_eN (n : ℕ) (b : Indexed.IndexedBasis n) :
   · intro h; exact absurd (Finset.mem_univ b) h
 
 theorem AB_zero_tmul (n : ℕ) (x : A0 n) : ((0 : RRing n) ᵍ⊗ₜ[ℚ] x : AB n) = 0 := by
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((0 : RRing n) ⊗ₜ[ℚ] x) = 0
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((0 : RRing n) ⊗ₜ[ℚ] x) = 0
   rw [TensorProduct.zero_tmul, map_zero]
 
 theorem iota0_zero (n : ℕ) : iota0 n (0 : Indexed.IndexedMod n) = 0 := by
@@ -144,7 +146,7 @@ theorem iota0_smul_eN (n : ℕ) (c : Indexed.Pn n) (b : Indexed.IndexedBasis n) 
 
 theorem AB_tmul_smul_left (n : ℕ) (c : ℚ) (r : RRing n) (x : A0 n) :
     ((c • r : RRing n) ᵍ⊗ₜ[ℚ] x : AB n) = c • (r ᵍ⊗ₜ[ℚ] x) := by
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((c • r) ⊗ₜ[ℚ] x)
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((c • r) ⊗ₜ[ℚ] x)
       = c • GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] x)
   rw [← map_smul, TensorProduct.smul_tmul']
 
@@ -164,14 +166,14 @@ commutator) is the one missing piece, lifted through `L0_eq_tmul` exactly as
 product (both sit in `C`-degree `0`, so no Koszul sign) -- the general form of `Bu0_mul'`. -/
 theorem A0_tmul_add (n : ℕ) (x y : Module.End ℚ (WPoly n)) (b : C) :
     ((x + y : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] b : A0 n) = x ᵍ⊗ₜ[ℚ] b + y ᵍ⊗ₜ[ℚ] b := by
-  show GradedTensorProduct.of ℚ (WGrading n) CGrading ((x + y) ⊗ₜ[ℚ] b)
+  change GradedTensorProduct.of ℚ (WGrading n) CGrading ((x + y) ⊗ₜ[ℚ] b)
       = GradedTensorProduct.of ℚ (WGrading n) CGrading (x ⊗ₜ[ℚ] b)
         + GradedTensorProduct.of ℚ (WGrading n) CGrading (y ⊗ₜ[ℚ] b)
   rw [← map_add, TensorProduct.add_tmul]
 
 theorem A0_tmul_smul (n : ℕ) (c : ℚ) (x : Module.End ℚ (WPoly n)) (b : C) :
     ((c • x : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] b : A0 n) = c • (x ᵍ⊗ₜ[ℚ] b) := by
-  show GradedTensorProduct.of ℚ (WGrading n) CGrading ((c • x) ⊗ₜ[ℚ] b)
+  change GradedTensorProduct.of ℚ (WGrading n) CGrading ((c • x) ⊗ₜ[ℚ] b)
       = c • GradedTensorProduct.of ℚ (WGrading n) CGrading (x ⊗ₜ[ℚ] b)
   rw [← map_smul, TensorProduct.smul_tmul']
 
@@ -190,12 +192,13 @@ theorem L0_comm (n : ℕ) (u v w z : Fin (2 * n)) :
   rw [show (L0hat n u v * L0hat n w z : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] (1:C)
         - (L0hat n w z * L0hat n u v : Module.End ℚ (WPoly n)) ᵍ⊗ₜ[ℚ] (1:C)
       = (L0hat n u v * L0hat n w z - L0hat n w z * L0hat n u v) ᵍ⊗ₜ[ℚ] (1:C) from by
-    show GradedTensorProduct.of ℚ (WGrading n) CGrading
+    change GradedTensorProduct.of ℚ (WGrading n) CGrading
         ((L0hat n u v * L0hat n w z : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (1:C))
       - GradedTensorProduct.of ℚ (WGrading n) CGrading
         ((L0hat n w z * L0hat n u v : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (1:C))
       = GradedTensorProduct.of ℚ (WGrading n) CGrading
-        ((L0hat n u v * L0hat n w z - L0hat n w z * L0hat n u v : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (1:C))
+        ((L0hat n u v * L0hat n w z - L0hat n w z * L0hat n u v : Module.End ℚ (WPoly n))
+            ⊗ₜ[ℚ] (1:C))
     rw [← map_sub, TensorProduct.sub_tmul]]
   rw [L0hat_comm, A0_tmul_smul, A0_tmul_add, A0_tmul_add, A0_tmul_add,
     A0_tmul_smul, A0_tmul_smul, A0_tmul_smul, A0_tmul_smul]
@@ -212,20 +215,20 @@ theorem iota0Basis_Fof (n : ℕ) (u : Fin (2 * n)) : iota0Basis n (Indexed.Fof u
 
 theorem AB_tmul_add (n : ℕ) (r : RRing n) (x y : A0 n) :
     (r ᵍ⊗ₜ[ℚ] (x + y) : AB n) = r ᵍ⊗ₜ[ℚ] x + r ᵍ⊗ₜ[ℚ] y := by
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (x + y))
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (x + y))
       = GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] x)
         + GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] y)
   rw [← map_add, TensorProduct.tmul_add]
 
 theorem AB_tmul_smul (n : ℕ) (c : ℚ) (r : RRing n) (x : A0 n) :
     (r ᵍ⊗ₜ[ℚ] (c • x) : AB n) = c • (r ᵍ⊗ₜ[ℚ] x) := by
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (c • x))
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (c • x))
       = c • GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] x)
   rw [← map_smul, TensorProduct.tmul_smul]
 
 theorem AB_tmul_sub (n : ℕ) (r : RRing n) (x y : A0 n) :
     (r ᵍ⊗ₜ[ℚ] (x - y) : AB n) = r ᵍ⊗ₜ[ℚ] x - r ᵍ⊗ₜ[ℚ] y := by
-  show GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (x - y))
+  change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] (x - y))
       = GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] x)
         - GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] y)
   rw [← map_sub, TensorProduct.tmul_sub]
@@ -244,10 +247,12 @@ theorem AB_one_tmul_mul_one_tmul (n : ℕ) {j : ZMod 2} (a b : A0 n) (ha : a ∈
 theorem iota0AB_comm_LL (n : ℕ) (u v w z : Fin (2 * n)) :
     iota0AB n (Indexed.Lof u v) * iota0AB n (Indexed.Lof w z)
         - iota0AB n (Indexed.Lof w z) * iota0AB n (Indexed.Lof u v)
-      = (1/2 : ℚ) • (JnQ n v w • iota0AB n (Indexed.Lof u z) + JnQ n u w • iota0AB n (Indexed.Lof v z)
+      = (1/2 : ℚ) • (JnQ n v w • iota0AB n (Indexed.Lof u z) + JnQ n u w
+          • iota0AB n (Indexed.Lof v z)
           + JnQ n v z • iota0AB n (Indexed.Lof u w) + JnQ n u z • iota0AB n (Indexed.Lof v w)) := by
   unfold iota0AB
-  rw [iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof]
+  rw [iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof, iota0Basis_Lof,
+      iota0Basis_Lof]
   rw [AB_one_tmul_mul_one_tmul (ha := L0_mem_A0Grading_zero n u v),
     AB_one_tmul_mul_one_tmul (ha := L0_mem_A0Grading_zero n w z), ← AB_tmul_sub, L0_comm,
     AB_tmul_smul, AB_tmul_add, AB_tmul_add, AB_tmul_add,
@@ -257,7 +262,8 @@ theorem iota0AB_comm_LL (n : ℕ) (u v w z : Fin (2 * n)) :
 theorem iota0AB_comm_LF (n : ℕ) (u v w : Fin (2 * n)) :
     iota0AB n (Indexed.Lof u v) * iota0AB n (Indexed.Fof w)
         - iota0AB n (Indexed.Fof w) * iota0AB n (Indexed.Lof u v)
-      = (1/2 : ℚ) • (JnQ n v w • iota0AB n (Indexed.Fof u) + JnQ n u w • iota0AB n (Indexed.Fof v)) := by
+      = (1/2 : ℚ) • (JnQ n v w • iota0AB n (Indexed.Fof u) + JnQ n u w
+          • iota0AB n (Indexed.Fof v)) := by
   unfold iota0AB
   rw [iota0Basis_Lof, iota0Basis_Fof, iota0Basis_Fof, iota0Basis_Fof]
   rw [AB_one_tmul_mul_one_tmul (ha := L0_mem_A0Grading_zero n u v),
@@ -268,7 +274,8 @@ theorem iota0AB_comm_LF (n : ℕ) (u v w : Fin (2 * n)) :
 theorem iota0AB_comm_FL (n : ℕ) (u v w : Fin (2 * n)) :
     iota0AB n (Indexed.Fof w) * iota0AB n (Indexed.Lof u v)
         - iota0AB n (Indexed.Lof u v) * iota0AB n (Indexed.Fof w)
-      = -((1/2 : ℚ) • (JnQ n v w • iota0AB n (Indexed.Fof u) + JnQ n u w • iota0AB n (Indexed.Fof v))) := by
+      = -((1/2 : ℚ)
+          • (JnQ n v w • iota0AB n (Indexed.Fof u) + JnQ n u w • iota0AB n (Indexed.Fof v))) := by
   rw [← iota0AB_comm_LF]; abel
 
 /-- **FF case**, citing `F0_comm_F0` directly (already at the `A0 n` level); this is the one
@@ -397,6 +404,8 @@ summand is fully characterized, case by case, by the four theorems just above
 (`iota0_bracketLLn`/`iota0_bracketLFn`/`iota0_bracketFLn`/`iota0_bracketFFn`) -- a homogeneous `x`,
 `y` pair picks out exactly one sector and the sum collapses to a single (anti)commutator. -/
 
+-- the `DecidableEq` instance is kept: removing it would change the statement
+set_option linter.unusedDecidableInType false in
 theorem iota0_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι)
     (f : ι → Indexed.IndexedMod n) :
     iota0 n (∑ i ∈ s, f i) = ∑ i ∈ s, iota0 n (f i) := by
@@ -405,10 +414,13 @@ theorem iota0_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι)
   | empty => simp [iota0_zero]
   | @insert a s ha ih => rw [Finset.sum_insert ha, iota0_add, ih, Finset.sum_insert ha]
 
+-- the `DecidableEq` instance is kept: removing it would change the statement
+set_option linter.unusedDecidableInType false in
 theorem iota0_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Indexed.Pn n)
     (f : ι → Indexed.IndexedMod n) :
     iota0 n (∑ i ∈ s, c i • f i)
-      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * iota0 n (f i) := by
+      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+          * iota0 n (f i) := by
   classical
   induction s using Finset.induction with
   | empty => simp [iota0_zero]
