@@ -3,6 +3,9 @@ import InhomogeneousDeformations.HomogeneousDegree
 import Mathlib.Tactic.IntervalCases
 import Mathlib.Tactic.FinCases
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # C1.2/C1.3/C2.2 — explicit n=1 correspondence and transported degree closure
 
@@ -89,9 +92,9 @@ lemma Ebackward_forward : ∀ p : IndexedBasis 1, Ebackward (Eforward p) = p := 
       first
       | omega
       | exact absurd h (by decide)
-      | (simp_all [Eforward, Ebackward])
+      | (simp_all [Eforward, Ebackward]; rfl)
   | .inr u =>
-    fin_cases u <;> simp [Eforward, Ebackward]
+    fin_cases u <;> simp [Eforward, Ebackward] <;> rfl
 
 /-- `C1.2`: the basis equivalence `E : IndexedBasis 1 ≃ Basis5`. -/
 def E : IndexedBasis 1 ≃ Basis5 where
@@ -397,21 +400,32 @@ theorem basis_case (p q : IndexedBasis 1) :
     Phi (bracketBasisN 1 p q) = bracket (e (E p)) (e (E q)) := by
   conv_lhs => rw [show p = E.symm (E p) from (E.symm_apply_apply p).symm,
                   show q = E.symm (E q) from (E.symm_apply_apply q).symm]
-  cases hEp : E p <;> cases hEq : E q <;>
-    first
-    | exact Phi_bracket_basis_L11_L11 | exact Phi_bracket_basis_L11_L12
-    | exact Phi_bracket_basis_L11_L22 | exact Phi_bracket_basis_L11_F1
-    | exact Phi_bracket_basis_L11_F2 | exact Phi_bracket_basis_L12_L11
-    | exact Phi_bracket_basis_L12_L12 | exact Phi_bracket_basis_L12_L22
-    | exact Phi_bracket_basis_L12_F1 | exact Phi_bracket_basis_L12_F2
-    | exact Phi_bracket_basis_L22_L11 | exact Phi_bracket_basis_L22_L12
-    | exact Phi_bracket_basis_L22_L22 | exact Phi_bracket_basis_L22_F1
-    | exact Phi_bracket_basis_L22_F2 | exact Phi_bracket_basis_F1_L11
-    | exact Phi_bracket_basis_F1_L12 | exact Phi_bracket_basis_F1_L22
-    | exact Phi_bracket_basis_F1_F1 | exact Phi_bracket_basis_F1_F2
-    | exact Phi_bracket_basis_F2_L11 | exact Phi_bracket_basis_F2_L12
-    | exact Phi_bracket_basis_F2_L22 | exact Phi_bracket_basis_F2_F1
-    | exact Phi_bracket_basis_F2_F2
+  cases hEp : E p <;> cases hEq : E q
+  · exact Phi_bracket_basis_L11_L11
+  · exact Phi_bracket_basis_L11_L12
+  · exact Phi_bracket_basis_L11_L22
+  · exact Phi_bracket_basis_L11_F1
+  · exact Phi_bracket_basis_L11_F2
+  · exact Phi_bracket_basis_L12_L11
+  · exact Phi_bracket_basis_L12_L12
+  · exact Phi_bracket_basis_L12_L22
+  · exact Phi_bracket_basis_L12_F1
+  · exact Phi_bracket_basis_L12_F2
+  · exact Phi_bracket_basis_L22_L11
+  · exact Phi_bracket_basis_L22_L12
+  · exact Phi_bracket_basis_L22_L22
+  · exact Phi_bracket_basis_L22_F1
+  · exact Phi_bracket_basis_L22_F2
+  · exact Phi_bracket_basis_F1_L11
+  · exact Phi_bracket_basis_F1_L12
+  · exact Phi_bracket_basis_F1_L22
+  · exact Phi_bracket_basis_F1_F1
+  · exact Phi_bracket_basis_F1_F2
+  · exact Phi_bracket_basis_F2_L11
+  · exact Phi_bracket_basis_F2_L12
+  · exact Phi_bracket_basis_F2_L22
+  · exact Phi_bracket_basis_F2_F1
+  · exact Phi_bracket_basis_F2_F2
 
 /-- `C1.3`/`C2`: `Phi` intertwines the indexed and native brackets on all of
 `IndexedMod 1`. Reduces to `basis_case` (the 25-basis-pair compatibility

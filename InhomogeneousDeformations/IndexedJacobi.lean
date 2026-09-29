@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.IndexedLaws
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # R2-C-2 (U4-U5) — general-rank super-Jacobi
 
@@ -110,11 +113,11 @@ theorem bracketN_eN_eN {n : ℕ} (X Y : IndexedBasis n) :
   · rw [Finset.sum_eq_single Y]
     · simp [eN]
     · intro b _ hb
-      have : eN Y b = 0 := by unfold eN; rw [if_neg hb]
+      have : eN Y b = 0 := by unfold eN; rw [ite_eq_right hb]
       simp [this]
     · intro h; exact absurd (Finset.mem_univ Y) h
   · intro b _ hb
-    have : eN X b = 0 := by unfold eN; rw [if_neg hb]
+    have : eN X b = 0 := by unfold eN; rw [ite_eq_right hb]
     simp [this]
   · intro h; exact absurd (Finset.mem_univ X) h
 
@@ -129,10 +132,10 @@ unfolding `bracketBasisN` blindly. -/
 
 theorem parity_Lof {n : ℕ} (u v : Fin (2 * n)) : parity (Lof u v : IndexedBasis n) = 0 := by
   rcases eq_or_ne u v with heq | hne
-  · subst heq; rw [Lof, dif_pos (le_refl u)]; rfl
+  · subst heq; simp only [Lof, (le_refl u), ↓reduceDIte]; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]; rfl
+    · simp only [Lof, hlt.le, ↓reduceDIte]; rfl
+    · simp only [Lof, (not_le.mpr hgt), ↓reduceDIte]; rfl
 
 theorem parity_Fof {n : ℕ} (u : Fin (2 * n)) : parity (Fof u : IndexedBasis n) = 1 := rfl
 
@@ -145,18 +148,18 @@ theorem bracketLFn_comm {n : ℕ} (u v w : Fin (2 * n)) :
 theorem bracketBasisN_Lof_Fof {n : ℕ} (a b x : Fin (2 * n)) :
     bracketBasisN n (Lof a b) (Fof x) = bracketLFn n a b x := by
   rcases eq_or_ne a b with heq | hne
-  · subst heq; rw [Lof, dif_pos (le_refl a)]; rfl
+  · subst heq; simp only [Lof, (le_refl a), ↓reduceDIte]; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]; exact bracketLFn_comm b a x
+    · simp only [Lof, hlt.le, ↓reduceDIte]; rfl
+    · simp only [Lof, (not_le.mpr hgt), ↓reduceDIte]; exact bracketLFn_comm b a x
 
 theorem bracketBasisN_Fof_Lof {n : ℕ} (x a b : Fin (2 * n)) :
     bracketBasisN n (Fof x) (Lof a b) = -bracketLFn n a b x := by
   rcases eq_or_ne a b with heq | hne
-  · subst heq; rw [Lof, dif_pos (le_refl a)]; rfl
+  · subst heq; simp only [Lof, (le_refl a), ↓reduceDIte]; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · rw [Lof, dif_pos hlt.le]; rfl
-    · rw [Lof, dif_neg (not_le.mpr hgt)]
+    · simp only [Lof, hlt.le, ↓reduceDIte]; rfl
+    · simp only [Lof, (not_le.mpr hgt), ↓reduceDIte]
       change -bracketLFn n b a x = -bracketLFn n a b x
       rw [bracketLFn_comm]
 
@@ -171,31 +174,31 @@ theorem bracketBasisN_Lof_Lof {n : ℕ} (a b c d : Fin (2 * n)) :
   rcases eq_or_ne a b with hab | hab
   · subst hab
     rcases eq_or_ne c d with hcd | hcd
-    · subst hcd; rw [Lof, dif_pos (le_refl a), Lof, dif_pos (le_refl c)]; rfl
+    · subst hcd; simp only [Lof, (le_refl a), (le_refl c), ↓reduceDIte]; rfl
     · rcases lt_or_gt_of_ne hcd with hlt | hgt
-      · rw [Lof, dif_pos (le_refl a), Lof, dif_pos hlt.le]; rfl
-      · rw [Lof, dif_pos (le_refl a), Lof, dif_neg (not_le.mpr hgt)]
+      · simp only [Lof, (le_refl a), hlt.le, ↓reduceDIte]; rfl
+      · simp only [Lof, (le_refl a), (not_le.mpr hgt), ↓reduceDIte]
         change bracketLLn n a a d c = bracketLLn n a a c d
         rw [bracketLLn_comm34]
   · rcases lt_or_gt_of_ne hab with hablt | habgt
-    · rw [Lof, dif_pos hablt.le]
+    · simp only [Lof, hablt.le, ↓reduceDIte]
       rcases eq_or_ne c d with hcd | hcd
-      · subst hcd; rw [Lof, dif_pos (le_refl c)]; rfl
+      · subst hcd; simp only [(le_refl c), ↓reduceDIte]; rfl
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
-        · rw [Lof, dif_pos hlt.le]; rfl
-        · rw [Lof, dif_neg (not_le.mpr hgt)]
+        · simp only [hlt.le, ↓reduceDIte]; rfl
+        · simp only [(not_le.mpr hgt), ↓reduceDIte]
           change bracketLLn n a b d c = bracketLLn n a b c d
           rw [bracketLLn_comm34]
-    · rw [Lof, dif_neg (not_le.mpr habgt)]
+    · simp only [Lof, (not_le.mpr habgt), ↓reduceDIte]
       rcases eq_or_ne c d with hcd | hcd
-      · subst hcd; rw [Lof, dif_pos (le_refl c)]
+      · subst hcd; simp only [(le_refl c), ↓reduceDIte]
         change bracketLLn n b a c c = bracketLLn n a b c c
         rw [bracketLLn_comm12]
       · rcases lt_or_gt_of_ne hcd with hlt | hgt
-        · rw [Lof, dif_pos hlt.le]
+        · simp only [hlt.le, ↓reduceDIte]
           change bracketLLn n b a c d = bracketLLn n a b c d
           rw [bracketLLn_comm12]
-        · rw [Lof, dif_neg (not_le.mpr hgt)]
+        · simp only [(not_le.mpr hgt), ↓reduceDIte]
           change bracketLLn n b a d c = bracketLLn n a b c d
           rw [bracketLLn_comm34, bracketLLn_comm12]
 
@@ -241,7 +244,7 @@ theorem jacobiN_LFF {n : ℕ} (u v w z : Fin (2 * n)) :
       bracketN_eN_eN (Lof u v : IndexedBasis n) (Fof w),
       bracketBasisN_Fof_Fof, bracketBasisN_Fof_Lof z u v, bracketBasisN_Lof_Fof u v w,
       parity_Lof, parity_Fof w, parity_Fof z]
-  simp (config := { decide := true }) only [gsignN, if_true, if_false]
+  simp (config := { decide := true }) only [gsignN, ite_true, ite_false]
   rw [bracketN_neg_right]
   unfold bracketFFn bracketLFn
   rw [bracketN_smul_right,
@@ -274,7 +277,7 @@ theorem jacobiN_LLF {n : ℕ} (u v w z t : Fin (2 * n)) :
       bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w z),
       bracketBasisN_Lof_Fof w z t, bracketBasisN_Fof_Lof t u v, bracketBasisN_Lof_Lof u v w z,
       parity_Lof u v, parity_Lof w z, parity_Fof t]
-  simp (config := { decide := true }) only [gsignN, if_false]
+  simp (config := { decide := true }) only [gsignN, ite_false]
   simp only [cratN_one, one_smul]
   rw [bracketN_neg_right]
   unfold bracketLFn bracketLLn
@@ -315,7 +318,7 @@ theorem jacobiN_LLL {n : ℕ} (u v w z s t : Fin (2 * n)) :
       bracketN_eN_eN (Lof u v : IndexedBasis n) (Lof w z),
       bracketBasisN_Lof_Lof w z s t, bracketBasisN_Lof_Lof s t u v, bracketBasisN_Lof_Lof u v w z,
       parity_Lof u v, parity_Lof w z, parity_Lof s t]
-  simp (config := { decide := true }) only [gsignN, if_false]
+  simp (config := { decide := true }) only [gsignN, ite_false]
   simp only [cratN_one, one_smul]
   unfold bracketLLn
   rw [bracketN_add_right, bracketN_add_right, bracketN_add_right,
@@ -373,37 +376,49 @@ respectively; `LLL` and `FFF` are already rotation-invariant. -/
 theorem jacobiN_basis {n : ℕ} (i j k : IndexedBasis n) : jacobiSum i j k = 0 := by
   match i, j, k with
   | .inl ⟨(u, v), h1⟩, .inl ⟨(w, z), h2⟩, .inl ⟨(s, t), h3⟩ =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
-      have e2 : (Sum.inl ⟨(w, z), h2⟩ : IndexedBasis n) = Lof w z := by rw [Lof, dif_pos h2]
-      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by rw [Lof, dif_pos h3]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
+      have e2 : (Sum.inl ⟨(w, z), h2⟩ : IndexedBasis n) = Lof w z := by
+        simp only [Lof, h2, ↓reduceDIte]
+      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by
+        simp only [Lof, h3, ↓reduceDIte]
       rw [e1, e2, e3]; exact jacobiN_LLL u v w z s t
   | .inl ⟨(u, v), h1⟩, .inl ⟨(w, z), h2⟩, .inr t =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
-      have e2 : (Sum.inl ⟨(w, z), h2⟩ : IndexedBasis n) = Lof w z := by rw [Lof, dif_pos h2]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
+      have e2 : (Sum.inl ⟨(w, z), h2⟩ : IndexedBasis n) = Lof w z := by
+        simp only [Lof, h2, ↓reduceDIte]
       rw [e1, e2]; exact jacobiN_LLF u v w z t
   | .inl ⟨(u, v), h1⟩, .inr w, .inl ⟨(s, t), h3⟩ =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
-      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by rw [Lof, dif_pos h3]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
+      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by
+        simp only [Lof, h3, ↓reduceDIte]
       rw [e1, e3]
       have h := jacobiN_LLF s t u v w
       rwa [jacobiSum_rot (Lof s t : IndexedBasis n) (Lof u v) (Fof w)] at h
   | .inr w, .inl ⟨(u, v), h1⟩, .inl ⟨(s, t), h3⟩ =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
-      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by rw [Lof, dif_pos h3]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
+      have e3 : (Sum.inl ⟨(s, t), h3⟩ : IndexedBasis n) = Lof s t := by
+        simp only [Lof, h3, ↓reduceDIte]
       rw [e1, e3]
       have h := jacobiN_LLF u v s t w
       rw [jacobiSum_rot (Lof u v : IndexedBasis n) (Lof s t) (Fof w)] at h
       rwa [jacobiSum_rot (Lof s t : IndexedBasis n) (Fof w) (Lof u v)] at h
   | .inl ⟨(u, v), h1⟩, .inr w, .inr z =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
       rw [e1]; exact jacobiN_LFF u v w z
   | .inr w, .inr z, .inl ⟨(u, v), h1⟩ =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
       rw [e1]
       have h := jacobiN_LFF u v w z
       rwa [jacobiSum_rot (Lof u v : IndexedBasis n) (Fof w) (Fof z)] at h
   | .inr w, .inl ⟨(u, v), h1⟩, .inr z =>
-      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by rw [Lof, dif_pos h1]
+      have e1 : (Sum.inl ⟨(u, v), h1⟩ : IndexedBasis n) = Lof u v := by
+        simp only [Lof, h1, ↓reduceDIte]
       rw [e1]
       have h := jacobiN_LFF u v z w
       rw [jacobiSum_rot (Lof u v : IndexedBasis n) (Fof z) (Fof w)] at h
