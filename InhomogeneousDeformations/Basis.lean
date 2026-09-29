@@ -1,6 +1,9 @@
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Data.Fintype.Basic
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # n=1 basis
 

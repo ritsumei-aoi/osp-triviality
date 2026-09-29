@@ -2,6 +2,9 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import InhomogeneousDeformations.Basis
 import InhomogeneousDeformations.Carrier
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # Native n=1 bracket, from the manuscript's rank-indexed formulas
 
@@ -52,8 +55,8 @@ lemma Fof_ne_L22 : ∀ u : Fin 2, Fof u ≠ Basis5.L22 := by decide
 /-- Indicator (single basis) vector. -/
 noncomputable def e (b : Basis5) : Mod := fun k => if k = b then 1 else 0
 
-@[simp] lemma e_apply_self (b : Basis5) : e b b = 1 := if_pos rfl
-@[simp] lemma e_apply_ne {b k : Basis5} (h : k ≠ b) : e b k = 0 := if_neg h
+@[simp] lemma e_apply_self (b : Basis5) : e b b = 1 := by simp [e]
+@[simp] lemma e_apply_ne {b k : Basis5} (h : k ≠ b) : e b k = 0 := by simp [e, h]
 
 noncomputable def bracketFF (u v : Fin 2) : Mod := (crat (1 / 2)) • e (Lof u v)
 

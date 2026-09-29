@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.Indexed
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # R2-C-1 (U0-U3) — general-rank interface, degree law and super-skew
 
@@ -50,8 +53,8 @@ theorem Lof_comm {n : ℕ} (u v : Fin (2 * n)) : Lof u v = Lof v u := by
   rcases eq_or_ne u v with heq | hne
   · subst heq; rfl
   · rcases lt_or_gt_of_ne hne with hlt | hgt
-    · unfold Lof; rw [dif_pos hlt.le, dif_neg (not_le.mpr hlt)]
-    · unfold Lof; rw [dif_pos hgt.le, dif_neg (not_le.mpr hgt)]
+    · unfold Lof; simp only [hlt.le, not_le.mpr hlt, ↓reduceDIte]; rfl
+    · unfold Lof; simp only [hgt.le, not_le.mpr hgt, ↓reduceDIte]; rfl
 
 /-- Coordinate lemma: `Lof`'s value determines, and is determined by, the
 unordered pair of its two arguments -- lets later proofs compare
@@ -64,20 +67,20 @@ theorem Lof_eq_iff {n : ℕ} {u v w z : Fin (2 * n)} :
     unfold Lof at h
     by_cases huv : u ≤ v
     · by_cases hwz : w ≤ z
-      · rw [dif_pos huv, dif_pos hwz] at h
+      · simp only [huv, hwz, ↓reduceDIte] at h
         injection h with h2
         injection congrArg Subtype.val h2 with e1 e2
         exact Or.inl ⟨e1, e2⟩
-      · rw [dif_pos huv, dif_neg hwz] at h
+      · simp only [huv, hwz, ↓reduceDIte] at h
         injection h with h2
         injection congrArg Subtype.val h2 with e1 e2
         exact Or.inr ⟨e1, e2⟩
     · by_cases hwz : w ≤ z
-      · rw [dif_neg huv, dif_pos hwz] at h
+      · simp only [huv, hwz, ↓reduceDIte] at h
         injection h with h2
         injection congrArg Subtype.val h2 with e1 e2
         exact Or.inr ⟨e2, e1⟩
-      · rw [dif_neg huv, dif_neg hwz] at h
+      · simp only [huv, hwz, ↓reduceDIte] at h
         injection h with h2
         injection congrArg Subtype.val h2 with e1 e2
         exact Or.inl ⟨e2, e1⟩
@@ -88,12 +91,13 @@ theorem Lof_eq_iff {n : ℕ} {u v w z : Fin (2 * n)} :
 /-- `Lof` always lands in the even (`.inl`) sector; needed so that `eN`
 of an `Lof` value is supported nowhere in the odd (`.inr`) sector. -/
 theorem Lof_ne_inr {n : ℕ} (u v w : Fin (2 * n)) : Lof u v ≠ Sum.inr w := by
-  unfold Lof; split_ifs <;> simp
+  unfold Lof
+  by_cases h : u ≤ v <;> simp only [h, ↓reduceDIte] <;> exact Sum.inl_ne_inr
 
 @[simp] theorem eN_Lof_apply_inr {n : ℕ} (a b w : Fin (2 * n)) :
     eN (Lof a b : IndexedBasis n) (Sum.inr w) = 0 := by
   unfold eN
-  rw [if_neg (fun h => Lof_ne_inr a b w h.symm)]
+  exact ite_eq_right (fun h => Lof_ne_inr a b w h.symm)
 
 /-! ## U1 — degree law at general `n` -/
 
@@ -102,23 +106,33 @@ theorem Lof_ne_inr {n : ℕ} (u v w : Fin (2 * n)) : Lof u v ≠ Sum.inr w := by
 shapes `bracketBasisN` matches on. -/
 theorem bracketBasisN_degree0 {n : ℕ} (i j k : IndexedBasis n)
     (h : bracketBasisN n i j k ≠ 0) : parity k = parity i + parity j := by
+  -- toolchain port (v4.34): the `IndexedMod` evaluation lemmas, restated on the sum type itself
+  have happ : ∀ (x y : IndexedMod n)
+      (k : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} ⊕ Fin (2 * n)),
+      (x + y) k = x k + y k := fun _ _ _ => rfl
+  have hsm : ∀ (c : Pn n) (x : IndexedMod n)
+      (k : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} ⊕ Fin (2 * n)), (c • x) k = c * x k :=
+    fun _ _ _ => rfl
+  have hng : ∀ (x : IndexedMod n)
+      (k : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} ⊕ Fin (2 * n)),
+      (-x) k = -x k := fun _ _ => rfl
   match i, j with
   | .inl ⟨(u, v), _⟩, .inl ⟨(w, z), _⟩ =>
     match k with
     | .inl _ => rfl
-    | .inr w' => exfalso; apply h; simp [bracketBasisN, bracketLLn]
+    | .inr w' => exfalso; apply h; simp [bracketBasisN, bracketLLn, happ, hsm]
   | .inl ⟨(u, v), _⟩, .inr w =>
     match k with
     | .inr _ => rfl
-    | .inl p => exfalso; apply h; simp [bracketBasisN, bracketLFn, eN, Fof]
+    | .inl p => exfalso; apply h; simp [bracketBasisN, bracketLFn, eN, Fof, happ, hsm]
   | .inr w, .inl ⟨(u, v), _⟩ =>
     match k with
     | .inr _ => rfl
-    | .inl p => exfalso; apply h; simp [bracketBasisN, bracketLFn, eN, Fof]
+    | .inl p => exfalso; apply h; simp [bracketBasisN, bracketLFn, eN, Fof, happ, hsm, hng]
   | .inr u, .inr v =>
     match k with
     | .inl _ => rfl
-    | .inr w' => exfalso; apply h; simp [bracketBasisN, bracketFFn]
+    | .inr w' => exfalso; apply h; simp [bracketBasisN, bracketFFn, hsm]
 
 /-- General-rank homogeneity predicate, transposed from `Native.lean`'s
 `n=1`-only `IsHomog` (which is stated over the fixed `Mod = Basis5 → Coeff`
@@ -162,14 +176,14 @@ noncomputable def gsignN (n : ℕ) (p q : ZMod 2) : Pn n :=
   if p = 1 ∧ q = 1 then cratN n (-1) else cratN n 1
 
 theorem gsignN_00 (n : ℕ) : gsignN n (0 : ZMod 2) (0 : ZMod 2) = 1 := by
-  unfold gsignN; rw [if_neg (by decide), cratN_one]
+  unfold gsignN; rw [ite_eq_right (by decide), cratN_one]
 theorem gsignN_01 (n : ℕ) : gsignN n (0 : ZMod 2) (1 : ZMod 2) = 1 := by
-  unfold gsignN; rw [if_neg (by decide), cratN_one]
+  unfold gsignN; rw [ite_eq_right (by decide), cratN_one]
 theorem gsignN_10 (n : ℕ) : gsignN n (1 : ZMod 2) (0 : ZMod 2) = 1 := by
-  unfold gsignN; rw [if_neg (by decide), cratN_one]
+  unfold gsignN; rw [ite_eq_right (by decide), cratN_one]
 theorem gsignN_11 (n : ℕ) : gsignN n (1 : ZMod 2) (1 : ZMod 2) = -1 := by
   unfold gsignN
-  rw [if_pos (by decide)]
+  rw [ite_eq_left (by decide)]
   rw [show (-1 : ℚ) = -(1 : ℚ) from rfl, ← cratN_neg, cratN_one]
 
 /-- **FF sector**: both parities odd, so the requirement `[F_u,F_v] =

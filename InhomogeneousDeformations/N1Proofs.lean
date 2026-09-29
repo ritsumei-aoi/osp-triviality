@@ -1,5 +1,8 @@
 import InhomogeneousDeformations.Native
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # Independent oracle (T1), degree/skew (T2), Jacobi (T3)
 
@@ -34,8 +37,8 @@ down to a single `crat (single rational)`, closeable by `norm_num`/injectivity. 
   simp [crat]
 lemma crat_injective : Function.Injective crat := by
   intro a b hab
-  have h0 : MvPolynomial.coeff (0 : Fin 2 →₀ ℕ) (crat a) = MvPolynomial.coeff 0 (crat b) :=
-    congrArg (MvPolynomial.coeff 0) hab
+  have h0 : (crat a).coeff (0 : Fin 2 →₀ ℕ) = (crat b).coeff 0 :=
+    congrArg (fun p => p.coeff 0) hab
   simpa [crat, MvPolynomial.coeff_C] using h0
 @[simp] lemma crat_eq_iff (a b : ℚ) : crat a = crat b ↔ a = b := crat_injective.eq_iff
 @[simp] lemma crat_neg_one : crat (-1 : ℚ) = -1 := by
