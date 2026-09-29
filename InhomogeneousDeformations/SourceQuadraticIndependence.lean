@@ -63,7 +63,7 @@ theorem L0FamilyIndependent_of_weyl (n : ℕ)
       (GradedTensorProduct.of ℚ (WGrading n) CGrading).symm.toLinearMap with hΨdef
   have hΨw : ∀ w : Module.End ℚ (WPoly n), Ψ (w ᵍ⊗ₜ[ℚ] (1 : C)) = w := by
     intro w
-    show Ψ (GradedTensorProduct.of ℚ (WGrading n) CGrading (w ⊗ₜ (1 : C))) = w
+    change Ψ (GradedTensorProduct.of ℚ (WGrading n) CGrading (w ⊗ₜ (1 : C))) = w
     rw [hΨdef]
     simp [TensorProduct.map_tmul, hφ]
   have hΨL0 : ∀ q : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2},
@@ -106,7 +106,7 @@ theorem evenIdx_le_oddIdx (n : ℕ) (k l : Fin n) (h : k ≤ l) :
 
 theorem oddIdx_le_evenIdx_of_lt (n : ℕ) (k l : Fin n) (h : k < l) :
     Indexed.oddIdx n k ≤ Indexed.evenIdx n l := by
-  simp only [Fin.lt_def, Indexed.oddIdx, Indexed.evenIdx] at h
+  simp only [Fin.lt_def] at h
   simp only [Fin.le_def, Indexed.oddIdx, Indexed.evenIdx]
   omega
 
@@ -122,7 +122,7 @@ theorem single_add_single_ne_zero (n : ℕ) (k l : Fin n) :
   have h2 : (Finsupp.single k (1:ℕ) + Finsupp.single l 1 : Fin n →₀ ℕ) k = (0 : Fin n →₀ ℕ) k := by
     rw [h]
   simp only [Finsupp.add_apply, Finsupp.single_eq_same, Finsupp.coe_zero, Pi.zero_apply] at h2
-  by_cases hlk : l = k <;> simp [hlk, Finsupp.single_apply] at h2
+  by_cases hlk : l = k <;> simp [hlk] at h2
 
 /-- **Step 2, stage 1 (evaluate at `1`)**: the value, for arbitrary `q`, of the coefficient of
 `X_k X_l` in `(B u * B v + B v * B u) (1)`. Only the both-odd sector (`u = oddIdx k`,
@@ -288,8 +288,8 @@ theorem hval2 (n : ℕ) (m p : Fin n) (hmp : m ≠ p)
       Module.End.one_apply,
       JnQ_eq_zero_of_same_parity n (Indexed.evenIdx n i) (Indexed.evenIdx n j)
         (by simp only [Indexed.evenIdx]; omega),
-      zero_smul, add_zero, smul_zero]
-    rcases hpim with h | h <;> rw [h] <;> simp [MvPolynomial.pderiv_one]
+      zero_smul, add_zero]
+    rcases hpim with h | h <;> rw [h] <;> simp
   · -- EO: u = evenIdx i, v = oddIdx j, i ≤ j.
     -- Bv*Bu (applied to X_m) = mulLeft(X_j)(pderiv_i(X_m)) = X_j * (if i = m then 1 else 0).
     -- With hmp : m ≠ p, the diagonal JnQ correction term never contributes to this coefficient.
@@ -297,17 +297,17 @@ theorem hval2 (n : ℕ) (m p : Fin n) (hmp : m ≠ p)
     obtain ⟨j, rfl⟩ : ∃ j, v = Indexed.oddIdx n j := ⟨wIndex n v, u_eq_oddIdx_of_odd n v hv⟩
     rw [if_neg (fun h : Indexed.evenIdx n i = Indexed.oddIdx n p ∧ _ => even_ne_odd i p h.1)]
     simp only [B_evenIdx, B_oddIdx, LinearMap.mulLeft_apply, Derivation.coeFn_coe,
-      Module.End.one_apply, evenIdx_eq_iff, JnQ_evenIdx_oddIdx, zero_add, true_and]
+      Module.End.one_apply, evenIdx_eq_iff, JnQ_evenIdx_oddIdx]
     by_cases him : i = m
     · subst him
       simp only [MvPolynomial.pderiv_X_self, mul_one, MvPolynomial.coeff_add,
         MvPolynomial.coeff_smul, MvPolynomial.coeff_single_X, smul_eq_mul, mul_one, mul_ite,
-        mul_zero, mul_one, eq_self_iff_true, true_and]
-      by_cases hjp : j = p <;> by_cases hij : i = p <;> simp_all [oddIdx_eq_iff]
+        mul_zero, mul_one, true_and]
+      by_cases hjp : j = p <;> by_cases hij : i = p <;> simp_all
     · rw [if_neg (fun h : i = m ∧ _ => him h.1)]
-      simp only [MvPolynomial.pderiv_X_of_ne (Ne.symm him), mul_zero, zero_smul, zero_add]
+      simp only [MvPolynomial.pderiv_X_of_ne (Ne.symm him), mul_zero, zero_add]
       by_cases hij : i = j <;> by_cases hip : i = p <;>
-        simp_all [oddIdx_eq_iff, MvPolynomial.coeff_single_X]
+        simp_all [MvPolynomial.coeff_single_X]
   · -- OE: u = oddIdx i, v = evenIdx j, i < j strictly.
     -- Bv*Bu (applied to X_m) = pderiv_j (mulLeft(X_i)(X_m)) = pderiv_j(X_i*X_m)
     --   = pderiv_j(X_i)*X_m + X_i*pderiv_j(X_m) = 0*X_m + X_i*(if j=m then 1 else 0)
@@ -325,8 +325,8 @@ theorem hval2 (n : ℕ) (m p : Fin n) (hmp : m ≠ p)
       oddIdx_eq_iff]
     by_cases hjm : j = m
     · subst hjm
-      simp only [MvPolynomial.pderiv_X_self, one_mul, MvPolynomial.coeff_smul,
-        MvPolynomial.coeff_single_X, smul_eq_mul]
+      simp only [MvPolynomial.pderiv_X_self, MvPolynomial.coeff_smul,
+        smul_eq_mul]
       by_cases hip : i = p <;> simp_all
     · simp only [MvPolynomial.pderiv_X_of_ne (Ne.symm hjm), mul_zero, smul_zero,
         MvPolynomial.coeff_zero, evenIdx_eq_iff]
@@ -430,7 +430,8 @@ theorem hval0 (n : ℕ) (q : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}) :
       MvPolynomial.coeff_smul, MvPolynomial.coeff_monomial,
       if_neg (by
         intro h
-        have h2 : (Finsupp.single i 1 + Finsupp.single j 1 : Fin n →₀ ℕ).sum (fun _ v => v) = 2 := by
+        have h2 : (Finsupp.single i 1 + Finsupp.single j 1 : Fin n →₀ ℕ).sum (fun _ v => v) = 2 :=
+          by
           simp [Finsupp.sum_add_index', Finsupp.sum_single_index]
         rw [h] at h2; simp at h2),
       smul_eq_mul, mul_zero]
@@ -455,7 +456,8 @@ theorem hS (n : ℕ) (g : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} → �
       = ∑ q : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2},
         (if ∃ i : Fin n, q.1.1 = Indexed.evenIdx n i ∧ q.1.2 = Indexed.oddIdx n i then g q else 0)
       from Finset.sum_congr rfl (fun q _ => by
-        rw [hval0 n q]; by_cases h : ∃ i : Fin n, q.1.1 = Indexed.evenIdx n i ∧ q.1.2 = Indexed.oddIdx n i
+        rw [hval0 n q]
+        by_cases h : ∃ i : Fin n, q.1.1 = Indexed.evenIdx n i ∧ q.1.2 = Indexed.oddIdx n i
         · rw [if_pos h, if_pos h, mul_one]
         · rw [if_neg h, if_neg h, mul_zero])]
   set φ : Fin n → {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} :=
@@ -551,7 +553,7 @@ theorem hOE (n : ℕ) (g : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} → �
       have hle' := q.2
       rw [h1, h2] at hle'
       simp only [Fin.le_def, Indexed.evenIdx, Indexed.oddIdx] at hle'
-      simp only [Fin.lt_def, Indexed.oddIdx, Indexed.evenIdx] at hpm
+      simp only [Fin.lt_def] at hpm
       omega
     by_cases h : q = target
     · rw [if_neg hiff2, if_pos ((hiff1).mpr h), if_pos h, zero_add]
@@ -585,7 +587,8 @@ theorem hval3 (n : ℕ) (k : Fin n) (q : {p : Fin (2 * n) × Fin (2 * n) // p.1 
   · -- EE: second derivative of a linear polynomial is `0`.
     obtain ⟨i, rfl⟩ : ∃ i, u = Indexed.evenIdx n i := ⟨wIndex n u, u_eq_evenIdx_of_even n u hu⟩
     obtain ⟨j, rfl⟩ : ∃ j, v = Indexed.evenIdx n j := ⟨wIndex n v, u_eq_evenIdx_of_even n v hv⟩
-    rw [if_neg (fun h => even_ne_odd j k h.2), if_neg (by rintro ⟨l, -, hl⟩; exact even_ne_odd j l hl)]
+    rw [if_neg (fun h => even_ne_odd j k h.2),
+      if_neg (by rintro ⟨l, -, hl⟩; exact even_ne_odd j l hl)]
     have hpik : (MvPolynomial.pderiv i (MvPolynomial.X k : WPoly n)) = 0
         ∨ (MvPolynomial.pderiv i (MvPolynomial.X k : WPoly n)) = 1 := by
       by_cases hik : i = k
@@ -595,8 +598,8 @@ theorem hval3 (n : ℕ) (k : Fin n) (q : {p : Fin (2 * n) × Fin (2 * n) // p.1 
       Module.End.one_apply,
       JnQ_eq_zero_of_same_parity n (Indexed.evenIdx n i) (Indexed.evenIdx n j)
         (by simp only [Indexed.evenIdx]; omega),
-      zero_smul, add_zero, smul_zero]
-    rcases hpik with h | h <;> rw [h] <;> simp [MvPolynomial.pderiv_one]
+      zero_smul, add_zero]
+    rcases hpik with h | h <;> rw [h] <;> simp
   · -- EO: value is `2•X_j•(if i=k then1else0) + (if i=j then1else0)•X_k`.
     obtain ⟨i, rfl⟩ : ∃ i, u = Indexed.evenIdx n i := ⟨wIndex n u, u_eq_evenIdx_of_even n u hu⟩
     obtain ⟨j, rfl⟩ : ∃ j, v = Indexed.oddIdx n j := ⟨wIndex n v, u_eq_oddIdx_of_odd n v hv⟩
@@ -608,17 +611,17 @@ theorem hval3 (n : ℕ) (k : Fin n) (q : {p : Fin (2 * n) × Fin (2 * n) // p.1 
       obtain rfl | hij := eq_or_ne i j
       · have hex : ∃ l : Fin n, Indexed.evenIdx n i = Indexed.evenIdx n l ∧
             Indexed.oddIdx n i = Indexed.oddIdx n l := ⟨i, rfl, rfl⟩
-        simp only [oddIdx_eq_iff, hex, if_pos, and_self]
+        simp only [oddIdx_eq_iff, if_pos, and_self]
         norm_num
       · have hji : j ≠ i := Ne.symm hij
         simp only [oddIdx_eq_iff]
         simp [hij, hji]
     · rw [MvPolynomial.pderiv_X_of_ne (Ne.symm hik), mul_zero, smul_zero, zero_add]
       obtain rfl | hij := eq_or_ne i j
-      · simp only [if_pos rfl, one_smul, MvPolynomial.coeff_single_X]
+      · simp only
         have hex : ∃ l : Fin n, Indexed.evenIdx n i = Indexed.evenIdx n l ∧
             Indexed.oddIdx n i = Indexed.oddIdx n l := ⟨i, rfl, rfl⟩
-        simp [hik, hex]
+        simp [hik]
       · have hne2 : ¬ ∃ l : Fin n, i = l ∧ Indexed.oddIdx n j = Indexed.oddIdx n l := by
           rintro ⟨l, hl1, hl2⟩
           exact hij ((((oddIdx_eq_iff j l).mp hl2).trans hl1.symm).symm)
@@ -723,7 +726,7 @@ theorem hEO_diag (n : ℕ) (g : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} 
     · rintro ⟨i, hi1, hi2⟩
       refine ⟨i, ?_⟩
       apply Subtype.ext
-      show (Indexed.evenIdx n i, Indexed.oddIdx n i) = q.1
+      change (Indexed.evenIdx n i, Indexed.oddIdx n i) = q.1
       rw [← hi1, ← hi2]
     · rintro ⟨i, hi⟩
       have h1 : q.1 = (Indexed.evenIdx n i, Indexed.oddIdx n i) := by rw [← hi]
@@ -840,7 +843,7 @@ theorem hval4 (n : ℕ) (k l : Fin n) (hkl : k ≤ l)
     simp only [B_evenIdx, B_oddIdx, LinearMap.mulLeft_apply, Derivation.coeFn_coe,
       Module.End.one_apply, JnQ_evenIdx_oddIdx]
     simp only [MvPolynomial.coeff_add, MvPolynomial.coeff_smul, smul_eq_mul, coeff0_X_mul,
-      coeff0_XkXl, mul_zero, add_zero]
+      mul_zero, add_zero]
   · -- OE: `pderiv j (X_i * (X_k * X_l))` splits by Leibniz into two coeff-`0`-vanishing terms.
     obtain ⟨i, rfl⟩ : ∃ i, u = Indexed.oddIdx n i := ⟨wIndex n u, u_eq_oddIdx_of_odd n u hu⟩
     obtain ⟨j, rfl⟩ : ∃ j, v = Indexed.evenIdx n j := ⟨wIndex n v, u_eq_evenIdx_of_even n v hv⟩
@@ -858,7 +861,7 @@ theorem hval4 (n : ℕ) (k l : Fin n) (hkl : k ≤ l)
     rw [if_neg (fun h => even_ne_odd k i (h.1.symm))]
     simp only [B_oddIdx, LinearMap.mulLeft_apply, Module.End.one_apply]
     simp only [MvPolynomial.coeff_add, MvPolynomial.coeff_smul, smul_eq_mul, coeff0_X_mul,
-      coeff0_XkXl, mul_zero, add_zero]
+      mul_zero, add_zero]
 
 /-- **Stage 3 (EE)**: the both-even sector's coefficients all vanish. -/
 theorem hEE (n : ℕ) (g : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2} → ℚ)
@@ -945,3 +948,7 @@ theorem L0FamilyIndependent_proved (n : ℕ) : L0FamilyIndependent n :=
 `independence_of_L0_and_F0` splitting lemma. -/
 theorem IndependenceStatement_proved (n : ℕ) : IndependenceStatement n :=
   independence_of_L0_and_F0 n (L0FamilyIndependent_proved n)
+
+end Source
+
+end InhomogeneousDeformations
