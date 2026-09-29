@@ -128,7 +128,9 @@ theorem ZMod2_add_cases (i j : ZMod 2) :
     (i = 0 ∧ j = 0 ∧ i + j = 0) ∨ (i = 0 ∧ j = 1 ∧ i + j = 1) ∨
     (i = 1 ∧ j = 0 ∧ i + j = 1) ∨ (i = 1 ∧ j = 1 ∧ i + j = 0) := by
   rcases ZMod2_eq_zero_or_one i with hi | hi <;> rcases ZMod2_eq_zero_or_one j with hj | hj <;>
-    subst hi <;> subst hj <;> simp_all <;> decide
+    subst hi <;> subst hj <;>
+    simp_all only [one_ne_zero, false_and, and_self, add_eq_left, and_false, true_and, false_or]
+      <;> decide
 
 /-- The four `(i', j')` pairs with `i' + j' = k` for a total degree `k = i + j` split as
 `i = i' + i''`, `j = j' + j''` across two factors: standalone (no other hypotheses in context)
@@ -145,7 +147,8 @@ instance WGrading_setLike (n : ℕ) : SetLike.GradedMonoid (WGrading n) where
   one_mem := by simp [WGrading]
   mul_mem := by
     intro i j gi gj hgi hgj
-    rcases ZMod2_add_cases i j with ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ <;>
+    rcases ZMod2_add_cases i j with
+      ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ | ⟨hi, hj, hij⟩ <;>
       subst hi <;> subst hj <;> rw [hij] <;> simp_all [WGrading]
 
 /-- The decomposition map, as a plain `LinearMap` — `DirectSum.Decomposition` (unlike
@@ -261,7 +264,7 @@ theorem A0_decompose_lin_tmul_coe (n : ℕ) (k : ZMod 2) (w : Module.End ℚ (WP
     A0_decompose_lin n (w ᵍ⊗ₜ[ℚ] (c : C)) =
       DirectSum.lof ℚ (ZMod 2) (fun k => A0Grading n k) k
         ⟨w ᵍ⊗ₜ[ℚ] (c : C), A0Grading_mem_of_tmul n k w c⟩ := by
-  show (DirectSum.lmap fun k => LinearMap.rangeRestrict (A0GradingMap n k))
+  change (DirectSum.lmap fun k => LinearMap.rangeRestrict (A0GradingMap n k))
       ((TensorProduct.directSumRight ℚ ℚ (Module.End ℚ (WPoly n)) (fun k => CGrading k))
         ((TensorProduct.congr (LinearEquiv.refl ℚ (Module.End ℚ (WPoly n)))
           (DirectSum.decomposeLinearEquiv CGrading)) (w ⊗ₜ (c : C)))) = _
@@ -288,7 +291,7 @@ noncomputable instance A0GradedAlgebra (n : ℕ) : GradedAlgebra (A0Grading n) :
       (by
         apply TensorProduct.ext'
         intro w c
-        show (DirectSum.coeLinearMap (A0Grading n)) ((A0_decompose_lin n) (w ⊗ₜ c)) = w ⊗ₜ c
+        change (DirectSum.coeLinearMap (A0Grading n)) ((A0_decompose_lin n) (w ⊗ₜ c)) = w ⊗ₜ c
         have key :
             ((DirectSum.coeLinearMap (A0Grading n) ∘ₗ A0_decompose_lin n).comp
                 (TensorProduct.mk ℚ (Module.End ℚ (WPoly n)) C w)).comp
@@ -298,7 +301,7 @@ noncomputable instance A0GradedAlgebra (n : ℕ) : GradedAlgebra (A0Grading n) :
           apply DirectSum.linearMap_ext ℚ
           intro k
           apply LinearMap.ext; intro x
-          show (DirectSum.coeLinearMap (A0Grading n))
+          change (DirectSum.coeLinearMap (A0Grading n))
               ((A0_decompose_lin n) (w ⊗ₜ[ℚ] ((DirectSum.decomposeLinearEquiv CGrading).symm
                 (DirectSum.lof ℚ (ZMod 2) (fun i => CGrading i) k x)))) =
             w ⊗ₜ[ℚ] ((DirectSum.decomposeLinearEquiv CGrading).symm
@@ -306,7 +309,7 @@ noncomputable instance A0GradedAlgebra (n : ℕ) : GradedAlgebra (A0Grading n) :
           rw [DirectSum.decomposeLinearEquiv_symm_lof, A0_decompose_lin_tmul,
             DirectSum.coeLinearMap_lof]
         have := DFunLike.congr_fun key ((DirectSum.decomposeLinearEquiv CGrading) c)
-        show (DirectSum.coeLinearMap (A0Grading n)) ((A0_decompose_lin n) (w ⊗ₜ[ℚ] c)) = w ⊗ₜ[ℚ] c
+        change (DirectSum.coeLinearMap (A0Grading n)) ((A0_decompose_lin n) (w ⊗ₜ[ℚ] c)) = w ⊗ₜ[ℚ] c
         rw [show c = (DirectSum.decomposeLinearEquiv CGrading).symm
           ((DirectSum.decomposeLinearEquiv CGrading) c) from
           (LinearEquiv.symm_apply_apply _ c).symm]
@@ -326,7 +329,7 @@ noncomputable instance A0GradedAlgebra (n : ℕ) : GradedAlgebra (A0Grading n) :
               (LinearMap.rangeRestrict (A0GradingMap n k)) := by
           apply TensorProduct.ext'
           intro w c
-          show A0_decompose_lin n (A0GradingMap n k (w ⊗ₜ c)) = _
+          change A0_decompose_lin n (A0GradingMap n k (w ⊗ₜ c)) = _
           rw [A0GradingMap_tmul, A0_decompose_lin_tmul_coe]
           rfl
         exact DFunLike.congr_fun key y) }
@@ -363,7 +366,7 @@ theorem ABGradingMap_range_le (n : ℕ) (i j : ZMod 2) :
     LinearMap.range (ABGradingMap n i j) ≤ ABGrading n (i + j) := by
   rcases ZMod2_eq_zero_or_one i with hi | hi <;> subst hi
   · rw [zero_add]; exact le_sup_left
-  · show LinearMap.range (ABGradingMap n 1 j) ≤
+  · change LinearMap.range (ABGradingMap n 1 j) ≤
       LinearMap.range (ABGradingMap n 0 (1 + j)) ⊔ LinearMap.range (ABGradingMap n 1 ((1 + j) + 1))
     rw [show (1 + j : ZMod 2) + 1 = j from by revert j; decide]
     exact le_sup_right
@@ -438,7 +441,7 @@ theorem AB_decompose_lin_tmul (n : ℕ) (i j : ZMod 2) (r : RGradingQ n i) (x : 
     AB_decompose_lin n ((r : RRing n) ᵍ⊗ₜ[ℚ] (x : A0 n)) =
       DirectSum.lof ℚ (ZMod 2) (fun k => ABGrading n k) (i + j)
         ⟨(r : RRing n) ᵍ⊗ₜ[ℚ] (x : A0 n), ABGrading_mem_of_tmul n i j r x⟩ := by
-  show (DirectSum.toModule ℚ (ZMod 2 × ZMod 2) (⨁ k : ZMod 2, ABGrading n k)
+  change (DirectSum.toModule ℚ (ZMod 2 × ZMod 2) (⨁ k : ZMod 2, ABGrading n k)
       (fun p => (DirectSum.lof ℚ (ZMod 2) (fun k => ABGrading n k) (p.1 + p.2)).comp
         ((Submodule.inclusion (ABGradingMap_range_le n p.1 p.2)).comp
           (LinearMap.rangeRestrict (ABGradingMap n p.1 p.2)))))
@@ -508,7 +511,7 @@ noncomputable instance ABGradedAlgebra (n : ℕ) : GradedAlgebra (ABGrading n) :
               (map_zero (AB_decompose_lin n))).trans (map_zero _)
           | of j y =>
             rw [← DirectSum.lof_eq_of ℚ, DirectSum.decomposeLinearEquiv_symm_lof]
-            show (DirectSum.coeLinearMap (ABGrading n))
+            change (DirectSum.coeLinearMap (ABGrading n))
                 ((AB_decompose_lin n) ((r' : RRing n) ᵍ⊗ₜ[ℚ] (y : A0 n))) =
               (r' : RRing n) ᵍ⊗ₜ[ℚ] (y : A0 n)
             rw [AB_decompose_lin_tmul, DirectSum.coeLinearMap_lof]
@@ -554,7 +557,7 @@ noncomputable instance ABGradedAlgebra (n : ℕ) : GradedAlgebra (ABGrading n) :
               (ABGradingMap0Restrict n k) := by
           apply TensorProduct.ext'
           intro r0 x0
-          show AB_decompose_lin n (ABGradingMap n 0 k (r0 ⊗ₜ x0)) =
+          change AB_decompose_lin n (ABGradingMap n 0 k (r0 ⊗ₜ x0)) =
             DirectSum.lof ℚ (ZMod 2) (fun i => ABGrading n i) k
               (ABGradingMap0Restrict n k (r0 ⊗ₜ x0))
           rw [ABGradingMap_tmul, AB_decompose_lin_tmul]
@@ -564,7 +567,7 @@ noncomputable instance ABGradedAlgebra (n : ℕ) : GradedAlgebra (ABGrading n) :
               (ABGradingMap1Restrict n k) := by
           apply TensorProduct.ext'
           intro r1 x1
-          show AB_decompose_lin n (ABGradingMap n 1 (k + 1) (r1 ⊗ₜ x1)) =
+          change AB_decompose_lin n (ABGradingMap n 1 (k + 1) (r1 ⊗ₜ x1)) =
             DirectSum.lof ℚ (ZMod 2) (fun i => ABGrading n i) k
               (ABGradingMap1Restrict n k (r1 ⊗ₜ x1))
           rw [ABGradingMap_tmul, AB_decompose_lin_tmul]
@@ -592,7 +595,7 @@ noncomputable instance ABGradedAlgebra (n : ℕ) : GradedAlgebra (ABGrading n) :
           _ = DirectSum.lof ℚ (ZMod 2) (fun i => ABGrading n i) k z := by
                 congr 1
                 apply Subtype.ext
-                show (ABGradingMap0Restrict n k y0 : AB n) + (ABGradingMap1Restrict n k y1 : AB n)
+                change (ABGradingMap0Restrict n k y0 : AB n) + (ABGradingMap1Restrict n k y1 : AB n)
                   = z
                 rw [show (ABGradingMap0Restrict n k y0 : AB n) = ABGradingMap n 0 k y0 from rfl,
                   show (ABGradingMap1Restrict n k y1 : AB n) = ABGradingMap n 1 (k + 1) y1 from
@@ -612,7 +615,7 @@ theorem aA0_ne_zero (n : ℕ) : aA0 n ≠ 0 := by
       ((1 : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (Source.a : C)) = 1 := by
     simp [TensorProduct.map_tmul, hf, hg]
   rw [show ((1 : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (Source.a : C) : A0 n) = aA0 n from rfl, h] at hΦ
-  simp only [LinearMap.comp_apply, map_zero] at hΦ
+  simp only [LinearMap.comp_apply] at hΦ
   exact one_ne_zero hΦ.symm
 
 /-- `κ`, embedded into `A_B` as `κ ᵍ⊗ₜ 1`. -/
@@ -657,7 +660,7 @@ theorem A3_independence (n : ℕ) :
       simp [TensorProduct.map_tmul, hf, hg]
     rw [show ((kappa n) ⊗ₜ[ℚ] (aA0 n) : AB n) =
       ((kappa n) ᵍ⊗ₜ[ℚ] (aA0 n) : AB n) from rfl, h] at hΦ
-    simp only [LinearMap.comp_apply, map_zero] at hΦ
+    simp only [LinearMap.comp_apply] at hΦ
     exact one_ne_zero hΦ.symm
 
 /-! ## **A4**: `A_0`'s and `A_B`'s gradings restrict correctly to their tensor factors -/
@@ -682,12 +685,14 @@ contributes degree `0`); both are the `k = k + 0` and `k = 0 + k` special cases 
 `ABGrading_mem_of_tmul`. -/
 theorem A4_R_into_AB (n : ℕ) (k : ZMod 2) (r : RGradingQ n k) :
     ((r : RRing n) ᵍ⊗ₜ[ℚ] (1 : A0 n) : AB n) ∈ ABGrading n k := by
-  have h := ABGrading_mem_of_tmul n k 0 r (⟨1, SetLike.one_mem_graded (A0Grading n)⟩ : A0Grading n 0)
+  have h := ABGrading_mem_of_tmul n k 0 r
+    (⟨1, SetLike.one_mem_graded (A0Grading n)⟩ : A0Grading n 0)
   rwa [add_zero] at h
 
 theorem A4_A0_into_AB (n : ℕ) (k : ZMod 2) (x : A0Grading n k) :
     ((1 : RRing n) ᵍ⊗ₜ[ℚ] (x : A0 n) : AB n) ∈ ABGrading n k := by
-  have h := ABGrading_mem_of_tmul n 0 k (⟨1, SetLike.one_mem_graded (RGradingQ n)⟩ : RGradingQ n 0) x
+  have h := ABGrading_mem_of_tmul n 0 k
+    (⟨1, SetLike.one_mem_graded (RGradingQ n)⟩ : RGradingQ n 0) x
   rwa [zero_add] at h
 
 end Source
