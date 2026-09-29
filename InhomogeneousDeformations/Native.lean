@@ -127,7 +127,7 @@ theorem bracket_smul_left (c : Coeff) (x y : Mod) :
   apply Finset.sum_congr rfl; intro i _
   rw [Finset.smul_sum]
   apply Finset.sum_congr rfl; intro j _
-  simp only [Pi.smul_apply, smul_eq_mul]
+  simp only [smul_eq_mul]
   ring
 
 theorem bracket_smul_right (c : Coeff) (x y : Mod) :
@@ -138,7 +138,7 @@ theorem bracket_smul_right (c : Coeff) (x y : Mod) :
   apply Finset.sum_congr rfl; intro i _
   rw [Finset.smul_sum]
   apply Finset.sum_congr rfl; intro j _
-  simp only [Pi.smul_apply, smul_eq_mul]
+  simp only [smul_eq_mul]
   ring
 
 /-- `T0`: homogeneity by basis support with the stated parity. -/
