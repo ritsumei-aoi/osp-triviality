@@ -37,14 +37,21 @@ re-transcribed here: they are the frozen, accepted `GammaBetaN`/`fBetaN`.
 
 | manuscript | lines | Lean |
 |---|---|---|
-| `R = P + kappa P`, `kappa^2 = 0`, `kappa` odd, `R` supercommutative | 57-62 | the `RBasis n = IndexedBasis n x Bool`/`RMod n` model; `true` is the `kappa` slot |
+| `R = P + kappa P`, `kappa^2 = 0`, `kappa` odd, `R` supercommutative | 57-62 | the `RBasis n =
+IndexedBasis n x Bool`/`RMod n` model; `true` is the `kappa` slot |
 | coefficients written on the left | 63 | `eR`, `bracketRBasis`'s four-row table below |
-| `eq:scalar-rule`: `[rX,sY]_0 = (-1)^{p(X)p(s)} rs [X,Y]_0` | 205-206 | `bracketRBasis`'s rows 2/3: sign `gsignN n (parity i) 1` when the RIGHT slot carries `kappa`, unsigned when the LEFT slot does |
-| `eq:deformed-bracket`: `[X,Y]_beta = [X,Y]_0 + kappa Gamma_beta(X,Y)` | 216-217 | `bracketRBetaBasis`'s row 1 (`bracketRBasis`'s row 1 plus `kappaEmbed (GammaBetaBasis n i j)`) |
-| `g_R = g_P + kappa g_P`; no `kappa`-injectivity claimed | 270-272 | `iotaR`/`kappaEmbed` decomposition (`decompose`); `kappaMulR_not_injective` (K0c) |
-| `(f_beta)_R(rX) = (-1)^{p(r)} r f_beta(X)` | 298-299 | `fBetaR`; `fBetaR_iotaR` (`r=1`) and `fBetaR_kappaEmbed` (`r=kappa`, sign `-1`) both proved, not assumed |
-| `eq:splitting`: `T_beta = id + kappa (f_beta)_R`, `T_beta^{-1} = id - kappa (f_beta)_R` | 300-302 | `TBeta`, `TBetaInv`, literal; `TBetaInv_TBeta`/`TBeta_TBetaInv` exact |
-| `eq:intertwining`: `[T_beta X, T_beta Y]_0 = T_beta([X,Y]_beta)` | 305-306 | `intertwining_basis` (basis level, cites `G4`), `intertwining` (arbitrary elements, unconditional) |
+| `eq:scalar-rule`: `[rX,sY]_0 = (-1)^{p(X)p(s)} rs [X,Y]_0` | 205-206 | `bracketRBasis`'s rows 2/3:
+sign `gsignN n (parity i) 1` when the RIGHT slot carries `kappa`, unsigned when the LEFT slot does |
+| `eq:deformed-bracket`: `[X,Y]_beta = [X,Y]_0 + kappa Gamma_beta(X,Y)` | 216-217 |
+`bracketRBetaBasis`'s row 1 (`bracketRBasis`'s row 1 plus `kappaEmbed (GammaBetaBasis n i j)`) |
+| `g_R = g_P + kappa g_P`; no `kappa`-injectivity claimed | 270-272 | `iotaR`/`kappaEmbed`
+decomposition (`decompose`); `kappaMulR_not_injective` (K0c) |
+| `(f_beta)_R(rX) = (-1)^{p(r)} r f_beta(X)` | 298-299 | `fBetaR`; `fBetaR_iotaR` (`r=1`) and
+`fBetaR_kappaEmbed` (`r=kappa`, sign `-1`) both proved, not assumed |
+| `eq:splitting`: `T_beta = id + kappa (f_beta)_R`, `T_beta^{-1} = id - kappa (f_beta)_R` | 300-302
+| `TBeta`, `TBetaInv`, literal; `TBetaInv_TBeta`/`TBeta_TBetaInv` exact |
+| `eq:intertwining`: `[T_beta X, T_beta Y]_0 = T_beta([X,Y]_beta)` | 305-306 | `intertwining_basis`
+(basis level, cites `G4`), `intertwining` (arbitrary elements, unconditional) |
 
 **Two named hazards, both resolved by direct computation, not by tuning
 towards the target.** (i) `eq:scalar-rule`'s sign depends on the LEFT
@@ -118,7 +125,8 @@ noncomputable def eR {n : ℕ} (b : RBasis n) : RMod n := fun k => if k = b then
 noncomputable def iotaR {n : ℕ} (x : IndexedMod n) : RMod n := fun p => if p.2 then 0 else x p.1
 
 /-- Embeds `x` scaled by `kappa`, directly into the `true` slot. -/
-noncomputable def kappaEmbed {n : ℕ} (x : IndexedMod n) : RMod n := fun p => if p.2 then x p.1 else 0
+noncomputable def kappaEmbed {n : ℕ} (x : IndexedMod n) : RMod n := fun p => if p.2
+  then x p.1 else 0
 
 /-- The `false`-slot coordinate function of an `R`-module element. -/
 def falsePart {n : ℕ} (r : RMod n) : IndexedMod n := fun i => r (i, false)
@@ -187,7 +195,8 @@ theorem iotaR_ne_zero_iff {n : ℕ} (x : IndexedMod n) : iotaR x ≠ 0 ↔ x ≠
     simpa [iotaR] using h2
 
 /-- `kappa`-multiplication on `g_R`: `kappa * (x0 + kappa x1) = kappa x0`. -/
-noncomputable def kappaMulR {n : ℕ} (r : RMod n) : RMod n := fun p => if p.2 then r (p.1, false) else 0
+noncomputable def kappaMulR {n : ℕ} (r : RMod n) : RMod n := fun p => if p.2 then r
+  (p.1, false) else 0
 
 theorem kappaMulR_eq {n : ℕ} (r : RMod n) : kappaMulR r = kappaEmbed (falsePart r) := by
   funext p; rcases p with ⟨i, b⟩; cases b <;> simp [kappaMulR, kappaEmbed, falsePart]
@@ -213,7 +222,7 @@ theorem kappaMulR_not_injective (n : ℕ) (hn : 0 < n) :
     | true =>
       have hc : ((i, false) : RBasis n) ≠ (Fof v, true) :=
         fun h => Bool.false_ne_true (congrArg Prod.snd h)
-      show eR (Fof v, true) (i, false) = kappaMulR (0 : RMod n) (i, true)
+      change eR (Fof v, true) (i, false) = kappaMulR (0 : RMod n) (i, true)
       simp [eR, kappaMulR, hc]
   have := hinj key
   have hne : (eR (n := n) (Fof v, true)) ≠ (0 : RMod n) := by
@@ -342,7 +351,8 @@ theorem bracketR_iotaR_iotaR (n : ℕ) (x y : IndexedMod n) :
   rw [h1, zero_add]
   apply Finset.sum_congr rfl; intro j _
   rw [sum_bool_eq]
-  have h2 : (iotaR x (i, false) * iotaR y (j, true)) • bracketRBasis n (i, false) (j, true) = 0 := by
+  have h2 : (iotaR x (i, false) * iotaR y (j, true)) • bracketRBasis n (i, false)
+    (j, true) = 0 := by
     simp [iotaR]
   rw [h2, zero_add]
   simp [iotaR, bracketRBasis]
@@ -370,10 +380,12 @@ theorem gsignN_succ_left_mul (n : ℕ) (p q : ZMod 2) :
     subst hp <;> subst hq <;>
     simp [e01, e11, gsignN_00, gsignN_01, gsignN_10, gsignN_11]
 
-@[simp] theorem parityR_false {n : ℕ} (i : IndexedBasis n) : parityR ((i, false) : RBasis n) = parity i := by
+@[simp] theorem parityR_false {n : ℕ} (i : IndexedBasis n) : parityR ((i, false) : RBasis n)
+  = parity i := by
   unfold parityR; simp
 
-@[simp] theorem parityR_true {n : ℕ} (i : IndexedBasis n) : parityR ((i, true) : RBasis n) = parity i + 1 := by
+@[simp] theorem parityR_true {n : ℕ} (i : IndexedBasis n) : parityR ((i, true) : RBasis n) =
+  parity i + 1 := by
   unfold parityR; simp
 
 /-- **K1c**: super-skew symmetry for `bracketRBasis`, over all four sectors
@@ -453,7 +465,8 @@ noncomputable def fBetaR (n : ℕ) (r : RMod n) : RMod n :=
 theorem fBetaR_iotaR (n : ℕ) (x : IndexedMod n) : fBetaR n (iotaR x) = iotaR (fBetaN n x) := by
   unfold fBetaR
   rw [falsePart_iotaR, truePart_iotaR, fBetaN_zero, neg_zero]
-  have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := by funext p; rcases p with ⟨i, b⟩; cases b <;> simp [kappaEmbed]
+  have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := by funext p; rcases p with ⟨i, b⟩; cases b
+    <;> simp [kappaEmbed]
   rw [this, add_zero]
 
 /-- **K2**: `(f_beta)_R(kappa X) = -kappa f_beta(X)` -- not assumed, proved. -/
@@ -471,7 +484,8 @@ theorem fBetaR_add (n : ℕ) (r1 r2 : RMod n) : fBetaR n (r1 + r2) = fBetaR n r1
 
 theorem fBetaR_smul (n : ℕ) (c : Pn n) (r : RMod n) : fBetaR n (c • r) = c • fBetaR n r := by
   unfold fBetaR
-  rw [falsePart_smul, truePart_smul, fBetaN_smul, fBetaN_smul, iotaR_smul, ← neg_smul, kappaEmbed_smul, smul_add]
+  rw [falsePart_smul, truePart_smul, fBetaN_smul, fBetaN_smul, iotaR_smul, ← neg_smul,
+    kappaEmbed_smul, smul_add]
   congr 1
   funext p; rcases p with ⟨i, b⟩; cases b <;> simp [kappaEmbed]
 
@@ -503,7 +517,8 @@ theorem TBeta_eq (n : ℕ) (r : RMod n) : TBeta n r = r + kappaEmbed (fBetaN n (
   unfold TBeta fBetaR
   rw [kappaMulR_add, kappaMulR_iotaR, kappaMulR_kappaEmbed, add_zero]
 
-theorem TBetaInv_eq (n : ℕ) (r : RMod n) : TBetaInv n r = r - kappaEmbed (fBetaN n (falsePart r)) := by
+theorem TBetaInv_eq (n : ℕ) (r : RMod n) : TBetaInv n r = r - kappaEmbed
+  (fBetaN n (falsePart r)) := by
   unfold TBetaInv fBetaR
   rw [kappaMulR_add, kappaMulR_iotaR, kappaMulR_kappaEmbed, add_zero]
 
@@ -511,7 +526,8 @@ theorem falsePart_TBeta (n : ℕ) (r : RMod n) : falsePart (TBeta n r) = falsePa
   rw [TBeta_eq, falsePart_add, falsePart_kappaEmbed, add_zero]
 
 theorem falsePart_TBetaInv (n : ℕ) (r : RMod n) : falsePart (TBetaInv n r) = falsePart r := by
-  rw [TBetaInv_eq, sub_eq_add_neg, falsePart_add, falsePart_neg, falsePart_kappaEmbed, neg_zero, add_zero]
+  rw [TBetaInv_eq, sub_eq_add_neg, falsePart_add, falsePart_neg, falsePart_kappaEmbed,
+    neg_zero, add_zero]
 
 /-- **K3**: `T_beta` and `T_beta^{-1}` are mutually inverse, exactly, with
 no truncation -- `eq:splitting`. -/
@@ -613,7 +629,8 @@ theorem kappaEmbed_sum {n : ℕ} {ι : Type*} (s : Finset ι) (f : ι → Indexe
   | empty => simp [kappaEmbed_zero]
   | @insert a s ha ih => rw [Finset.sum_insert ha, kappaEmbed_add, ih, Finset.sum_insert ha]
 
-theorem kappaEmbed_sum_smul {n : ℕ} {ι : Type*} (s : Finset ι) (c : ι → Pn n) (f : ι → IndexedMod n) :
+theorem kappaEmbed_sum_smul {n : ℕ} {ι : Type*} (s : Finset ι) (c : ι → Pn n)
+  (f : ι → IndexedMod n) :
     kappaEmbed (∑ i ∈ s, c i • f i) = ∑ i ∈ s, c i • kappaEmbed (f i) := by
   classical
   induction s using Finset.induction with
@@ -624,9 +641,11 @@ theorem kappaEmbed_sum_smul {n : ℕ} {ι : Type*} (s : Finset ι) (c : ι → P
 /-- **K4**: on the image of `g_P -> g_R`, `bracketRBeta` restricts exactly
 to `bracketN + kappa GammaBetaN`. -/
 theorem bracketRBeta_iotaR_iotaR (n : ℕ) (x y : IndexedMod n) :
-    bracketRBeta n (iotaR x) (iotaR y) = iotaR (bracketN n x y) + kappaEmbed (GammaBetaN n x y) := by
+    bracketRBeta n (iotaR x) (iotaR y) = iotaR (bracketN n x y) + kappaEmbed
+      (GammaBetaN n x y) := by
   have hlhs : bracketRBeta n (iotaR x) (iotaR y)
-      = ∑ i : IndexedBasis n, ∑ j : IndexedBasis n, (x i * y j) • bracketRBetaBasis n (i, false) (j, false) := by
+      = ∑ i : IndexedBasis n, ∑ j : IndexedBasis n, (x i * y j) • bracketRBetaBasis n (i, false)
+        (j, false) := by
     unfold bracketRBeta
     simp only [Fintype.sum_prod_type]
     apply Finset.sum_congr rfl; intro i _
@@ -638,14 +657,16 @@ theorem bracketRBeta_iotaR_iotaR (n : ℕ) (x y : IndexedMod n) :
     rw [h1, zero_add]
     apply Finset.sum_congr rfl; intro j _
     rw [sum_bool_eq]
-    have h2 : (iotaR x (i, false) * iotaR y (j, true)) • bracketRBetaBasis n (i, false) (j, true) = 0 := by
+    have h2 : (iotaR x (i, false) * iotaR y (j, true)) • bracketRBetaBasis n (i, false)
+      (j, true) = 0 := by
       simp [iotaR]
     rw [h2, zero_add]
     simp [iotaR]
   rw [hlhs]
   unfold bracketRBetaBasis
   simp only [smul_add]
-  rw [Finset.sum_congr rfl (fun i _ => Finset.sum_add_distrib (s := (Finset.univ : Finset (IndexedBasis n)))
+  rw [Finset.sum_congr rfl
+    (fun i _ => Finset.sum_add_distrib (s := (Finset.univ : Finset (IndexedBasis n)))
       (f := fun j => (x i * y j) • iotaR (bracketBasisN n i j))
       (g := fun j => (x i * y j) • kappaEmbed (GammaBetaBasis n i j)))]
   rw [Finset.sum_add_distrib]
@@ -725,7 +746,7 @@ theorem bracketR_eR_false_kappaEmbed (n : ℕ) (i : IndexedBasis n) (y : Indexed
     have h1 : (kappaEmbed y (k, false)) • bracketRBasis n (i, false) (k, false) = 0 := by
       simp [kappaEmbed]
     rw [h1, add_zero]
-    show (kappaEmbed y (k, true)) • bracketRBasis n (i, false) (k, true)
+    change (kappaEmbed y (k, true)) • bracketRBasis n (i, false) (k, true)
       = (y k) • kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i k)
     simp [kappaEmbed, bracketRBasis]
   rw [hlhs, bracketN_eN_left_eq_sum, Finset.smul_sum, kappaEmbed_sum_smul]
@@ -734,12 +755,16 @@ theorem bracketR_eR_false_kappaEmbed (n : ℕ) (i : IndexedBasis n) (y : Indexed
   congr 1
   ring
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem bracketR_sum_left' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → RMod n)
     (y : RMod n) : bracketR n (∑ i ∈ s, f i) y = ∑ i ∈ s, bracketR n (f i) y := by
   induction s using Finset.induction with
   | empty => simp [bracketR_zero_left]
   | @insert a s ha ih => rw [Finset.sum_insert ha, bracketR_add_left, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem bracketR_sum_right' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → RMod n)
     (x : RMod n) : bracketR n x (∑ i ∈ s, f i) = ∑ i ∈ s, bracketR n x (f i) := by
   induction s using Finset.induction with
@@ -749,7 +774,8 @@ theorem bracketR_sum_right' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset 
 theorem bracketR_kappaEmbed_eR_false (n : ℕ) (y : IndexedMod n) (j : IndexedBasis n) :
     bracketR n (kappaEmbed y) (eR ((j, false) : RBasis n)) = kappaEmbed (bracketN n y (eN j)) := by
   rw [kappaEmbed_eq_sum, bracketR_sum_left']
-  have : ∀ k : IndexedBasis n, bracketR n (y k • eR ((k, true) : RBasis n)) (eR ((j, false) : RBasis n))
+  have : ∀ k : IndexedBasis n, bracketR n (y k • eR ((k, true) : RBasis n))
+    (eR ((j, false) : RBasis n))
       = y k • kappaEmbed (bracketBasisN n k j) := by
     intro k
     rw [bracketR_smul_left, bracketR_eR_eR]
@@ -792,7 +818,8 @@ theorem falsePart_eR_true (n : ℕ) (i : IndexedBasis n) :
 /-- `T_beta` on a `g_P` coordinate basis vector: `eq:primitive`'s `f_beta`
 enters exactly here. -/
 theorem TBeta_eR_false (n : ℕ) (i : IndexedBasis n) :
-    TBeta n (eR ((i, false) : RBasis n)) = eR ((i, false) : RBasis n) + kappaEmbed (fBetaBasis n i) := by
+    TBeta n (eR ((i, false) : RBasis n)) = eR ((i, false) : RBasis n) + kappaEmbed
+      (fBetaBasis n i) := by
   rw [TBeta_eq, falsePart_eR_false, fBetaN_eN]
 
 /-- `T_beta` fixes any `kappa`-basis vector exactly. -/
@@ -820,7 +847,8 @@ theorem intertwining_basis (n : ℕ) (p q : RBasis n) :
     set A := gsignN n (parity i) 1 • bracketN n (eN i) (fBetaBasis n j) with hA
     set B := bracketN n (fBetaBasis n i) (eN j) with hB
     -- LHS is now `iotaR (bracketBasisN n i j) + kappaEmbed A + kappaEmbed B`.
-    have hfix : TBeta n (kappaEmbed (GammaBetaBasis n i j)) = kappaEmbed (GammaBetaBasis n i j) := by
+    have hfix : TBeta n (kappaEmbed (GammaBetaBasis n i j)) = kappaEmbed
+      (GammaBetaBasis n i j) := by
       rw [TBeta_eq, falsePart_kappaEmbed, fBetaN_zero, kappaEmbed_zero, add_zero]
     simp only [bracketRBetaBasis]
     rw [TBeta_add, TBeta_eq, falsePart_iotaR, hfix]
@@ -840,28 +868,30 @@ theorem intertwining_basis (n : ℕ) (p q : RBasis n) :
       _ = iotaR (bracketBasisN n i j) + kappaEmbed Z + kappaEmbed (B + A - Z) := by abel
   · -- (i,false),(j,true)
     rw [TBeta_eR_false, TBeta_eR_true, bracketRBeta_eR_eR]
-    show bracketR n (eR ((i, false) : RBasis n) + kappaEmbed (fBetaBasis n i)) (eR ((j, true) : RBasis n))
+    show bracketR n (eR ((i, false) : RBasis n) + kappaEmbed (fBetaBasis n i))
+      (eR ((j, true) : RBasis n))
       = TBeta n (bracketRBetaBasis n (i, false) (j, true))
     rw [bracketR_add_left, bracketR_eR_eR, bracketR_kappaEmbed_eR_true, add_zero]
     show bracketRBasis n (i, false) (j, true) = TBeta n (bracketRBetaBasis n (i, false) (j, true))
-    show kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j)
+    change kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j)
       = TBeta n (kappaEmbed (gsignN n (parity i) 1 • bracketBasisN n i j))
     rw [TBeta_eq, falsePart_kappaEmbed, fBetaN_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
     rw [this, add_zero]
   · -- (i,true),(j,false)
     rw [TBeta_eR_true, TBeta_eR_false, bracketRBeta_eR_eR]
-    show bracketR n (eR ((i, true) : RBasis n)) (eR ((j, false) : RBasis n) + kappaEmbed (fBetaBasis n j))
+    show bracketR n (eR ((i, true) : RBasis n))
+      (eR ((j, false) : RBasis n) + kappaEmbed (fBetaBasis n j))
       = TBeta n (bracketRBetaBasis n (i, true) (j, false))
     rw [bracketR_add_right, bracketR_eR_eR, bracketR_eR_true_kappaEmbed, add_zero]
     show bracketRBasis n (i, true) (j, false) = TBeta n (bracketRBetaBasis n (i, true) (j, false))
-    show kappaEmbed (bracketBasisN n i j) = TBeta n (kappaEmbed (bracketBasisN n i j))
+    change kappaEmbed (bracketBasisN n i j) = TBeta n (kappaEmbed (bracketBasisN n i j))
     rw [TBeta_eq, falsePart_kappaEmbed, fBetaN_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
     rw [this, add_zero]
   · -- (i,true),(j,true)
     rw [TBeta_eR_true, TBeta_eR_true, bracketRBeta_eR_eR, bracketR_eR_eR]
-    show (0 : RMod n) = TBeta n (0 : RMod n)
+    change (0 : RMod n) = TBeta n (0 : RMod n)
     have hfp0 : falsePart (0 : RMod n) = 0 := by funext k; simp [falsePart]
     rw [TBeta_eq, hfp0, fBetaN_zero]
     have : kappaEmbed (0 : IndexedMod n) = (0 : RMod n) := kappaEmbed_zero n
@@ -882,7 +912,10 @@ theorem TBeta_zero (n : ℕ) : TBeta n (0 : RMod n) = 0 := by
   have hfp0 : falsePart (0 : RMod n) = 0 := by funext k; simp [falsePart]
   rw [TBeta_eq, hfp0, fBetaN_zero, kappaEmbed_zero, add_zero]
 
-theorem TBeta_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n) (f : ι → RMod n) :
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
+theorem TBeta_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n)
+  (f : ι → RMod n) :
     TBeta n (∑ i ∈ s, c i • f i) = ∑ i ∈ s, c i • TBeta n (f i) := by
   classical
   induction s using Finset.induction with
@@ -890,6 +923,8 @@ theorem TBeta_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : 
   | @insert a s ha ih =>
     rw [Finset.sum_insert ha, TBeta_add, TBeta_smul, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem bracketR_sum_left'' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n)
     (f : ι → RMod n) (y : RMod n) :
     bracketR n (∑ i ∈ s, c i • f i) y = ∑ i ∈ s, c i • bracketR n (f i) y := by
@@ -899,6 +934,8 @@ theorem bracketR_sum_left'' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset 
   | @insert a s ha ih =>
     rw [Finset.sum_insert ha, bracketR_add_left, bracketR_smul_left, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem bracketR_sum_right'' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Pn n)
     (f : ι → RMod n) (x : RMod n) :
     bracketR n x (∑ i ∈ s, c i • f i) = ∑ i ∈ s, c i • bracketR n x (f i) := by
@@ -908,6 +945,8 @@ theorem bracketR_sum_right'' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset
   | @insert a s ha ih =>
     rw [Finset.sum_insert ha, bracketR_add_right, bracketR_smul_right, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem TBeta_sum {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → RMod n) :
     TBeta n (∑ i ∈ s, f i) = ∑ i ∈ s, TBeta n (f i) := by
   classical
@@ -924,7 +963,8 @@ to `intertwining_basis` pointwise via two nested `Finset.sum_congr`s. -/
 theorem intertwining (n : ℕ) (x y : RMod n) :
     bracketR n (TBeta n x) (TBeta n y) = TBeta n (bracketRBeta n x y) := by
   have hLHS : bracketR n (TBeta n x) (TBeta n y)
-      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (TBeta n (eR p)) (TBeta n (eR q)) := by
+      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (TBeta n (eR p))
+        (TBeta n (eR q)) := by
     conv_lhs => rw [eR_decompose n x, eR_decompose n y]
     rw [TBeta_sum', TBeta_sum', bracketR_sum_left'']
     apply Finset.sum_congr rfl; intro p _
@@ -932,7 +972,8 @@ theorem intertwining (n : ℕ) (x y : RMod n) :
     apply Finset.sum_congr rfl; intro q _
     rw [smul_smul]
   have hRHS : TBeta n (bracketRBeta n x y)
-      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (TBeta n (eR p)) (TBeta n (eR q)) := by
+      = ∑ p : RBasis n, ∑ q : RBasis n, (x p * y q) • bracketR n (TBeta n (eR p))
+        (TBeta n (eR q)) := by
     unfold bracketRBeta
     rw [TBeta_sum]
     apply Finset.sum_congr rfl; intro p _
