@@ -210,13 +210,15 @@ theorem AB_decompose_R_lin_tmul (n : ℕ) (i : ZMod 2) (r : RGradingQ n i) (x : 
         ⟨(r : RRing n) ᵍ⊗ₜ[ℚ] x, ABGradingR_mem_of_tmul n i r x⟩ :=
   AB_decompose_R_lin_tmul_coe n i r x
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.show false in
 noncomputable instance ABDecompositionR (n : ℕ) : DirectSum.Decomposition (ABGradingR n) :=
   DirectSum.Decomposition.ofLinearMap (ABGradingR n)
     (AB_decompose_R_lin n)
     (by
       apply TensorProduct.ext'
       intro r x
-      change (DirectSum.coeLinearMap (ABGradingR n)) ((AB_decompose_R_lin n) (r ⊗ₜ x)) = r ⊗ₜ x
+      show (DirectSum.coeLinearMap (ABGradingR n)) ((AB_decompose_R_lin n) (r ⊗ₜ x)) = r ⊗ₜ x
       have key :
           ((DirectSum.coeLinearMap (ABGradingR n) ∘ₗ AB_decompose_R_lin n).comp
               ((TensorProduct.mk ℚ (RRing n) (A0 n)).flip x)).comp
@@ -226,7 +228,7 @@ noncomputable instance ABDecompositionR (n : ℕ) : DirectSum.Decomposition (ABG
         apply DirectSum.linearMap_ext ℚ
         intro i
         apply LinearMap.ext; intro y
-        change (DirectSum.coeLinearMap (ABGradingR n))
+        show (DirectSum.coeLinearMap (ABGradingR n))
             ((AB_decompose_R_lin n) (((DirectSum.decomposeLinearEquiv (RGradingQ n)).symm
               (DirectSum.lof ℚ (ZMod 2) (fun j => RGradingQ n j) i y) : RRing n) ⊗ₜ[ℚ] x)) =
           ((DirectSum.decomposeLinearEquiv (RGradingQ n)).symm
@@ -235,8 +237,7 @@ noncomputable instance ABDecompositionR (n : ℕ) : DirectSum.Decomposition (ABG
           DirectSum.coeLinearMap_lof]
         rfl
       have := DFunLike.congr_fun key ((DirectSum.decomposeLinearEquiv (RGradingQ n)) r)
-      change (DirectSum.coeLinearMap (ABGradingR n)) ((AB_decompose_R_lin n) (r ⊗ₜ[ℚ] x))
-          = r ⊗ₜ[ℚ] x
+      show (DirectSum.coeLinearMap (ABGradingR n)) ((AB_decompose_R_lin n) (r ⊗ₜ[ℚ] x)) = r ⊗ₜ[ℚ] x
       rw [show r = (DirectSum.decomposeLinearEquiv (RGradingQ n)).symm
         ((DirectSum.decomposeLinearEquiv (RGradingQ n)) r) from
         (LinearEquiv.symm_apply_apply _ r).symm]
@@ -256,7 +257,7 @@ noncomputable instance ABDecompositionR (n : ℕ) : DirectSum.Decomposition (ABG
             (LinearMap.rangeRestrict (ABGradingRMap n i)) := by
         apply TensorProduct.ext'
         intro r x
-        change AB_decompose_R_lin n (ABGradingRMap n i (r ⊗ₜ x)) = _
+        show AB_decompose_R_lin n (ABGradingRMap n i (r ⊗ₜ x)) = _
         rw [ABGradingRMap_tmul, AB_decompose_R_lin_tmul_coe]
         rfl
       exact DFunLike.congr_fun key y)

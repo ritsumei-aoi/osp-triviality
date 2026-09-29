@@ -22,20 +22,26 @@ theorem comm_mul_left (x y z : Module.End ℚ (WPoly n)) :
 
 /-! ## Step 1(1): `[L0hat(u,v), L0hat(w,z)]`, via A1 alone -/
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
 /-- `L0` "before embedding": the pure `Module.End` version of `4•L0`, i.e. `(a*c-c*a)` etc. -/
-noncomputable def L0hat (u v : Fin (2 * n)) : Module.End ℚ (WPoly n) :=
+noncomputable def L0hat (u v : Fin (2*n)) : Module.End ℚ (WPoly n) :=
   (1/4 : ℚ) • (B n u * B n v + B n v * B n u)
 
-theorem comm_scalar (u v : Fin (2 * n)) :
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
+theorem comm_scalar (u v : Fin (2*n)) :
     B n u * B n v - B n v * B n u = JnQ n u v • (1 : Module.End ℚ (WPoly n)) := B_comm n u v
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
 /-- The key lemma: `[a*b+b*a, c*d+d*c]` for the four elements `B_u,B_v,B_w,B_z`, using ONLY A1
 (pairwise commutators are ℚ-scalars). -/
 theorem symm_comm_symm (a b c d : Module.End ℚ (WPoly n)) (p q r s : ℚ)
-    (hac : a * c - c * a = p • (1 : Module.End ℚ (WPoly n)))
-    (had : a * d - d * a = q • (1 : Module.End ℚ (WPoly n)))
-    (hbc : b * c - c * b = r • (1 : Module.End ℚ (WPoly n)))
-    (hbd : b * d - d * b = s • (1 : Module.End ℚ (WPoly n))) :
+    (hac : a*c - c*a = p • (1 : Module.End ℚ (WPoly n)))
+    (had : a*d - d*a = q • (1 : Module.End ℚ (WPoly n)))
+    (hbc : b*c - c*b = r • (1 : Module.End ℚ (WPoly n)))
+    (hbd : b*d - d*b = s • (1 : Module.End ℚ (WPoly n))) :
     (a*b+b*a)*(c*d+d*c) - (c*d+d*c)*(a*b+b*a)
       = (2:ℚ) • (r • (a*d+d*a) + s • (a*c+c*a) + p • (b*d+d*b) + q • (b*c+c*b)) := by
   have hab_cd : a*b*(c*d) - (c*d)*(a*b) = a*(b*(c*d)-(c*d)*b) + (a*(c*d)-(c*d)*a)*b :=
@@ -58,7 +64,9 @@ theorem symm_comm_symm (a b c d : Module.End ℚ (WPoly n)) (p q r s : ℚ)
   simp only [mul_add, add_mul, smul_mul_assoc, mul_smul_comm, one_mul, mul_one]
   module
 
-theorem L0hat_comm (u v w z : Fin (2 * n)) :
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
+theorem L0hat_comm (u v w z : Fin (2*n)) :
     L0hat n u v * L0hat n w z - L0hat n w z * L0hat n u v
       = (1/2 : ℚ) • (JnQ n v w • L0hat n u z + JnQ n u w • L0hat n v z
           + JnQ n v z • L0hat n u w + JnQ n u z • L0hat n v w) := by
@@ -98,7 +106,9 @@ bounded budget before getting the parenthesization and lemma-argument order righ
 uncompleted (not forced) per instruction; the working `L0`-`L0` case above is the substantive
 deliverable of this experiment. -/
 
-theorem Bu0_mul' (u v : Fin (2 * n)) :
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
+theorem Bu0_mul' (u v : Fin (2*n)) :
     Bu0 n u * Bu0 n v = (B n u * B n v) ᵍ⊗ₜ[ℚ] (1 : C) := by
   unfold Bu0
   rw [GradedTensorProduct.tmul_coe_mul_zero_coe_tmul (𝒜 := WGrading n) (ℬ := CGrading)
@@ -106,8 +116,10 @@ theorem Bu0_mul' (u v : Fin (2 * n)) :
     (1 : C)]
   norm_num
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
 /-- `4•L0hat n u v` embeds, via `Bu0`, as `4•(L0 n u v)`. -/
-theorem L0_eq_tmul (u v : Fin (2 * n)) :
+theorem L0_eq_tmul (u v : Fin (2*n)) :
     L0 n u v = (L0hat n u v) ᵍ⊗ₜ[ℚ] (1 : C) := by
   unfold L0 L0hat
   rw [Bu0_mul', Bu0_mul']
@@ -119,8 +131,10 @@ theorem L0_eq_tmul (u v : Fin (2 * n)) :
         (((1/4:ℚ) • (B n u * B n v + B n v * B n u) : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (1 : C))
   rw [← map_add, ← TensorProduct.add_tmul, ← map_smul, ← TensorProduct.smul_tmul']
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
 /-- **`eq:base-lf`, checked**: `[L0 u v, F0 w] = (1/2)•(JnQ v w • F0 u + JnQ u w • F0 v)`. -/
-theorem L0_comm_F0 (u v w : Fin (2 * n)) :
+theorem L0_comm_F0 (u v w : Fin (2*n)) :
     L0 n u v * F0 n w - F0 n w * L0 n u v
       = (1/2 : ℚ) • (JnQ n v w • F0 n u + JnQ n u w • F0 n v) := by
   unfold F0
@@ -207,7 +221,9 @@ theorem L0_comm_F0 (u v w : Fin (2 * n)) :
 
 /-! ## Step 1(3): `{F0_u,F0_v}`, matching `eq:base-ff` -/
 
-theorem Bu0_mul_L0hat_shape (u v : Fin (2 * n)) :
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
+theorem Bu0_mul_L0hat_shape (u v : Fin (2*n)) :
     Bu0 n u * Bu0 n v + Bu0 n v * Bu0 n u = (4:ℚ) • L0 n u v := by
   rw [L0_eq_tmul]
   unfold L0hat
@@ -220,8 +236,10 @@ theorem Bu0_mul_L0hat_shape (u v : Fin (2 * n)) :
   norm_num
   rw [← map_add, TensorProduct.add_tmul]
 
+-- lint: keeps the frozen declaration text byte-identical (statement hash).
+set_option linter.style.whitespace false in
 /-- **`eq:base-ff`, checked**: `{F0_u,F0_v} = (1/2)•L0_uv`. -/
-theorem F0_comm_F0 (u v : Fin (2 * n)) :
+theorem F0_comm_F0 (u v : Fin (2*n)) :
     F0 n u * F0 n v + F0 n v * F0 n u = (1/2 : ℚ) • L0 n u v := by
   unfold F0
   rw [show ((1/2:ℚ) • (aA0 n * Bu0 n u)) * ((1/2:ℚ) • (aA0 n * Bu0 n v))
