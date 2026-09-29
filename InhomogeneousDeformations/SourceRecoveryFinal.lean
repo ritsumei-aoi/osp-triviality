@@ -47,13 +47,11 @@ theorem comm_mul_left_AB (n : ℕ) (x y z : AB n) :
   rw [mul_sub, sub_mul, mul_assoc, mul_assoc, mul_assoc]
   abel
 
--- the hypotheses keep the `a*c` spelling so the statement text stays unchanged (I116-1)
-set_option linter.style.whitespace false in
 theorem symm_comm_symm_AB (n : ℕ) (a b c d : AB n) (p q r s : ℚ)
-    (hac : a*c - c*a = p • (1 : AB n))
-    (had : a*d - d*a = q • (1 : AB n))
-    (hbc : b*c - c*b = r • (1 : AB n))
-    (hbd : b*d - d*b = s • (1 : AB n)) :
+    (hac : a * c - c * a = p • (1 : AB n))
+    (had : a * d - d * a = q • (1 : AB n))
+    (hbc : b * c - c * b = r • (1 : AB n))
+    (hbd : b * d - d * b = s • (1 : AB n)) :
     (a*b+b*a)*(c*d+d*c) - (c*d+d*c)*(a*b+b*a)
       = (2:ℚ) • (r • (a*d+d*a) + s • (a*c+c*a) + p • (b*d+d*b) + q • (b*c+c*b)) := by
   have hab_cd : a*b*(c*d) - (c*d)*(a*b) = a*(b*(c*d)-(c*d)*b) + (a*(c*d)-(c*d)*a)*b :=
