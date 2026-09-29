@@ -13,6 +13,7 @@ occurrence is reported below, field by field. No other transformation is
 performed: no sorting, no merging, no normalization, no computed bracket
 value, no assumed-success marker, no call to any other validator.
 """
+import argparse
 import hashlib
 import json
 import sys
@@ -82,7 +83,153 @@ def lean_row(entry: dict, idx: int, field_report: list) -> str:
     return f"{{ inputs := {inputs}, output := {output} : InhomogeneousDeformations.Wire.Row }}"
 
 
+LINE_LIMIT = 100
+_CLOSERS = {"[": "]", "{": "}", "(": ")"}
+
+
+def _parse_group(t: str, i: int):
+    """Parse the bracket group opening at t[i]; return ((open, close, items), next index)."""
+    op = t[i]
+    cl = _CLOSERS[op]
+    items, cur = [], []
+    i += 1
+    while True:
+        ch = t[i]
+        if ch == '"':
+            j = i + 1
+            while t[j] != '"':
+                j += 1
+            cur.append(t[i:j + 1])
+            i = j + 1
+            continue
+        if ch in _CLOSERS:
+            g, i = _parse_group(t, i)
+            cur.append(g)
+            continue
+        if ch == cl:
+            items.append(cur)
+            if op == "{":
+                if cur and isinstance(items[0][0], str) and items[0][0].startswith(" "):
+                    items[0][0] = items[0][0][1:]
+                if cur and isinstance(cur[-1], str) and cur[-1].endswith(" "):
+                    cur[-1] = cur[-1][:-1]
+            return (op, cl, items), i + 1
+        if ch == "," and t[i + 1] == " ":
+            items.append(cur)
+            cur = []
+            i += 2
+            continue
+        cur.append(ch)
+        i += 1
+
+
+def _sequence(t: str):
+    out, i, buf = [], 0, ""
+    while i < len(t):
+        ch = t[i]
+        if ch == '"':
+            j = i + 1
+            while t[j] != '"':
+                j += 1
+            buf += t[i:j + 1]
+            i = j + 1
+            continue
+        if ch in _CLOSERS:
+            if buf:
+                out.append(buf)
+                buf = ""
+            g, i = _parse_group(t, i)
+            out.append(g)
+            continue
+        buf += ch
+        i += 1
+    if buf:
+        out.append(buf)
+    return out
+
+
+def _flat(x) -> str:
+    if isinstance(x, str):
+        return x
+    if isinstance(x, list):
+        return "".join(_flat(y) for y in x)
+    op, cl, items = x
+    inner = ", ".join("".join(_flat(y) for y in it) for it in items)
+    return op + " " + inner + " " + cl if op == "{" else op + inner + cl
+
+
+def _render_seq(nodes, col):
+    lines, c = [""], col
+    for x in nodes:
+        if isinstance(x, str):
+            lines[-1] += x
+            c += len(x)
+        else:
+            f = _flat(x)
+            if c + len(f) <= LINE_LIMIT:
+                lines[-1] += f
+                c += len(f)
+            else:
+                sub = _render_group(x, c)
+                lines[-1] += sub[0]
+                lines.extend(sub[1:])
+                c = len(lines[-1]) if len(lines) > 1 else c
+    return lines
+
+
+def _render_group(g, col):
+    op, cl, items = g
+    ind = col + 2 if op == "{" else col + 1
+    head = op + " " if op == "{" else op
+    out = []
+    for k, it in enumerate(items):
+        sub = _render_seq(it, ind)
+        sub[0] = (head if k == 0 else " " * ind) + sub[0]
+        if k < len(items) - 1:
+            sub[-1] += ","
+        else:
+            sub[-1] += " " + cl if op == "{" else cl
+        out.extend(sub)
+    return out
+
+
+def wrap_long_lines(text: str) -> str:
+    """Re-wrap every line over LINE_LIMIT along its bracket structure (Lean is whitespace-
+    insensitive here), so that the generated file has 0 style-linter warnings; then break
+    what is left at ` : ` (type ascriptions). Only whitespace changes."""
+    res = []
+    for line in text.split("\n"):
+        if len(line) > LINE_LIMIT:
+            ind = len(line) - len(line.lstrip())
+            ls = _render_seq(_sequence(line[ind:]), ind)
+            res.append(" " * ind + ls[0])
+            res.extend(ls[1:])
+        else:
+            res.append(line)
+    out = []
+    for line in res:
+        if len(line) <= LINE_LIMIT:
+            out.append(line)
+            continue
+        ind = len(line) - len(line.lstrip())
+        parts = line.split(" : ")
+        cur = parts[0]
+        for q in parts[1:]:
+            piece = ": " + q
+            if len(cur) + 1 + len(piece) > LINE_LIMIT:
+                out.append(cur)
+                cur = " " * (ind + 2) + piece
+            else:
+                cur += " " + piece
+        out.append(cur)
+    return "\n".join(out)
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split(chr(10))[0])
+    ap.add_argument("--report", metavar="PATH", help="write the field-by-field report here (default: print it to stdout)")
+    args = ap.parse_args()
+
     raw_bytes = FIXTURE_PATH.read_bytes()
     actual_len = len(raw_bytes)
     actual_sha256 = hashlib.sha256(raw_bytes).hexdigest()
@@ -160,7 +307,7 @@ fixture identity ever legitimately changes. Every projected field, row,
 coefficient, exponent and explicit zero of the raw structure is preserved
 in the raw structure's own order; the ONE transformation performed is the
 declared string-numerator/denominator -> typed `ℤ` conversion (see the
-extractor's own field-by-field report, `evidence/.../extractor_field_report.txt`).
+extractor's own field-by-field report, printed by the script or written with `--report PATH`).
 -/
 
 namespace InhomogeneousDeformations
@@ -193,16 +340,15 @@ def fixtureRawInput : Decode.RawInput where
 end InhomogeneousDeformations
 """
 
-    OUT_PATH.write_text(lean_source, encoding="utf-8")
-
-    report_path = Path(__file__).resolve().parent.parent.parent / "evidence"
-    report_path.mkdir(parents=True, exist_ok=True)
-    (report_path / "extractor_field_report.txt").write_text(
-        "\n".join(field_report) + "\n", encoding="utf-8"
-    )
-
+    OUT_PATH.write_text(wrap_long_lines(lean_source), encoding="utf-8")
+    report = "\n".join(field_report) + "\n"
     print(f"OK: wrote {OUT_PATH} ({len(entries)} rows, {len(zero_rows)} zero rows)")
-    print(f"OK: field report at {report_path / 'extractor_field_report.txt'} ({len(field_report)} lines)")
+    if args.report:
+        Path(args.report).write_text(report, encoding="utf-8")
+        print(f"OK: field report at {args.report} ({len(field_report)} lines)")
+    else:
+        print("field report:")
+        print(report, end="")
     return 0
 
 

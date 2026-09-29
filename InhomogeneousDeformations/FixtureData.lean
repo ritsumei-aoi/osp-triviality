@@ -11,7 +11,7 @@ fixture identity ever legitimately changes. Every projected field, row,
 coefficient, exponent and explicit zero of the raw structure is preserved
 in the raw structure's own order; the ONE transformation performed is the
 declared string-numerator/denominator -> typed `ℤ` conversion (see the
-extractor's own field-by-field report, `evidence/.../extractor_field_report.txt`).
+extractor's own field-by-field report, printed by the script or written with `--report PATH`).
 -/
 
 namespace InhomogeneousDeformations
