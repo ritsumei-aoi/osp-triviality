@@ -139,7 +139,8 @@ def Row.pairIdx (declared : List String) (r : Row) : Option (ℕ × ℕ) :=
 lexicographic order -- the canonical "total coverage" pair list for a
 declared basis of size `len`, general in `len`. -/
 def canonicalPairs (len : ℕ) : List (ℕ × ℕ) :=
-  (List.range len).flatMap (fun p => (List.range len).filterMap (fun q => if p ≤ q then some (p, q) else none))
+  (List.range len).flatMap (fun p =>
+    (List.range len).filterMap (fun q => if p ≤ q then some (p, q) else none))
 
 /-- A raw canonical-pair-table operation definition is valid against a
 declared basis list exactly when its rows' declared-index pairs, read off
