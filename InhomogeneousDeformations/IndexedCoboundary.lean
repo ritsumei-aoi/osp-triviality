@@ -96,8 +96,10 @@ noncomputable def vN (n : ℕ) (t : Fin (2 * n)) : Pn n :=
 
 /-- The 0-based even/odd index pair for loop variable `j : Fin n`:
 `evenIdx n j = 2*j`, `oddIdx n j = 2*j+1`. -/
-noncomputable def evenIdx (n : ℕ) (j : Fin n) : Fin (2 * n) := ⟨2 * (j : ℕ), by have := j.isLt; omega⟩
-noncomputable def oddIdx (n : ℕ) (j : Fin n) : Fin (2 * n) := ⟨2 * (j : ℕ) + 1, by have := j.isLt; omega⟩
+noncomputable def evenIdx (n : ℕ) (j : Fin n) : Fin (2 * n) :=
+  ⟨2 * (j : ℕ), by have := j.isLt; omega⟩
+noncomputable def oddIdx (n : ℕ) (j : Fin n) : Fin (2 * n) :=
+  ⟨2 * (j : ℕ) + 1, by have := j.isLt; omega⟩
 
 theorem Jn_ne_zero_iff_partner (n : ℕ) (t u : Fin (2 * n)) (h : Jn n t u ≠ 0) :
     t = partnerN n u := by
@@ -131,7 +133,8 @@ theorem contraction_identity (n : ℕ) (u : Fin (2 * n)) :
         have hp : partnerN n (⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) = u := by
           apply Fin.ext
           unfold partnerN
-          rw [dif_neg (show ¬ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
+          rw [dif_neg
+            (show ¬ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ) % 2 = 0 by
             dsimp only; omega)]
           dsimp only; omega
         unfold vN
@@ -140,7 +143,8 @@ theorem contraction_identity (n : ℕ) (u : Fin (2 * n)) :
       have hj : Jn n (⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) u = -1 := by
         unfold Jn
         rw [if_neg (by dsimp only; omega),
-            if_pos (show (u : ℕ) % 2 = 0 ∧ ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ)
+            if_pos (show (u : ℕ) % 2 = 0 ∧
+              ((⟨(u : ℕ) + 1, by have := u.isLt; omega⟩ : Fin (2 * n)) : ℕ)
                 = (u : ℕ) + 1 from ⟨hu, by dsimp only⟩)]
         rw [show (-1 : ℚ) = -(1 : ℚ) from rfl, ← cratN_neg, cratN_one]
       rw [hv, hj]
@@ -209,7 +213,8 @@ on `F_u` (`H1` in `T`'s two hazards, converted from the manuscript's
 noncomputable def fBetaBasis (n : ℕ) : IndexedBasis n → IndexedMod n
   | .inl _ => 0
   | .inr u => ∑ j : Fin n,
-      (betaN n (evenIdx n j) • eN (Lof (oddIdx n j) u) - betaN n (oddIdx n j) • eN (Lof (evenIdx n j) u))
+      (betaN n (evenIdx n j) • eN (Lof (oddIdx n j) u) - betaN n (oddIdx n j) • eN
+        (Lof (evenIdx n j) u))
 
 /-- `G1`'s required transcription check: `eq:primitive`'s `sum_j` form
 agrees with the `thm:main` proof's `f_beta(F_u) = -sum_t v_t L_{tu}`
@@ -217,8 +222,9 @@ form. Proved via `sum_split_even_odd` plus the `partnerN` computation
 (never by deriving one form from the other). -/
 theorem fBetaBasis_alt_form (n : ℕ) (u : Fin (2 * n)) :
     fBetaBasis n (Fof u) = -∑ t : Fin (2 * n), vN n t • eN (Lof t u) := by
-  show (∑ j : Fin n,
-      (betaN n (evenIdx n j) • eN (Lof (oddIdx n j) u) - betaN n (oddIdx n j) • eN (Lof (evenIdx n j) u)))
+  change (∑ j : Fin n,
+      (betaN n (evenIdx n j) • eN (Lof (oddIdx n j) u) - betaN n (oddIdx n j) • eN
+        (Lof (evenIdx n j) u)))
     = -∑ t : Fin (2 * n), vN n t • eN (Lof t u)
   rw [sum_split_even_odd n (fun t => vN n t • eN (Lof t u))]
   rw [← Finset.sum_neg_distrib]
@@ -248,7 +254,7 @@ theorem fBetaBasis_degree (n : ℕ) (i k : IndexedBasis n) (h : fBetaBasis n i k
   | .inl _ => simp [fBetaBasis] at h
   | .inr u =>
     match k with
-    | .inl _ => simp [parity]; decide
+    | .inl _ => simp only [parity]; decide
     | .inr m => exfalso; apply h; simp [fBetaBasis]
 
 /-- `f_beta` extended `P`-linearly to all of `IndexedMod n`. -/
@@ -362,13 +368,18 @@ theorem bracketN_neg_left {n : ℕ} (x y : IndexedMod n) : bracketN n (-x) y = -
     rw [← bracketN_add_left, neg_add_cancel, bracketN_zero_left]
   exact eq_neg_of_add_eq_zero_left h1
 
-theorem bracketN_sum_right' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → IndexedMod n)
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
+theorem bracketN_sum_right' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι)
+  (f : ι → IndexedMod n)
     (x : IndexedMod n) :
     bracketN n x (∑ j ∈ s, f j) = ∑ j ∈ s, bracketN n x (f j) := by
   induction s using Finset.induction with
   | empty => simp [bracketN_zero_right]
   | @insert a s ha ih => rw [Finset.sum_insert ha, bracketN_add_right, ih, Finset.sum_insert ha]
 
+-- kept: the `[DecidableEq _]` argument is part of the fixed, published signature
+set_option linter.unusedDecidableInType false in
 theorem bracketN_sum_left' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (f : ι → IndexedMod n)
     (y : IndexedMod n) :
     bracketN n (∑ i ∈ s, f i) y = ∑ i ∈ s, bracketN n (f i) y := by
@@ -408,15 +419,15 @@ theorem GammaBetaBasis_degree0 {n : ℕ} (i j k : IndexedBasis n)
   | .inl ⟨(_, _), _⟩, .inr _ =>
     match k with
     | .inr _ => exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
-    | .inl _ => simp [parity]; decide
+    | .inl _ => simp only [parity]; decide
   | .inr _, .inl ⟨(_, _), _⟩ =>
     match k with
     | .inr _ => exfalso; apply h; simp [GammaBetaBasis, gammaLFn, eN_Lof_apply_inr]
-    | .inl _ => simp [parity]; decide
+    | .inl _ => simp only [parity]; decide
   | .inr _, .inr _ =>
     match k with
     | .inl _ => exfalso; apply h; simp [GammaBetaBasis, gammaFFn, Fof, eN]
-    | .inr _ => simp [parity]; decide
+    | .inr _ => simp only [parity]; decide
 
 /-! ## G3 -- the coboundary operator, for a general odd `P`-linear map `f` -/
 
@@ -482,7 +493,8 @@ theorem sum_vN_smul_Lof (n : ℕ) (a : Fin (2 * n)) :
 
 theorem sum_vN_mul_Jn_const_smul (n : ℕ) (s : Fin (2 * n)) (c : Pn n) (X : IndexedMod n) :
     ∑ t : Fin (2 * n), vN n t • ((c * Jn n s t) • X) = (c * -betaN n s) • X := by
-  have step1 : ∀ t : Fin (2 * n), vN n t • ((c * Jn n s t) • X) = (vN n t * (c * Jn n s t)) • X := by
+  have step1 : ∀ t : Fin (2 * n), vN n t • ((c * Jn n s t) • X) =
+    (vN n t * (c * Jn n s t)) • X := by
     intro t; rw [smul_smul]
   simp_rw [step1]
   rw [← Finset.sum_smul]
@@ -495,7 +507,8 @@ theorem sum_vN_mul_Jn_const_smul (n : ℕ) (s : Fin (2 * n)) (c : Pn n) (X : Ind
 
 theorem sum_vN_mul_Jn_const_smul' (n : ℕ) (s : Fin (2 * n)) (c : Pn n) (X : IndexedMod n) :
     ∑ t : Fin (2 * n), vN n t • ((c * Jn n t s) • X) = (c * betaN n s) • X := by
-  have step1 : ∀ t : Fin (2 * n), vN n t • ((c * Jn n t s) • X) = (vN n t * (c * Jn n t s)) • X := by
+  have step1 : ∀ t : Fin (2 * n), vN n t • ((c * Jn n t s) • X) =
+    (vN n t * (c * Jn n t s)) • X := by
     intro t; rw [smul_smul]
   simp_rw [step1]
   rw [← Finset.sum_smul]
@@ -541,7 +554,7 @@ theorem GammaBetaBasis_Lof_Fof (n : ℕ) (u v w : Fin (2 * n)) :
   · rcases lt_or_gt_of_ne hne with hlt | hgt
     · rw [Lof, dif_pos hlt.le]; rfl
     · rw [Lof, dif_neg (not_le.mpr hgt)]
-      show gammaLFn n v u w = gammaLFn n u v w
+      change gammaLFn n v u w = gammaLFn n u v w
       unfold gammaLFn; rw [add_comm]
 
 /-- **LF sector**: expanding `f_beta(F_w) = -sum_t v_t L_{tw}` through the
@@ -584,7 +597,7 @@ purely in the (`f_beta`-killed) even part -- as Agent1's hand analysis
 predicted. -/
 theorem G4_FF (n : ℕ) (u v : Fin (2 * n)) :
     GammaBetaBasis n (Fof u) (Fof v) = deltaFBasis n (fBetaN n) (Fof u) (Fof v) := by
-  show gammaFFn n u v = deltaFBasis n (fBetaN n) (Fof u) (Fof v)
+  change gammaFFn n u v = deltaFBasis n (fBetaN n) (Fof u) (Fof v)
   unfold deltaFBasis
   rw [parity_Fof, gsignN_11]
   rw [fBetaN_eN, fBetaBasis_alt_form, fBetaN_eN, fBetaBasis_alt_form]
@@ -628,7 +641,7 @@ theorem GammaBetaBasis_Fof_Lof (n : ℕ) (w u v : Fin (2 * n)) :
   · rcases lt_or_gt_of_ne hne with hlt | hgt
     · rw [Lof, dif_pos hlt.le]; rfl
     · rw [Lof, dif_neg (not_le.mpr hgt)]
-      show -gammaLFn n v u w = -gammaLFn n u v w
+      change -gammaLFn n v u w = -gammaLFn n u v w
       unfold gammaLFn; rw [add_comm]
 
 /-- **FL sector**: computed the same way as LF/LL's methods combined
@@ -666,7 +679,8 @@ theorem G4_FL (n : ℕ) (u v w : Fin (2 * n)) :
 
 /-! ## G4: assembled on all basis pairs -/
 
-theorem G4 (n : ℕ) (i j : IndexedBasis n) : GammaBetaBasis n i j = deltaFBasis n (fBetaN n) i j := by
+theorem G4 (n : ℕ) (i j : IndexedBasis n) : GammaBetaBasis n i j = deltaFBasis n
+  (fBetaN n) i j := by
   match i, j with
   | .inl ⟨(a, b), h1⟩, .inl ⟨(c, d), h2⟩ =>
       have e1 : (Sum.inl ⟨(a, b), h1⟩ : IndexedBasis n) = Lof a b := by rw [Lof, dif_pos h1]
@@ -697,6 +711,8 @@ theorem GammaBetaN_eq_deltaFN (n : ℕ) (x y : IndexedMod n) :
   apply Finset.sum_congr rfl; intro j _
   rw [G4 n i j]
 
+-- kept: the homogeneity hypotheses are part of the fixed statement
+set_option linter.unusedVariables false in
 theorem GammaBetaN_eq_deltaFN_homog (n : ℕ) (x y : IndexedMod n) (dx dy : ZMod 2)
     (hx : IsHomogN x dx) (hy : IsHomogN y dy) :
     GammaBetaN n x y = deltaFN n (fBetaN n) x y :=
