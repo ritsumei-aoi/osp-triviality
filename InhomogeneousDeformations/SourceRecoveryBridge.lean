@@ -52,12 +52,14 @@ theorem algebraMap_Jn (n : ℕ) (u v : Fin (2 * n)) :
   rw [Jn_eq_C_JnQ, ← MvPolynomial.algebraMap_eq,
       ← IsScalarTower.algebraMap_apply ℚ (Indexed.Pn n) (RRing n),
     Algebra.algebraMap_eq_smul_one]
+  rfl
 
 theorem algebraMap_cratN (n : ℕ) (q : ℚ) :
     algebraMap (Indexed.Pn n) (RRing n) (Indexed.cratN n q) = q • (1 : RRing n) := by
   unfold Indexed.cratN
   rw [← MvPolynomial.algebraMap_eq, ← IsScalarTower.algebraMap_apply ℚ (Indexed.Pn n) (RRing n),
     Algebra.algebraMap_eq_smul_one]
+  rfl
 
 /-! ## `iota0` : `Pn n`-linear extension of `iota0Basis`, landing in `A_B` -/
 
@@ -112,7 +114,7 @@ theorem iota0_eN (n : ℕ) (b : Indexed.IndexedBasis n) :
   · unfold Indexed.eN; simp
   · intro c _ hc
     unfold Indexed.eN
-    rw [if_neg hc]
+    rw [ite_eq_right hc]
     simp
   · intro h; exact absurd (Finset.mem_univ b) h
 
@@ -149,10 +151,13 @@ theorem AB_tmul_smul_left (n : ℕ) (c : ℚ) (r : RRing n) (x : A0 n) :
   change GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((c • r) ⊗ₜ[ℚ] x)
       = c • GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) (r ⊗ₜ[ℚ] x)
   rw [← map_smul, TensorProduct.smul_tmul']
+  rfl
 
 theorem algebraMap_cratN_half_mul_Jn (n : ℕ) (u v : Fin (2 * n)) :
     algebraMap (Indexed.Pn n) (RRing n) (Indexed.cratN n (1/2) * Indexed.Jn n u v)
       = ((1/2 : ℚ) * JnQ n u v) • (1 : RRing n) := by
+  have : IsScalarTower ℚ (RRing n) (RRing n) := IsScalarTower.right
+  have : SMulCommClass ℚ (RRing n) (RRing n) := Algebra.to_smulCommClass
   rw [map_mul, algebraMap_cratN, algebraMap_Jn, smul_mul_smul_comm, mul_one]
 
 /-! ## Lifting `L0hat_comm` to `A0 n`
@@ -207,9 +212,9 @@ theorem L0_comm (n : ℕ) (u v w z : Fin (2 * n)) :
 
 theorem iota0Basis_Lof (n : ℕ) (u v : Fin (2 * n)) : iota0Basis n (Indexed.Lof u v) = L0 n u v := by
   unfold Indexed.Lof
-  split
-  · rfl
-  · exact (L0_symm n u v).symm
+  by_cases h : u ≤ v
+  · simp only [h, ↓reduceDIte]; rfl
+  · simp only [h, ↓reduceDIte]; exact (L0_symm n u v).symm
 
 theorem iota0Basis_Fof (n : ℕ) (u : Fin (2 * n)) : iota0Basis n (Indexed.Fof u) = F0 n u := rfl
 
