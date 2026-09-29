@@ -96,8 +96,7 @@ theorem bracket_eq_oracle : ∀ i j : Basis5, bracket (e i) (e j) = oracleFull i
   rw [bracket_e_e]
   cases i <;> cases j <;>
     (funext k; fin_cases k <;>
-      simp [bracketBasis, bracketLL, bracketLF, bracketFF, oracleFull, Lof, Fof, Jmat, e,
-        neg_smul, smul_smul] <;>
+      simp [bracketBasis, bracketLL, bracketLF, bracketFF, oracleFull, Lof, Fof, Jmat, e] <;>
       norm_num)
 
 /-- Parity sign helper for the graded formulas, `(-1)^(p·q)`, valued in `Coeff`. -/
@@ -108,17 +107,21 @@ theorem bracket_degree0 (i j k : Basis5) (h : bracket (e i) (e j) k ≠ 0) :
     Basis5.parity k = Basis5.parity i + Basis5.parity j := by
   rw [bracket_eq_oracle] at h
   cases i <;> cases j <;> cases k <;>
-    simp_all [oracleFull, Basis5.parity] <;> decide
+    simp_all only [oracleFull, crat_zero, Pi.smul_apply, e_apply_self, smul_eq_mul, mul_one, ne_eq,
+      not_true_eq_false, reduceCtorEq, not_false_eq_true, e_apply_ne, mul_zero, crat_one,
+      one_ne_zero, Basis5.parity, add_zero, zero_add, crat_neg_one, neg_eq_zero, one_div] <;>
+    decide
 
-set_option maxHeartbeats 800000 in
 /-- `T2` (super-skew) on basis vectors: `[X,Y] = -(-1)^{p(X)p(Y)}[Y,X]`. -/
 theorem bracket_super_skew (i j : Basis5) :
     bracket (e i) (e j) = -(gsign (Basis5.parity i) (Basis5.parity j)) • bracket (e j) (e i) := by
   rw [bracket_eq_oracle, bracket_eq_oracle]
   cases i <;> cases j <;> funext k <;> fin_cases k <;>
-    simp [oracleFull, gsign, Basis5.parity, neg_smul, smul_smul, smul_eq_mul] <;> norm_num
+    simp [oracleFull, gsign, Basis5.parity, neg_smul, smul_eq_mul] <;> norm_num
 
 set_option maxHeartbeats 800000 in
+-- Needed (125 basis triples), measured 2026-09-29: 200000 and 600000 time out at `whnf`;
+-- 800000 passes.
 /-- `T3`: the graded Jacobi identity on all 125 ordered n=1 basis triples. -/
 theorem jacobi125 (X Y Z : Basis5) :
     (gsign (Basis5.parity X) (Basis5.parity Z)) • bracket (e X) (bracket (e Y) (e Z))
@@ -128,12 +131,11 @@ theorem jacobi125 (X Y Z : Basis5) :
   cases X <;> cases Y <;> cases Z <;>
     simp only [bracket_eq_oracle, oracleFull, bracket_smul_right] <;>
     (funext k; fin_cases k) <;>
-    simp [gsign, Basis5.parity, crat_smul_e, smul_smul, smul_add, add_smul, neg_smul,
+    simp [gsign, Basis5.parity, smul_smul, neg_smul,
       smul_eq_mul] <;>
     ring_nf <;>
-    (try simp [crat_add, crat_mul, crat_two_mul, crat_mul_two, crat_natCast, crat_zero, crat_one,
-      crat_neg, crat_neg_one, crat_eq_iff]) <;>
-    norm_num
+    (try simp [crat_mul_two, crat_zero, crat_one,
+      crat_neg_one])
 
 /-- `bracket 0 y = 0` and `bracket x 0 = 0`: the finite double sum vanishes term
 by term since `(0 : Mod) i = 0`. -/
