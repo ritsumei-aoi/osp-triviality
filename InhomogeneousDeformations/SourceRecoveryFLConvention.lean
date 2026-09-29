@@ -9,7 +9,8 @@ file only reads their already-accepted definitions/theorems. `GammaBetaBasis`
 
 ## U4 — what went wrong with R8, corrected here
 
-R8's file claimed the chain from `iotaBetaRBracket_super_skew` down to `GammaBetaBasis_Fof_Lof_forced`
+R8's file claimed the chain from `iotaBetaRBracket_super_skew` down to
+`GammaBetaBasis_Fof_Lof_forced`
 never used `GammaBetaBasis`'s declared FL row. That claim was **true of the new file's own steps**
 and **false of the chain**: `bracketRBetaBasis_super_skew` cites `iotaBetaR_bracketRBetaBasis`,
 which for the `(false, false)` case cites R7's `iotaBetaRBracket_false_false`, which is proved via
@@ -18,7 +19,8 @@ R5's `liftsBracket_eq_bridge`, which internally branches on `F0hatBeta_bracket_F
 declared FL row) directly. Lean's dependency tracking is per compiled constant: any theorem
 depending on `liftsBracket_eq_bridge`, even instantiated at unrelated index values, carries that
 transitive dependency. Agent1c's mechanical checker (BFS over `ConstantInfo.getUsedConstantsAsSet`
-from each claimed theorem's compiled proof term to `InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof`)
+from each claimed theorem's compiled proof term to
+`InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof`)
 confirmed the path
 
 `GammaBetaBasis_Fof_Lof_forced → bracketRBetaBasis_super_skew → iotaBetaR_bracketRBetaBasis
@@ -40,15 +42,19 @@ the concrete algebra `A_B`, never mentioning `GammaBetaBasis` and never citing
 
 Agent1c's checker (`agent1c_checker/Agent1cCheck4.lean`) was copied to a throwaway scratch file
 inside `InhomogeneousDeformations/`, edited after each theorem below was added, run via
-`lake env lean InhomogeneousDeformations/Agent1cCheck4Scratch.lean`, and deleted before delivery (it is not
+`lake env lean InhomogeneousDeformations/Agent1cCheck4Scratch.lean`, and deleted before delivery
+(it is not
 part of this payload). Its exact output, per theorem:
 
-* `InhomogeneousDeformations.Source.gsignNQ_symm` — `NO PATH from InhomogeneousDeformations.Source.gsignNQ_symm to the FL
+* `InhomogeneousDeformations.Source.gsignNQ_symm` —
+  `NO PATH from InhomogeneousDeformations.Source.gsignNQ_symm to the FL
   row lemma` (R8's own result, unaffected; re-run here as a control, unchanged).
-* `InhomogeneousDeformations.Source.gsignNQ_sq` — `NO PATH from InhomogeneousDeformations.Source.gsignNQ_sq to the FL row
+* `InhomogeneousDeformations.Source.gsignNQ_sq` —
+  `NO PATH from InhomogeneousDeformations.Source.gsignNQ_sq to the FL row
   lemma` (control, unchanged).
 * `InhomogeneousDeformations.Source.iotaBetaRBracket_super_skew` — `NO PATH from
-  InhomogeneousDeformations.Source.iotaBetaRBracket_super_skew to the FL row lemma` (control, unchanged).
+  InhomogeneousDeformations.Source.iotaBetaRBracket_super_skew to the FL row
+  lemma` (control, unchanged).
 * `InhomogeneousDeformations.Source.F0hatBeta_comm_L0hatBeta_FL_free` — `NO PATH from
   InhomogeneousDeformations.Source.F0hatBeta_comm_L0hatBeta_FL_free to the FL row lemma`.
 * `InhomogeneousDeformations.Source.GammaBetaBasis_Fof_Lof_forced_FL_free` — `NO PATH from
@@ -61,7 +67,8 @@ report; the lines above match it.)
 
 U0's mechanical check shows both `F0hatBeta_comm_L0hatBeta_FL_free` (U2) and
 `GammaBetaBasis_Fof_Lof_forced_FL_free` (U3) have no dependency path to
-`InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof`. U3 states that any coefficient `c` the concrete
+`InhomogeneousDeformations.Indexed.GammaBetaBasis_Fof_Lof`. U3 states that any coefficient `c` the
+concrete
 algebra `A_B` admits on the FL sector (`F0hatBeta n w * L0hatBeta n u v - L0hatBeta n u v *
 F0hatBeta n w = iota0 n (bracketBasisN n (Fof w) (Lof u v)) + kappaAB n * iota0 n c`) is forced to
 equal `-(gammaLFn n u v w)` — derived from R5's LF theorem (`L0hatBeta_bracket_LF`, itself
@@ -138,7 +145,8 @@ satisfies the same commutator equation as `F0hatBeta_comm_L0hatBeta_FL_free`, ca
 `kappaAB_iota0_eq_zero_imp` (`SourceRecoveryClosure.lean`, confirmed FL-free) to
 `c + gammaLFn n u v w`. -/
 
-theorem GammaBetaBasis_Fof_Lof_forced_FL_free (n : ℕ) (u v w : Fin (2 * n)) (c : Indexed.IndexedMod n)
+theorem GammaBetaBasis_Fof_Lof_forced_FL_free (n : ℕ) (u v w : Fin (2 * n))
+    (c : Indexed.IndexedMod n)
     (h : F0hatBeta n w * L0hatBeta n u v - L0hatBeta n u v * F0hatBeta n w
         = iota0 n (Indexed.bracketBasisN n (Indexed.Fof w) (Indexed.Lof u v))
           + kappaAB n * iota0 n c) :
@@ -147,7 +155,8 @@ theorem GammaBetaBasis_Fof_Lof_forced_FL_free (n : ℕ) (u v w : Fin (2 * n)) (c
   rw [h2] at h
   have hBC : kappaAB n * iota0 n c - kappaAB n * iota0 n (-(Indexed.gammaLFn n u v w)) = 0 := by
     have heq : kappaAB n * iota0 n c - kappaAB n * iota0 n (-(Indexed.gammaLFn n u v w))
-        = (iota0 n (Indexed.bracketBasisN n (Indexed.Fof w) (Indexed.Lof u v)) + kappaAB n * iota0 n c)
+        = (iota0 n (Indexed.bracketBasisN n (Indexed.Fof w) (Indexed.Lof u v))
+            + kappaAB n * iota0 n c)
           - (iota0 n (Indexed.bracketBasisN n (Indexed.Fof w) (Indexed.Lof u v))
               + kappaAB n * iota0 n (-(Indexed.gammaLFn n u v w))) := by abel
     rw [heq, h]; abel
