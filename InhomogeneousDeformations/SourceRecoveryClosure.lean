@@ -46,7 +46,7 @@ theorem liftBeta_add (n : ℕ) (x y : Indexed.IndexedMod n) :
   apply Finset.sum_congr rfl
   intro b _
   rw [Indexed.indexedMod_add_apply, map_add]
-  show (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
+  change (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
       ((algebraMap (Indexed.Pn n) (RRing n) (x b) + algebraMap (Indexed.Pn n) (RRing n) (y b))
         ⊗ₜ[ℚ] (1 : A0 n))) * liftsFamilyBeta n b
     = (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
@@ -80,7 +80,7 @@ theorem liftBeta_eN (n : ℕ) (b : Indexed.IndexedBasis n) :
   rw [Finset.sum_eq_single b]
   · unfold Indexed.eN
     rw [if_pos rfl, map_one]
-    show (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((1 : RRing n) ⊗ₜ[ℚ] (1 : A0 n)))
+    change (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n) ((1 : RRing n) ⊗ₜ[ℚ] (1 : A0 n)))
         * liftsFamilyBeta n b = liftsFamilyBeta n b
     rw [← Algebra.TensorProduct.one_def, GradedTensorProduct.of_one, one_mul]
   · intro c _ hc
@@ -93,14 +93,18 @@ theorem liftBeta_neg (n : ℕ) (x : Indexed.IndexedMod n) : liftBeta n (-x) = -l
     rw [← liftBeta_add, neg_add_cancel, liftBeta_zero]
   exact eq_neg_of_add_eq_zero_left h
 
+-- the `DecidableEq` instance is kept: removing it would change the statement
+set_option linter.unusedDecidableInType false in
 theorem liftBeta_sum' {n : ℕ} {ι : Type*} [DecidableEq ι] (s : Finset ι) (c : ι → Indexed.Pn n)
     (f : ι → Indexed.IndexedMod n) :
     liftBeta n (∑ i ∈ s, c i • f i)
-      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n)) * liftBeta n (f i) := by
+      = ∑ i ∈ s, ((algebraMap (Indexed.Pn n) (RRing n) (c i)) ᵍ⊗ₜ[ℚ] (1 : A0 n))
+          * liftBeta n (f i) := by
   classical
   induction s using Finset.induction with
   | empty => simp [liftBeta_zero]
-  | @insert a s ha ih => rw [Finset.sum_insert ha, liftBeta_add, liftBeta_smul, ih, Finset.sum_insert ha]
+  | @insert a s ha ih => rw [Finset.sum_insert ha, liftBeta_add, liftBeta_smul, ih,
+                           Finset.sum_insert ha]
 
 noncomputable def iotaBetaR (n : ℕ) (r : Indexed.RMod n) : AB n :=
   liftBeta n (Indexed.falsePart r) + kappaAB n * liftBeta n (Indexed.truePart r)
@@ -125,16 +129,20 @@ theorem iotaBetaR_smul (n : ℕ) (c : Indexed.Pn n) (r : Indexed.RMod n) :
 defined). Pure `iota0`/`liftBeta`/`hMap` content -- `UMapInv` enters afterward, once, at the
 general-element theorem below, since `UMapInv_eq` needs no linearity to apply. -/
 theorem iota0_eN_sub_eq (n : ℕ) (b : Indexed.IndexedBasis n) :
-    iota0 n (Indexed.eN b) = liftBeta n (Indexed.eN b) - kappaAB n * liftBeta n (Indexed.hMap n (Indexed.eN b)) := by
+    iota0 n (Indexed.eN b) = liftBeta n (Indexed.eN b) - kappaAB n
+        * liftBeta n (Indexed.hMap n (Indexed.eN b)) := by
   rw [Indexed.hMap_eN]
   rcases b with ⟨⟨u, v⟩, huv⟩ | u
   · show iota0 n (Indexed.eN (Sum.inl ⟨(u, v), huv⟩))
         = liftBeta n (Indexed.eN (Sum.inl ⟨(u, v), huv⟩))
           - kappaAB n * liftBeta n (Indexed.hBasis n (Sum.inl ⟨(u, v), huv⟩))
-    have hh : Indexed.hBasis n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
-        = Indexed.betaN n u • Indexed.eN (Indexed.Fof v) + Indexed.betaN n v • Indexed.eN (Indexed.Fof u) := rfl
+    have hh : Indexed.hBasis n
+        (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
+        = Indexed.betaN n u • Indexed.eN (Indexed.Fof v) + Indexed.betaN n v
+            • Indexed.eN (Indexed.Fof u) := rfl
     rw [hh, liftBeta_add, liftBeta_smul, liftBeta_smul, liftBeta_eN, liftBeta_eN, liftBeta_eN]
-    have hL : liftsFamilyBeta n (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
+    have hL : liftsFamilyBeta n
+        (Sum.inl (⟨(u, v), huv⟩ : {p : Fin (2 * n) × Fin (2 * n) // p.1 ≤ p.2}))
         = L0hatBeta n u v := rfl
     have hFv : liftsFamilyBeta n (Indexed.Fof v : Indexed.IndexedBasis n) = F0hatBeta n v := rfl
     have hFu : liftsFamilyBeta n (Indexed.Fof u : Indexed.IndexedBasis n) = F0hatBeta n u := rfl
@@ -143,7 +151,8 @@ theorem iota0_eN_sub_eq (n : ℕ) (b : Indexed.IndexedBasis n) :
         = L0AB n u v := rfl
     rw [hi0]
   · show iota0 n (Indexed.eN (Sum.inr u))
-        = liftBeta n (Indexed.eN (Sum.inr u)) - kappaAB n * liftBeta n (Indexed.hBasis n (Sum.inr u))
+        = liftBeta n (Indexed.eN (Sum.inr u)) - kappaAB n
+            * liftBeta n (Indexed.hBasis n (Sum.inr u))
     have hh : Indexed.hBasis n (Sum.inr u : Indexed.IndexedBasis n) = 0 := rfl
     rw [hh, liftBeta_zero, mul_zero, sub_zero, liftBeta_eN]
     have hF : liftsFamilyBeta n (Sum.inr u : Indexed.IndexedBasis n) = F0hatBeta n u := rfl
@@ -199,7 +208,8 @@ theorem prop_recovery (n : ℕ) (x y : Indexed.IndexedMod n) :
           + Indexed.kappaEmbed (Indexed.GammaBetaN n x y)) := by
   have hRHS : iotaBetaR n (Indexed.iotaR (Indexed.bracketN n x y)
         + Indexed.kappaEmbed (Indexed.GammaBetaN n x y))
-      = liftBeta n (Indexed.bracketN n x y) + kappaAB n * liftBeta n (Indexed.GammaBetaN n x y) := by
+      = liftBeta n (Indexed.bracketN n x y) + kappaAB n
+          * liftBeta n (Indexed.GammaBetaN n x y) := by
     unfold iotaBetaR
     rw [Indexed.falsePart_add, Indexed.truePart_add, Indexed.falsePart_iotaR,
       Indexed.falsePart_kappaEmbed, Indexed.truePart_iotaR, Indexed.truePart_kappaEmbed, add_zero,
@@ -224,7 +234,8 @@ theorem prop_recovery (n : ℕ) (x y : Indexed.IndexedMod n) :
 /-! ## Z2b — tied to the frozen `bracketRBeta` -/
 
 theorem prop_recovery_bracketRBeta (n : ℕ) (x y : Indexed.IndexedMod n) :
-    iotaBetaR n (Indexed.iotaR (Indexed.bracketN n x y) + Indexed.kappaEmbed (Indexed.GammaBetaN n x y))
+    iotaBetaR n (Indexed.iotaR (Indexed.bracketN n x y)
+        + Indexed.kappaEmbed (Indexed.GammaBetaN n x y))
       = iotaBetaR n (Indexed.bracketRBeta n (Indexed.iotaR x) (Indexed.iotaR y)) := by
   rw [Indexed.bracketRBeta_iotaR_iotaR]
 
@@ -253,8 +264,10 @@ theorem iota0Basis_linearIndependent (n : ℕ) :
     rw [hLeq0, zero_add] at hL0F0eq; exact hL0F0eq
   intro x
   cases x with
-  | inl p => exact (Fintype.linearIndependent_iff.mp (L0FamilyIndependent_proved n)) (fun p => g (Sum.inl p)) hLeq0 p
-  | inr u => exact (Fintype.linearIndependent_iff.mp (F0_linearIndependent n)) (fun u => g (Sum.inr u)) hFeq0 u
+  | inl p => exact (Fintype.linearIndependent_iff.mp (L0FamilyIndependent_proved n))
+               (fun p => g (Sum.inl p)) hLeq0 p
+  | inr u => exact (Fintype.linearIndependent_iff.mp (F0_linearIndependent n))
+               (fun u => g (Sum.inr u)) hFeq0 u
 
 /-- The `ℚ`-linear combination map for `iota0Basis`, as an explicit `LinearMap`, needed to invoke
 `LinearMap.exists_leftInverse_of_injective` (a left inverse is the cleanest way to extract each
@@ -284,7 +297,8 @@ noncomputable def RRingToTriv (n : ℕ) :
 the first (`Pn n`) coordinate. Since `RRingToTriv` is a `Pn n`-algebra map,
 `RRingToTriv (algebraMap c) = c • RRingToTriv 1 = c • 1`, whose first coordinate is `c`. -/
 noncomputable def RRingRetract (n : ℕ) : RRing n →ₗ[ℚ] Indexed.Pn n :=
-  ((TrivSqZeroExt.fstHom (Indexed.Pn n) (Indexed.Pn n) (Indexed.Pn n)).toLinearMap.restrictScalars ℚ)
+  ((TrivSqZeroExt.fstHom (Indexed.Pn n) (Indexed.Pn n)
+      (Indexed.Pn n)).toLinearMap.restrictScalars ℚ)
     ∘ₗ ((RRingToTriv n).toLinearMap.restrictScalars ℚ)
 
 theorem RRingRetract_algebraMap (n : ℕ) (c : Indexed.Pn n) :
@@ -300,26 +314,28 @@ theorem RRingRetract_algebraMap (n : ℕ) (c : Indexed.Pn n) :
 noncomputable def iota0Coord (n : ℕ) (ginv : A0 n →ₗ[ℚ] (Indexed.IndexedBasis n → ℚ))
     (b0 : Indexed.IndexedBasis n) : AB n →ₗ[ℚ] Indexed.Pn n :=
   (TensorProduct.rid ℚ (Indexed.Pn n)).toLinearMap ∘ₗ
-    (TensorProduct.map (RRingRetract n) ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)) ∘ₗ
+    (TensorProduct.map (RRingRetract n) ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ)
+        ∘ₗ ginv)) ∘ₗ
     (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)).symm.toLinearMap
 
 theorem iota0Coord_apply (n : ℕ) (ginv : A0 n →ₗ[ℚ] (Indexed.IndexedBasis n → ℚ))
     (b0 : Indexed.IndexedBasis n) (c : Indexed.Pn n) (y : A0 n) :
     iota0Coord n ginv b0 ((algebraMap (Indexed.Pn n) (RRing n) c) ᵍ⊗ₜ[ℚ] y) = ginv y b0 • c := by
   unfold iota0Coord
-  show (TensorProduct.rid ℚ (Indexed.Pn n))
-      (TensorProduct.map (RRingRetract n) ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)
+  change (TensorProduct.rid ℚ (Indexed.Pn n))
+      (TensorProduct.map (RRingRetract n)
+          ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)
         ((GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)).symm
           (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
             ((algebraMap (Indexed.Pn n) (RRing n) c) ⊗ₜ[ℚ] y))))
       = ginv y b0 • c
   rw [LinearEquiv.symm_apply_apply, TensorProduct.map_tmul]
-  show (TensorProduct.rid ℚ (Indexed.Pn n))
+  change (TensorProduct.rid ℚ (Indexed.Pn n))
       ((RRingRetract n (algebraMap (Indexed.Pn n) (RRing n) c)) ⊗ₜ[ℚ]
         ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) (ginv y)))
       = ginv y b0 • c
   rw [RRingRetract_algebraMap]
-  show ginv y b0 • c = ginv y b0 • c
+  change ginv y b0 • c = ginv y b0 • c
   rfl
 
 theorem iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n) (hz : iota0 n z = 0) : z = 0 := by
@@ -331,7 +347,7 @@ theorem iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n) (hz : iota0 n z =
     intro b
     have hcombo : iota0BasisCombo n (Pi.single b (1 : ℚ)) = Source.iota0Basis n b := by
       unfold iota0BasisCombo
-      show ∑ b' : Indexed.IndexedBasis n,
+      change ∑ b' : Indexed.IndexedBasis n,
           (Pi.single b (1 : ℚ) : Indexed.IndexedBasis n → ℚ) b' • Source.iota0Basis n b'
           = Source.iota0Basis n b
       rw [Finset.sum_eq_single b]
@@ -396,9 +412,9 @@ theorem RRingRetractKappa_kappa_mul_algebraMap (n : ℕ) (c : Indexed.Pn n) :
       rw [show (1 : TrivSqZeroExt (Indexed.Pn n) (Indexed.Pn n)) = TrivSqZeroExt.inl 1 from rfl,
         ← TrivSqZeroExt.inl_smul, smul_eq_mul, mul_one]
     rw [hk, hc]
-    show TrivSqZeroExt.sndHom (R := Indexed.Pn n) (M := Indexed.Pn n)
+    change TrivSqZeroExt.sndHom (R := Indexed.Pn n) (M := Indexed.Pn n)
         (TrivSqZeroExt.inr (1 : Indexed.Pn n) * TrivSqZeroExt.inl c) = c
-    show (TrivSqZeroExt.inr (1 : Indexed.Pn n) * TrivSqZeroExt.inl c).snd = c
+    change (TrivSqZeroExt.inr (1 : Indexed.Pn n) * TrivSqZeroExt.inl c).snd = c
     rw [TrivSqZeroExt.snd_mul, TrivSqZeroExt.fst_inr, TrivSqZeroExt.snd_inr,
       TrivSqZeroExt.fst_inl, TrivSqZeroExt.snd_inl]
     simp
@@ -407,7 +423,8 @@ theorem RRingRetractKappa_kappa_mul_algebraMap (n : ℕ) (c : Indexed.Pn n) :
 noncomputable def kappaCoord (n : ℕ) (ginv : A0 n →ₗ[ℚ] (Indexed.IndexedBasis n → ℚ))
     (b0 : Indexed.IndexedBasis n) : AB n →ₗ[ℚ] Indexed.Pn n :=
   (TensorProduct.rid ℚ (Indexed.Pn n)).toLinearMap ∘ₗ
-    (TensorProduct.map (RRingRetractKappa n) ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)) ∘ₗ
+    (TensorProduct.map (RRingRetractKappa n)
+        ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)) ∘ₗ
     (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)).symm.toLinearMap
 
 theorem kappaCoord_apply (n : ℕ) (ginv : A0 n →ₗ[ℚ] (Indexed.IndexedBasis n → ℚ))
@@ -415,14 +432,15 @@ theorem kappaCoord_apply (n : ℕ) (ginv : A0 n →ₗ[ℚ] (Indexed.IndexedBasi
     kappaCoord n ginv b0 ((kappa n * algebraMap (Indexed.Pn n) (RRing n) c) ᵍ⊗ₜ[ℚ] y)
       = ginv y b0 • c := by
   unfold kappaCoord
-  show (TensorProduct.rid ℚ (Indexed.Pn n))
-      (TensorProduct.map (RRingRetractKappa n) ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)
+  change (TensorProduct.rid ℚ (Indexed.Pn n))
+      (TensorProduct.map (RRingRetractKappa n)
+          ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) ∘ₗ ginv)
         ((GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)).symm
           (GradedTensorProduct.of ℚ (RGradingQ n) (A0Grading n)
             ((kappa n * algebraMap (Indexed.Pn n) (RRing n) c) ⊗ₜ[ℚ] y))))
       = ginv y b0 • c
   rw [LinearEquiv.symm_apply_apply, TensorProduct.map_tmul]
-  show (TensorProduct.rid ℚ (Indexed.Pn n))
+  change (TensorProduct.rid ℚ (Indexed.Pn n))
       ((RRingRetractKappa n (kappa n * algebraMap (Indexed.Pn n) (RRing n) c)) ⊗ₜ[ℚ]
         ((LinearMap.proj b0 : (Indexed.IndexedBasis n → ℚ) →ₗ[ℚ] ℚ) (ginv y)))
       = ginv y b0 • c
@@ -439,7 +457,7 @@ theorem kappaAB_iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n)
     intro b
     have hcombo : iota0BasisCombo n (Pi.single b (1 : ℚ)) = Source.iota0Basis n b := by
       unfold iota0BasisCombo
-      show ∑ b' : Indexed.IndexedBasis n,
+      change ∑ b' : Indexed.IndexedBasis n,
           (Pi.single b (1 : ℚ) : Indexed.IndexedBasis n → ℚ) b' • Source.iota0Basis n b'
           = Source.iota0Basis n b
       rw [Finset.sum_eq_single b]
@@ -453,10 +471,12 @@ theorem kappaAB_iota0_eq_zero_imp (n : ℕ) (z : Indexed.IndexedMod n)
   have hcompute : kappaCoord n ginv b0 (kappaAB n * iota0 n z) = z b0 := by
     have hexpand : kappaAB n * iota0 n z
         = ∑ b : Indexed.IndexedBasis n,
-            (kappa n * algebraMap (Indexed.Pn n) (RRing n) (z b)) ᵍ⊗ₜ[ℚ] (Source.iota0Basis n b) := by
+            (kappa n * algebraMap (Indexed.Pn n) (RRing n) (z b)) ᵍ⊗ₜ[ℚ]
+                (Source.iota0Basis n b) := by
       unfold iota0
       rw [Finset.mul_sum]
-      exact Finset.sum_congr rfl (fun b _ => kappaAB_mul_algebraMap_tmul n (z b) (Source.iota0Basis n b))
+      exact Finset.sum_congr rfl
+          (fun b _ => kappaAB_mul_algebraMap_tmul n (z b) (Source.iota0Basis n b))
     rw [hexpand, map_sum]
     have hterm : ∀ b : Indexed.IndexedBasis n,
         kappaCoord n ginv b0
@@ -485,10 +505,10 @@ theorem iota0_mem_ABGradingR_zero (n : ℕ) (z : Indexed.IndexedMod n) :
 
 theorem kappa_mul_algebraMap_mem_RGradingQ_one (n : ℕ) (c : Indexed.Pn n) :
     kappa n * algebraMap (Indexed.Pn n) (RRing n) c ∈ RGradingQ n 1 := by
-  have hmem := SetLike.mul_mem_graded (kappa_mem_RGradingQ_one n) (algebraMap_mem_RGradingQ_zero n c)
+  have hmem := SetLike.mul_mem_graded (kappa_mem_RGradingQ_one n)
+      (algebraMap_mem_RGradingQ_zero n c)
   simpa using hmem
 
-set_option maxHeartbeats 1000000 in
 theorem kappaAB_mul_iota0_mem_ABGradingR_one (n : ℕ) (z : Indexed.IndexedMod n) :
     kappaAB n * iota0 n z ∈ ABGradingR n 1 := by
   have hexpand : kappaAB n * iota0 n z
@@ -496,7 +516,8 @@ theorem kappaAB_mul_iota0_mem_ABGradingR_one (n : ℕ) (z : Indexed.IndexedMod n
           (kappa n * algebraMap (Indexed.Pn n) (RRing n) (z b)) ᵍ⊗ₜ[ℚ] (Source.iota0Basis n b) := by
     unfold iota0
     rw [Finset.mul_sum]
-    exact Finset.sum_congr rfl (fun b _ => kappaAB_mul_algebraMap_tmul n (z b) (Source.iota0Basis n b))
+    exact Finset.sum_congr rfl
+        (fun b _ => kappaAB_mul_algebraMap_tmul n (z b) (Source.iota0Basis n b))
   rw [hexpand]
   exact Submodule.sum_mem _ (fun b _ =>
     ABGradingR_mem_of_tmul n 1
