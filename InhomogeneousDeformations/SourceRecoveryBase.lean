@@ -1,9 +1,6 @@
 import InhomogeneousDeformations.SourceLifts
 import InhomogeneousDeformations.SourceIsomorphism
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 namespace InhomogeneousDeformations
 namespace Source
 

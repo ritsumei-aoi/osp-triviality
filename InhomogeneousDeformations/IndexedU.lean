@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.IndexedKappa
 import Mathlib.Tactic.Module
-
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
 -- Toolchain port (v4.34): `IndexedBasis` is a plain `def` whose sum structure the proofs
 -- use; restore the pre-v4.34 type-transparency behaviour of `isDefEq` for this file.
 set_option backward.isDefEq.respectTransparency.types false

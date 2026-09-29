@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.IndexedLaws
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # R2-C-2 (U4-U5) — general-rank super-Jacobi
 

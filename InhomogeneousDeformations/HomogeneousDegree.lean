@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.N1Proofs
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # C2.1 — general homogeneous degree preservation on the retained n=1 model
 

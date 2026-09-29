@@ -6,9 +6,6 @@ import Mathlib.Data.Fintype.Sum
 import Mathlib.Data.Prod.Lex
 import Mathlib.Order.Basic
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # C1.1 — genuinely rank-indexed native family definitions
 

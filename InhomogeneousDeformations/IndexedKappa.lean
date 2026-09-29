@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.IndexedCoboundary
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # R2-E -- the `kappa` extension and the trivializing map `T_beta` (P3)
 

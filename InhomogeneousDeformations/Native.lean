@@ -2,9 +2,6 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import InhomogeneousDeformations.Basis
 import InhomogeneousDeformations.Carrier
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # Native n=1 bracket, from the manuscript's rank-indexed formulas
 

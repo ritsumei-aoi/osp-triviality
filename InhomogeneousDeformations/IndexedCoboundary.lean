@@ -1,9 +1,6 @@
 import InhomogeneousDeformations.IndexedJacobi
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Algebra.BigOperators.Fin
-
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
 -- Toolchain port (v4.34): `IndexedBasis` is a plain `def`, and the proofs below match on its sum
 -- structure; the pre-v4.34 type-transparency behaviour of `isDefEq` is restored for this file.
 set_option backward.isDefEq.respectTransparency.types false

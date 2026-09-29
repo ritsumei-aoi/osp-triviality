@@ -8,9 +8,6 @@ import Mathlib.LinearAlgebra.CliffordAlgebra.Contraction
 import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.Tactic.NoncommRing
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # I106 R2, W2 — `A_0 = W_n ⊗ C` and `A_B = R ⊗ A_0`, via `GradedTensorProduct`
 

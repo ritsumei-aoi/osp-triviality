@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.Native
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # Independent oracle (T1), degree/skew (T2), Jacobi (T3)
 

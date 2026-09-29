@@ -1,9 +1,6 @@
 import Mathlib.Data.Int.GCD
 import Mathlib.Data.Rat.Defs
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # T5-T7 wire types — rank-independent structured-input primitives
 

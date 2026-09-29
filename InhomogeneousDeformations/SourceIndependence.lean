@@ -2,9 +2,6 @@ import InhomogeneousDeformations.SourceLifts
 import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
 import Mathlib.LinearAlgebra.Dual.Lemmas
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # I106 R2, W4 — the independence statement, written and assessed
 

@@ -7,6 +7,9 @@ defaultTargets = ["InhomogeneousDeformations"]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
+# toolchain port (v4.34): the header linter did not exist at v4.29.1; the repository is MIT-licensed,
+# not the Apache header form that mathlib's header linter expects.
+weak.linter.style.header = false
 maxSynthPendingDepth = 3
 
 [[require]]

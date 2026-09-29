@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.Indexed
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # R2-C-1 (U0-U3) — general-rank interface, degree law and super-skew
 

@@ -2,9 +2,6 @@ import InhomogeneousDeformations.IndexedU
 import Mathlib.Algebra.MvPolynomial.PDeriv
 import Mathlib.Algebra.Module.LinearMap.Defs
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # I106 R2, W1 — `W_n` as operators on `MvPolynomial (Fin n) ℚ`
 

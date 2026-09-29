@@ -1,8 +1,5 @@
 import InhomogeneousDeformations.SourceTensor
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # I106 R2, W3 — the undeformed lifts `L^0_{uv}` and `F^0_u`, in `A_0`
 

@@ -3,9 +3,6 @@ import InhomogeneousDeformations.HomogeneousDegree
 import Mathlib.Tactic.IntervalCases
 import Mathlib.Tactic.FinCases
 
--- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
-set_option linter.style.header false
-
 /-!
 # C1.2/C1.3/C2.2 — explicit n=1 correspondence and transported degree closure
 
