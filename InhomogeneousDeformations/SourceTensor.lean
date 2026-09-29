@@ -8,6 +8,9 @@ import Mathlib.LinearAlgebra.CliffordAlgebra.Contraction
 import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.Tactic.NoncommRing
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # I106 R2, W2 — `A_0 = W_n ⊗ C` and `A_B = R ⊗ A_0`, via `GradedTensorProduct`
 
@@ -68,11 +71,11 @@ theorem kappa_ne_zero (n : ℕ) : kappa n ≠ 0 := by
   set F : RRing n →ₐ[Indexed.Pn n] TrivSqZeroExt (Indexed.Pn n) (Indexed.Pn n) :=
     CliffordAlgebra.lift (Qzero n)
       ⟨TrivSqZeroExt.inrHom (Indexed.Pn n) (Indexed.Pn n), fun m => by
-        rw [TrivSqZeroExt.inrHom, LinearMap.coe_mk, AddHom.coe_mk, TrivSqZeroExt.inr_mul_inr,
-          show Qzero n m = 0 from rfl, map_zero]⟩ with hF
+        change TrivSqZeroExt.inr m * TrivSqZeroExt.inr m = _
+        rw [TrivSqZeroExt.inr_mul_inr, show Qzero n m = 0 from rfl, map_zero]⟩ with hF
   have hFkappa : F (kappa n) = TrivSqZeroExt.inr 1 := by
-    rw [kappa, hF, CliffordAlgebra.lift_ι_apply, TrivSqZeroExt.inrHom, LinearMap.coe_mk,
-      AddHom.coe_mk]
+    rw [kappa, hF, CliffordAlgebra.lift_ι_apply]
+    rfl
   intro h
   rw [h, map_zero] at hFkappa
   exact one_ne_zero (by
@@ -167,7 +170,8 @@ noncomputable instance WGradedAlgebra (n : ℕ) : GradedAlgebra (WGrading n) :=
       (WGrading_decompose_lin n)
       (by
         ext f
-        simp [WGrading_decompose_lin])
+        simp [WGrading_decompose_lin]
+        rfl)
       (by
         apply DirectSum.linearMap_ext ℚ
         intro i
@@ -231,12 +235,10 @@ instance A0Grading_setLike (n : ℕ) : SetLike.GradedMonoid (A0Grading n) where
     obtain ⟨xj, hxj⟩ := hgj
     subst hxi
     subst hxj
-    induction xi using TensorProduct.induction_on with
-    | zero => simp
+    induction xi using TensorProduct.inductionOn with
     | add x y hx hy => simp only [map_add, add_mul]; exact add_mem hx hy
     | tmul w c =>
-      induction xj using TensorProduct.induction_on with
-      | zero => simp
+      induction xj using TensorProduct.inductionOn with
       | add x y hx hy => simp only [map_add, mul_add]; exact add_mem hx hy
       | tmul w' c' =>
         rw [A0GradingMap_tmul, A0GradingMap_tmul,
@@ -396,12 +398,10 @@ instance ABGrading_setLike (n : ℕ) : SetLike.GradedMonoid (ABGrading n) where
       intro i' j' i'' j'' x y hx hy
       obtain ⟨x, rfl⟩ := hx
       obtain ⟨y, rfl⟩ := hy
-      induction x using TensorProduct.induction_on with
-      | zero => simp
+      induction x using TensorProduct.inductionOn with
       | add x1 x2 hx1 hx2 => simp only [map_add, add_mul]; exact add_mem hx1 hx2
       | tmul r1 x1 =>
-        induction y using TensorProduct.induction_on with
-        | zero => simp
+        induction y using TensorProduct.inductionOn with
         | add y1 y2 hy1 hy2 => simp only [map_add, mul_add]; exact add_mem hy1 hy2
         | tmul r2 x2 =>
           rw [ABGradingMap_tmul, ABGradingMap_tmul,
@@ -619,7 +619,6 @@ theorem aA0_ne_zero (n : ℕ) : aA0 n ≠ 0 := by
       ((1 : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (Source.a : C)) = 1 := by
     simp [TensorProduct.map_tmul, hf, hg]
   rw [show ((1 : Module.End ℚ (WPoly n)) ⊗ₜ[ℚ] (Source.a : C) : A0 n) = aA0 n from rfl, h] at hΦ
-  simp only [LinearMap.comp_apply] at hΦ
   exact one_ne_zero hΦ.symm
 
 /-- `κ`, embedded into `A_B` as `κ ᵍ⊗ₜ 1`. -/
@@ -664,7 +663,6 @@ theorem A3_independence (n : ℕ) :
       simp [TensorProduct.map_tmul, hf, hg]
     rw [show ((kappa n) ⊗ₜ[ℚ] (aA0 n) : AB n) =
       ((kappa n) ᵍ⊗ₜ[ℚ] (aA0 n) : AB n) from rfl, h] at hΦ
-    simp only [LinearMap.comp_apply] at hΦ
     exact one_ne_zero hΦ.symm
 
 /-! ## **A4**: `A_0`'s and `A_B`'s gradings restrict correctly to their tensor factors -/

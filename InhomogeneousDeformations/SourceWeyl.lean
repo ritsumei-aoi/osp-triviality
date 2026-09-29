@@ -2,6 +2,9 @@ import InhomogeneousDeformations.IndexedU
 import Mathlib.Algebra.MvPolynomial.PDeriv
 import Mathlib.Algebra.Module.LinearMap.Defs
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # I106 R2, W1 — `W_n` as operators on `MvPolynomial (Fin n) ℚ`
 
@@ -55,12 +58,12 @@ noncomputable def B (n : ℕ) (u : Fin (2 * n)) : Module.End ℚ (WPoly n) :=
 theorem B_evenIdx (n : ℕ) (j : Fin n) :
     B n (Indexed.evenIdx n j) = (MvPolynomial.pderiv j).toLinearMap := by
   unfold B
-  rw [if_pos (by unfold Indexed.evenIdx; simp), wIndex_evenIdx]
+  rw [ite_eq_left (by unfold Indexed.evenIdx; simp), wIndex_evenIdx]
 
 theorem B_oddIdx (n : ℕ) (j : Fin n) :
     B n (Indexed.oddIdx n j) = LinearMap.mulLeft ℚ (MvPolynomial.X j) := by
   unfold B
-  rw [if_neg (by unfold Indexed.oddIdx; simp), wIndex_oddIdx]
+  rw [ite_eq_right (by unfold Indexed.oddIdx; simp), wIndex_oddIdx]
 
 /-- The commutator of two operators on `WPoly n`, as an element of `Module.End ℚ (WPoly n)`
 (a `Ring`, composition as multiplication). -/
@@ -78,7 +81,7 @@ theorem pderiv_mulLeft_comm (n : ℕ) (i j : Fin n) :
   · subst hij
     rw [MvPolynomial.pderiv_X_self]
     simp
-  · rw [MvPolynomial.pderiv_X_of_ne (Ne.symm hij), if_neg hij]
+  · rw [MvPolynomial.pderiv_X_of_ne (Ne.symm hij), ite_eq_right hij]
     simp
 
 /-- Mixed partial derivatives commute, for every polynomial (not just monomials) — proved by
@@ -146,7 +149,7 @@ noncomputable def JnQ (n : ℕ) (u v : Fin (2 * n)) : ℚ :=
 theorem JnQ_eq_zero_of_same_parity (n : ℕ) (u v : Fin (2 * n))
     (h : (u : ℕ) % 2 = (v : ℕ) % 2) : JnQ n u v = 0 := by
   unfold JnQ Indexed.Jn
-  rw [if_neg (by omega), if_neg (by omega)]
+  rw [ite_eq_right (by omega), ite_eq_right (by omega)]
   simp
 
 theorem JnQ_evenIdx_oddIdx (n : ℕ) (i j : Fin n) :
@@ -154,8 +157,8 @@ theorem JnQ_evenIdx_oddIdx (n : ℕ) (i j : Fin n) :
   unfold JnQ Indexed.Jn Indexed.evenIdx Indexed.oddIdx
   dsimp only
   by_cases hij : i = j
-  · subst hij; rw [if_pos (by omega)]; simp
-  · rw [if_neg (by omega), if_neg (by omega)]
+  · subst hij; rw [ite_eq_left (by omega)]; simp
+  · rw [ite_eq_right (by omega), ite_eq_right (by omega)]
     simp [hij]
 
 theorem JnQ_oddIdx_evenIdx (n : ℕ) (i j : Fin n) :
@@ -163,9 +166,9 @@ theorem JnQ_oddIdx_evenIdx (n : ℕ) (i j : Fin n) :
   unfold JnQ Indexed.Jn Indexed.evenIdx Indexed.oddIdx
   dsimp only
   by_cases hij : i = j
-  · subst hij; rw [if_neg (by omega), if_pos (by omega)]
+  · subst hij; rw [ite_eq_right (by omega), ite_eq_left (by omega)]
     unfold Indexed.cratN; simp
-  · rw [if_neg (by omega), if_neg (by omega)]
+  · rw [ite_eq_right (by omega), ite_eq_right (by omega)]
     simp [hij]
 
 /-- **A1**: `[B_u, B_v] = Jn n u v • 1`, `Jn` imported unchanged from the frozen
@@ -191,10 +194,10 @@ theorem B_comm (n : ℕ) (u v : Fin (2 * n)) :
     rw [B_oddIdx, B_evenIdx, mulLeft_pderiv_comm, JnQ_oddIdx_evenIdx]
     by_cases hij : i = j
     · subst hij
-      rw [if_pos rfl, if_pos rfl]
+      rw [ite_eq_left rfl, ite_eq_left rfl]
       apply LinearMap.ext; intro x
       simp
-    · rw [if_neg hij, if_neg (Ne.symm hij)]; simp
+    · rw [ite_eq_right hij, ite_eq_right (Ne.symm hij)]; simp
   · -- both odd: [B_u,B_v] = [mulLeft,mulLeft] = 0 = JnQ (same parity)
     obtain ⟨i, rfl⟩ : ∃ i, u = Indexed.oddIdx n i := ⟨wIndex n u, u_eq_oddIdx_of_odd n u hu⟩
     obtain ⟨j, rfl⟩ : ∃ j, v = Indexed.oddIdx n j := ⟨wIndex n v, u_eq_oddIdx_of_odd n v hv⟩

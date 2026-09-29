@@ -2,6 +2,9 @@ import InhomogeneousDeformations.IndexedU
 import Mathlib.LinearAlgebra.CliffordAlgebra.Basic
 import Mathlib.LinearAlgebra.CliffordAlgebra.Grading
 
+-- The repository is MIT-licensed, not the Apache header the mathlib header linter expects.
+set_option linter.style.header false
+
 /-!
 # I106 R2, W0 — `C = Q[a]/(a^2 - 1/2)`, `a` odd
 
