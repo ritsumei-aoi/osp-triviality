@@ -77,7 +77,8 @@ The changed lines lie in proof positions:
   `backward.isDefEq.respectTransparency.types false`, each with a comment. v4.34 changed how
   `isDefEq` unfolds types, and `IndexedBasis` stays a `def`. The other files were fixed in their
   proofs.
-- `maxHeartbeats` is not raised anywhere.
+- `maxHeartbeats` is not raised beyond `v2.1-lint-clean`: the two existing settings,
+  `N1Proofs.lean` (800000) and `N1Specialization.lean` (400000), are unchanged, and no other is added.
 
 **6. Renames.** No mathlib identifier in a statement was merely renamed. Renames inside proofs
 (for example `induction_on` → `inductionOn`) are proof changes and are not listed.

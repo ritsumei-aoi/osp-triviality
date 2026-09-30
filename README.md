@@ -114,16 +114,17 @@ describe.
 
 **Do not skip `lake exe cache get`.** Skipping it does not fail — it silently falls back to
 *compiling mathlib from source*, which is hours of CPU on a laptop where the cache step is
-minutes. Measured on this branch with mathlib's archives already in the local cache store,
-`lake exe cache get` followed by `lake build` took 2 min 55 s in total and recompiled nothing
-upstream; a machine fetching that revision for the first time also downloads the archives
-(several hundred MB) first. A second, fully cached `lake build` replays the identical report.
+minutes. On two machines with mathlib's archives already in the local cache store,
+`lake exe cache get` followed by `lake build` took between about 3 and 5 minutes, and recompiled
+nothing upstream; the time depends on the machine and on the disk. A machine fetching that revision
+for the first time also downloads the archives (several hundred MB) first. A second, fully cached
+`lake build` replays the identical report.
 
 Approximate sizes, measured on a clean run:
 
 | | |
 |---|---|
-| the clone | ~3.4 MB |
+| the clone (tracked files; `docs/blueprint/` is 5.4 MB of it) | ~6.9 MB |
 | mathlib and the other dependencies, cached (in the working copy, `.lake/`) | ~7.6 GB |
 | this project's own build (in `.lake/`) | ~68 MB |
 | the blueprint package's own `blueprint/.lake/` (its own copy of the dependencies) | ~8.8 GB |
